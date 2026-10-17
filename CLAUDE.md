@@ -145,4 +145,9 @@ Tiger Data stays a separate hosted database.
   `awckiu`). Give commands for PowerShell.
 - Secrets (Gemini, Vultr, Tiger Data) go in `.env` files, which are git-ignored. Never
   commit them.
+- **Ask before pushing.** Never commit, push or open a PR until a team member has
+  approved it. Before asking, show every change in the chat in full: the complete
+  diff, or the whole file for new files. A summary or an attachment alone is not enough.
+- Never commit secrets (API keys, `.env` files), and never paste them into diffs shown
+  in chat.
 - Keep changes small and demoable; commit working states often.
