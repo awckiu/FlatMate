@@ -45,8 +45,9 @@ kept for the bills and area features later.
   how to reduce them, based on the address.
 - **Bills estimate by region**: EPC rating, council tax, average energy prices (track rises
   and notify), parking permits; toggle off what the agreement already includes.
-- **Move-in photos**: upload photos at move-in as a record for later disputes; optionally
-  have the LLM flag mould / damage.
+- **Move-in photos**: upload photos at move-in and store them in the database as dated
+  evidence, in case a landlord raises an issue later (e.g. deposit deductions). Photos are
+  stored only; no LLM analysis of images.
 - **Landlord replies**: upload or read landlord emails and interpret them.
 - **Tenancy buddy chatbot**: help during the tenancy; contact the landlord about issues.
 - **User modes**: single / family / friends (tenancy swaps), HMO or not; changes what is
@@ -61,10 +62,9 @@ kept for the bills and area features later.
 
 ## Sponsor tracks / services
 
-- **Gemini API**: LLM for extraction, flagging, the email draft, and embeddings. Gemini is
-  multimodal, so it also covers images if the move-in photo feature is built. The team can
-  get Gemini Pro (student offer) for the demo; the default model is `gemini-2.5-flash`
-  (`GEMINI_MODEL` in `.env`).
+- **Gemini API**: LLM for extraction, flagging, the email draft, and embeddings (text only;
+  Gemini is not used on images). The team can get Gemini Pro (student offer) for the demo;
+  the default model is `gemini-2.5-flash` (`GEMINI_MODEL` in `.env`).
 - **Vultr**: deploy frontend + backend.
 - **Tiger Data**: Postgres + pgvector for the law index; later, area data and common
   property issues for flagging.
