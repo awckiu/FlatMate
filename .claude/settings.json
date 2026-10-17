@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh repo:*)",
+      "PowerShell(git push:*)",
+      "PowerShell(gh pr create:*)",
+      "PowerShell(gh pr merge:*)",
+      "PowerShell(gh repo:*)"
+    ],
+    "deny": [
+      "Read(./backend/.env)",
+      "Read(**/.env)"
+    ]
+  }
+}

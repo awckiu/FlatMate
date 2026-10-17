@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 type Flag = {
   kind: 'clarification' | 'legal'
@@ -24,6 +24,14 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<AnalyzeResponse | null>(null)
+  const [geminiConfigured, setGeminiConfigured] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/health')
+      .then((res) => res.json())
+      .then((health) => setGeminiConfigured(Boolean(health.gemini_configured)))
+      .catch(() => {})
+  }, [])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -50,6 +58,13 @@ export default function App() {
 
   return (
     <main>
+      {!geminiConfigured && (
+        <div className="key-banner" role="alert">
+          <strong>Gemini API key missing:</strong> add <code>GEMINI_API_KEY</code> to{' '}
+          <code>backend/.env</code> (see README), then restart the backend. Results below are
+          placeholders until then.
+        </div>
+      )}
       <h1>Tenancy Demystifier</h1>
       <p>Upload your tenancy agreement and we'll flag what to check before you sign.</p>
 

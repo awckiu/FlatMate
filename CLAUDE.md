@@ -1,5 +1,22 @@
 # Tenancy Demystifier (IKU Hackathon 2026)
 
+## Rules for Claude (read first)
+
+1. **Never `git push`, create remote branches, or open/merge PRs without the user's explicit
+   confirmation for that specific action.** Commit locally, then ask.
+2. Work on feature branches off `dev` (`feature/<name>-<thing>`). Never commit to `main` or
+   `dev` directly.
+3. Never read, print or commit secrets (`.env`, API keys). `.env.example` holds empty
+   placeholders only.
+4. Stick to the MVP scope below. Ask before adding features, new dependencies or new services.
+5. Before saying something works, actually run it: backend starts, `/api/health` responds,
+   `npm run build` passes, plus whatever the change touches.
+6. Report every change as a precise list: files added/changed (one line each on what and
+   why), what you tested and the result, and what you did *not* test.
+7. Follow `.claude/skills/feature-workflow/SKILL.md` for any code change.
+
+---
+
 Source of truth for the idea: Google Doc "IKU Hackathon"
 (https://docs.google.com/document/d/1X7dr80E1U_18iKHcWF1CMMxvI_mh_Pf1YdD6vRWGqSc/edit).
 
