@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS agreements (
   object_key         text,                 -- PDF in Vultr Object Storage
   page_count         int,
   text               text NOT NULL,
+  summary            text,                 -- one plain-language paragraph about the whole agreement
   uploaded_at        timestamptz NOT NULL DEFAULT now()
 );
 
@@ -86,6 +87,7 @@ CREATE TABLE IF NOT EXISTS flags (
   id              bigserial PRIMARY KEY,
   clause_id       bigint NOT NULL REFERENCES clauses(id) ON DELETE CASCADE,
   kind            text NOT NULL CHECK (kind IN ('need_to_know', 'clarify', 'contradicts_law')),
+  topic           text,                    -- e.g. 'Guests', 'Pets'; only set for need-to-knows
   explanation     text NOT NULL,
   law_section_id  bigint REFERENCES law_sections(id) ON DELETE SET NULL,
   cited_source    text,
