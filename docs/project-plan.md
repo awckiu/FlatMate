@@ -140,16 +140,17 @@ The pages from the wireframe.
 1. PDF → text (pypdf); split into numbered clauses, keeping the printed number (`clauses.number`).
 2. Retrieve law: embed each clause, top-k `law_sections` from C5; merge and de-duplicate.
 3. **One Gemini call** with the whole agreement + retrieved sections, structured JSON output:
-   for each clause worth mentioning, a finding of kind `need_to_know` / `clarify` /
-   `contradicts_law`, with explanation and citation (section 7). Split only if the agreement
-   is very long.
-4. **Guardrail**: the model may only cite sections it was given; drop or downgrade any
-   `contradicts_law` whose citation isn't in the retrieved set. Map citations to
-   `law_section_id` and keep a text snapshot (`cited_source`, `cited_section`).
+   a `summary`, a separate `need_to_knows` list, and `flags` of kind `clarify` /
+   `contradicts_law` with explanation and citation (section 7). Agreements over the size
+   limit get a clear error rather than a split call.
+4. **Guardrail**: the model may only cite sections it was given; a `contradicts_law` flag
+   whose citation isn't in the retrieved set is downgraded to `clarify` with a note. Map
+   citations to `law_section_id` and keep a text snapshot (`cited_source`, `cited_section`).
 5. **One more call** drafts the landlord email from the `clarify` and `contradicts_law` flags,
    with the disclaimer.
-- *(scaffold)* `backend/app/pipeline.py`, `backend/app/llm.py`. Currently one call per
-  clause; must change to the single analysis call.
+- Implemented in PR #5 (`ui` branch, kept by Andrea): `backend/app/pipeline.py`,
+  `backend/app/llm.py` (`AGREEMENT_SCHEMA`, `analyze_agreement`), with tests in
+  `backend/tests/test_pipeline.py`.
 
 ### C5. Law knowledge base (P0)
 - Sources: Housing Act 1988, Housing Act 2004, Tenant Fees Act 2019, Renters' Rights Act 2025,
@@ -218,40 +219,60 @@ Owner of schema changes: workstream B. Change the draft file first, then the SQL
 
 Agreeing these in the first hour lets frontend, backend and pipeline work in parallel.
 
-`POST /api/analyze` (multipart, logged in): `agreement` (PDF), `lead_tenant`, `co_tenants`
-(optional, comma-separated), `property_address`, `postcode`, `tenancy_start`, `tenancy_end`
-(optional).
+The response shape is the one in **PR #5** (`ui` branch), which Andrea decided to keep:
+a `summary`, a separate `need_to_knows` list, and `flags`. Fields marked *(cases)* are added
+when accounts and saved cases land (workstream B); everything else already exists in PR #5.
 
-Response (and `GET /api/cases/{code}`):
+`POST /api/analyze` (multipart): `agreement` (PDF), `lead_tenant`, `co_tenants` (optional,
+comma-separated), `property_address`. *(cases)* adds: logged-in session, `postcode`,
+`tenancy_start`, `tenancy_end` (optional).
+
+Response (and *(cases)* `GET /api/cases/{code}`):
 
 ```json
 {
-  "case_code": "FLAT-7KQ2",
-  "mode": "gemini | placeholder",
+  "tenant_name": "...",
+  "co_tenants": ["..."],
   "property_address": "...",
-  "postcode": "...",
-  "tenancy_start": "2026-09-01",
-  "tenancy_end": "2027-08-31",
-  "tenants": [{"name": "...", "role": "lead", "joined": true}],
-  "agreement": {"filename": "...", "pages": 12},
+  "filename": "agreement.pdf",
+  "pages": 12,
+  "mode": "gemini | placeholder",
+  "law_data_available": true,
+  "summary": "Plain-English summary of the agreement.",
+  "need_to_knows": [
+    {"topic": "Guests", "clause_ref": "7.2", "text": "Guests may stay up to 3 nights a week."}
+  ],
   "flags": [
     {
-      "id": 42,
-      "kind": "need_to_know | clarify | contradicts_law",
-      "clause": {"number": "4.1", "text": "..."},
+      "kind": "clarify | contradicts_law",
+      "clause_ref": "4.1",
+      "clause_excerpt": "...",
       "explanation": "...",
-      "citation": {"source": "Tenant Fees Act 2019", "section": "s.1", "url": "..."},
-      "status": "open"
+      "citation": {"source": "Tenant Fees Act 2019", "section": "s.1", "url": "..."}
     }
   ],
   "email": "Dear ...",
-  "disclaimer": "This is information, not legal advice."
+  "disclaimer": "This tool provides information, not legal advice.",
+
+  "case_code": "FLAT-7KQ2",
+  "postcode": "...",
+  "tenancy_start": "2026-09-01",
+  "tenancy_end": "2027-08-31",
+  "tenants": [{"name": "...", "role": "lead", "joined": true}]
 }
 ```
 
-The frontend groups `flags` by `kind` into need-to-knows, Questions to ask, and Possible
-legal issues. Gemini's structured output (C4) returns `{clause_number, kind, explanation,
-citation}` items; the backend attaches clause text and ids after the guardrail.
+- The last block of fields is *(cases)*. With saved cases, each flag also gets `id` and
+  `status` (`open | resolved`) so it can be ticked off.
+- `citation` is `null` when a flag cites nothing (e.g. a `clarify` flag, or a downgraded one).
+- The frontend shows `summary`, then `need_to_knows`, then flags split by `kind` into
+  Questions to ask (`clarify`) and Possible legal issues (`contradicts_law`).
+- Gemini's structured output (`AGREEMENT_SCHEMA` in `llm.py`) returns `summary`,
+  `need_to_knows` and `flags` (with `citation_source` / `citation_section`); the backend
+  resolves the citation against the retrieved sections after the guardrail.
+- **Storage (for workstream B / schema v4):** `need_to_knows` can be saved as `flags` rows
+  with `kind = need_to_know` and returned separately, or get their own table; `summary` needs
+  a column (e.g. `agreements.summary`). Decide in the database design thread.
 
 ---
 
