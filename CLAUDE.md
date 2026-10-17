@@ -2,8 +2,8 @@
 
 ## Rules for Claude (read first)
 
-1. **Never `git push`, create remote branches, or open/merge PRs without the user's explicit
-   confirmation for that specific action.** Commit locally, then ask.
+1. **Never `git push` (including creating remote branches) without the user's explicit
+   confirmation for that specific push.** Commit locally, then ask.
 2. Work on feature branches off `dev` (`feature/<name>-<thing>`). Never commit to `main` or
    `dev` directly.
 3. Never read, print or commit secrets (`.env`, API keys). `.env.example` holds empty
