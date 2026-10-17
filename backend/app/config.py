@@ -7,7 +7,7 @@ BACKEND_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BACKEND_DIR / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or None
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 GEMINI_EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 
 # Tiger Data (Postgres + pgvector). Empty means use the local in-memory index.
