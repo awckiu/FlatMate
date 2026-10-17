@@ -20,9 +20,11 @@ class Chunk:
 class VectorStore(Protocol):
     def add(self, chunks: list[Chunk], embeddings: list[list[float]]) -> None: ...
 
-    def search(self, embedding: list[float], k: int) -> list[Chunk]: ...
+    def replace_source(self, source: str, chunks: list[Chunk], embeddings: list[list[float]]) -> None: ...
 
-    def clear_source(self, source: str) -> None: ...
+    def is_empty(self) -> bool: ...
+
+    def search(self, embedding: list[float], k: int) -> list[Chunk]: ...
 
 
 class LocalStore:
@@ -48,12 +50,23 @@ class LocalStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(self.path, vectors=self.vectors, chunks=json.dumps([asdict(c) for c in self.chunks]))
 
-    def clear_source(self, source):
-        keep = [i for i, c in enumerate(self.chunks) if c.source != source]
-        self.chunks = [self.chunks[i] for i in keep]
+    def replace_source(self, source, chunks, embeddings):
+        if any(chunk.source != source for chunk in chunks):
+            raise ValueError("All replacement chunks must belong to the requested source")
+        keep = [index for index, chunk in enumerate(self.chunks) if chunk.source != source]
         if self.vectors.size:
             self.vectors = self.vectors[keep]
-        self._save()
+        self.chunks = [self.chunks[index] for index in keep]
+        if chunks:
+            new = np.asarray(embeddings, dtype=np.float32)
+            new /= np.linalg.norm(new, axis=1, keepdims=True)
+            self.vectors = new if self.vectors.size == 0 else np.vstack([self.vectors, new])
+            self.chunks.extend(chunks)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        np.savez(self.path, vectors=self.vectors, chunks=json.dumps([asdict(c) for c in self.chunks]))
+
+    def is_empty(self):
+        return not self.chunks
 
     def search(self, embedding, k):
         if not self.chunks:
@@ -93,8 +106,27 @@ class PgVectorStore:
                 ],
             )
 
-    def clear_source(self, source):
-        self.conn.execute("DELETE FROM law_sources WHERE name = %s", (source,))
+    def replace_source(self, source, chunks, embeddings):
+        if any(chunk.source != source for chunk in chunks):
+            raise ValueError("All replacement chunks must belong to the requested source")
+        url = chunks[0].url if chunks else None
+        with self.conn.transaction():
+            with self.conn.cursor() as cur:
+                cur.execute(
+                    """INSERT INTO law_sources (name, url) VALUES (%s, %s)
+                       ON CONFLICT (name) DO UPDATE SET url = EXCLUDED.url, ingested_at = now()
+                       RETURNING id""",
+                    (source, url),
+                )
+                source_id = cur.fetchone()[0]
+                cur.execute("DELETE FROM law_sections WHERE source_id = %s", (source_id,))
+                cur.executemany(
+                    "INSERT INTO law_sections (source_id, section_ref, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
+                    [(source_id, c.section, c.text, c.url, np.asarray(e)) for c, e in zip(chunks, embeddings)],
+                )
+
+    def is_empty(self):
+        return not bool(self.conn.execute("SELECT EXISTS (SELECT 1 FROM law_sections)").fetchone()[0])
 
     def search(self, embedding, k):
         rows = self.conn.execute(

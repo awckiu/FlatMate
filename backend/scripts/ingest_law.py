@@ -26,15 +26,27 @@ SOURCES = {
 
 
 def main():
-    store = get_store()
-    total = 0
+    available = []
     for stem, (source, url) in SOURCES.items():
         path = config.LAW_TEXT_DIR / f"{stem}.txt"
-        if not path.exists():
+        if not path.is_file():
             print(f"skip {source}: {path} not found")
             continue
-        chunks = chunk_by_section(path.read_text(encoding="utf-8"), source, url)
-        store.clear_source(source)  # re-running replaces a law instead of storing it twice
+        text = path.read_text(encoding="utf-8").strip()
+        if not text:
+            print(f"skip {source}: {path} is empty")
+            continue
+        available.append((source, url, text))
+    if not available:
+        raise FileNotFoundError(
+            f"No non-empty law source files found in {config.LAW_TEXT_DIR}; "
+            "add at least one source before running ingestion."
+        )
+
+    store = get_store()
+    total = 0
+    for source, url, text in available:
+        chunks = chunk_by_section(text, source, url)
         total += ingest(store, chunks)
         print(f"{source}: {len(chunks)} chunks")
     print(f"done, {total} chunks ingested")

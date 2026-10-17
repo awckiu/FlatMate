@@ -1,25 +1,38 @@
 import { useEffect, useState, type FormEvent } from 'react'
 
 type Flag = {
-  kind: 'clarification' | 'legal'
-  clause: string
-  message: string
-  citation: string
+  kind: 'clarification' | 'legal' | 'clarify' | 'contradicts_law'
+  clause_ref: string
+  clause_excerpt: string
+  explanation: string
+  citation: { source: string; section: string; url: string } | null
+}
+
+type NeedToKnow = {
+  topic: string
+  clause_ref: string
+  text: string
 }
 
 type AnalyzeResponse = {
   tenant_name: string
+  co_tenants: string[]
   property_address: string
   filename: string
   pages: number
+  summary: string
+  need_to_knows: NeedToKnow[]
   flags: Flag[]
   email: string
   mode: 'placeholder' | 'gemini'
+  law_data_available: boolean
+  disclaimer: string
 }
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null)
   const [tenantName, setTenantName] = useState('')
+  const [coTenants, setCoTenants] = useState('')
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -42,7 +55,8 @@ export default function App() {
 
     const body = new FormData()
     body.append('agreement', file)
-    body.append('tenant_name', tenantName)
+    body.append('lead_tenant', tenantName)
+    body.append('co_tenants', coTenants)
     body.append('property_address', address)
 
     try {
@@ -83,6 +97,10 @@ export default function App() {
           <input value={tenantName} onChange={(e) => setTenantName(e.target.value)} required />
         </label>
         <label>
+          Co-tenant names (optional, comma-separated)
+          <input value={coTenants} onChange={(e) => setCoTenants(e.target.value)} />
+        </label>
+        <label>
           Property address
           <input value={address} onChange={(e) => setAddress(e.target.value)} required />
         </label>
@@ -95,20 +113,44 @@ export default function App() {
 
       {result && (
         <section>
-          <h2>Flags for {result.property_address}</h2>
+          <h2>Agreement summary</h2>
+          <p>{result.summary}</p>
           <p>
             {result.filename}: {result.pages} page(s)
           </p>
+          <h3>Need-to-knows</h3>
+          {result.need_to_knows.length > 0 ? (
+            <ul>
+              {result.need_to_knows.map((item, i) => (
+                <li key={i}>
+                  <strong>{item.topic}</strong>: {item.text}
+                  {item.clause_ref && ` (Clause ${item.clause_ref})`}
+                </li>
+              ))}
+            </ul>
+          ) : <p>No key details were returned.</p>}
+          <h3>Flags for {result.property_address}</h3>
           <ul>
             {result.flags.map((f, i) => (
-              <li key={i} className={`flag flag-${f.kind}`}>
-                <strong>{f.kind === 'legal' ? 'Possible legal issue' : 'Ask your landlord'}</strong>
+              <li key={i} className={`flag flag-${f.kind === 'contradicts_law' || f.kind === 'legal' ? 'legal' : 'clarification'}`}>
+                <strong>{f.kind === 'contradicts_law' || f.kind === 'legal' ? 'Possible legal issue' : 'Ask your landlord'}</strong>
                 {' · '}
-                {f.clause}: {f.message}
-                {f.citation && <em> ({f.citation})</em>}
+                {f.clause_ref ? `Clause ${f.clause_ref}` : f.clause_excerpt}: {f.explanation}
+                {f.citation && (
+                  <em>
+                    {' '}
+                    ({f.citation.source} {f.citation.section}
+                    {f.citation.url && <> · <a href={f.citation.url} target="_blank" rel="noreferrer">Source</a></>})
+                  </em>
+                )}
               </li>
             ))}
           </ul>
+          <p>{result.disclaimer}</p>
+          {result.mode === 'placeholder' && <p>Gemini is not configured; this document was not analyzed.</p>}
+          {result.mode === 'gemini' && !result.law_data_available && (
+            <p>No relevant law reference sections were available, so legal issues could not be checked.</p>
+          )}
           {result.email && (
             <>
               <h2>Email to your landlord</h2>
