@@ -57,19 +57,31 @@ kept for the bills and area features later.
 - **Property-viewing tracker add-on** (before signing): spreadsheet of viewed properties,
   likes/dislikes, group preferences, and area filters for structural history (mould,
   floods, gas leaks, electric vs gas heating, maintenance), EPC checker.
+- **Legislation watch (incident.io)**: a daily job compares each law source's
+  last-updated date with the one stored in Tiger Data. If it changed, it raises an
+  incident in incident.io; a person reviews it before the law is rescanned and stored.
+  Only for new legislation, always with a human in the loop.
 - Future: landlord reviews, verified government-sourced dataset, paywall on the chatbot,
   solicitor partnership, email provider integration.
 
 ## Sponsor tracks / services
 
-- **Gemini API**: LLM for extraction, flagging, the email draft, and embeddings (text only;
-  Gemini is not used on images). The team can get Gemini Pro (student offer) for the demo;
-  the default model is `gemini-2.5-flash` (`GEMINI_MODEL` in `.env`).
-- **Vultr**: deploy frontend + backend.
-- **Tiger Data**: Postgres + pgvector for the law index; later, area data and common
-  property issues for flagging.
-- **incident.io** (side track): adaptive agents that watch for legislation changes and
-  re-ingest the knowledge base.
+- **Gemini API**: text only (not used on images). Two jobs:
+  - Embeddings for the law sections and agreement clauses.
+  - Analysis: the whole agreement plus the retrieved law sections go in one call
+    (batched only for very long agreements), then one call drafts the landlord email.
+    Never one call per clause, to stay inside the free tier's per-minute limits.
+  Default model `gemini-flash-latest` (`GEMINI_MODEL` in `.env`). The Gemini Pro student
+  offer is for the Gemini app, not the API; the API runs on an AI Studio key.
+- **Vultr**:
+  - Cloud Compute VM running the app (frontend + backend, one process).
+  - Object Storage (S3-compatible) for move-in photo files.
+- **Tiger Data** (Postgres + pgvector):
+  - Law knowledge base: each source's sections and embeddings, stored once, with the
+    source's last-updated date.
+  - User data: tenancies (case number, tenants, address), extracted clauses and flags,
+    and photo records (link to the file in Vultr, date, room). Schema to be designed.
+- **incident.io**: future extension, not in the MVP (see Later).
 
 ## Stack
 
