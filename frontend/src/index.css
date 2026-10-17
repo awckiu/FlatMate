@@ -1,0 +1,50 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+}
+
+main {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  font: inherit;
+  padding: 0.5rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+
+.error {
+  color: #b00020;
+}
+
+.flag {
+  margin-bottom: 0.5rem;
+}
+
+.flag-legal strong {
+  color: #b00020;
+}
+
+.flag-clarification strong {
+  color: #8a5a00;
+}

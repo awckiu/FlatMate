@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+google-genai
+pypdf
+python-dotenv
+numpy
+psycopg[binary]
+pgvector
