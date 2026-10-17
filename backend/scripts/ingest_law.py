@@ -34,6 +34,7 @@ def main():
             print(f"skip {source}: {path} not found")
             continue
         chunks = chunk_by_section(path.read_text(encoding="utf-8"), source, url)
+        store.clear_source(source)  # re-running replaces a law instead of storing it twice
         total += ingest(store, chunks)
         print(f"{source}: {len(chunks)} chunks")
     print(f"done, {total} chunks ingested")

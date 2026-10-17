@@ -17,42 +17,36 @@ def client() -> genai.Client:
 
 
 def embed(texts: list[str]) -> list[list[float]]:
-    result = client().models.embed_content(model=config.GEMINI_EMBED_MODEL, contents=texts)
+    result = client().models.embed_content(
+        model=config.GEMINI_EMBED_MODEL,
+        contents=texts,
+        config=types.EmbedContentConfig(output_dimensionality=config.EMBED_DIM),
+    )
     return [e.values for e in result.embeddings]
 
 
 CLASSIFY_SCHEMA = {
-    "type": "array",
-    "items": {
-        "type": "object",
-        "properties": {
-            "clause_id": {"type": "integer"},
-            "verdict": {"type": "string", "enum": ["ok", "clarify", "contradicts_law"]},
-            "explanation": {"type": "string"},
-            "citation": {"type": "string"},
-        },
-        "required": ["clause_id", "verdict", "explanation"],
+    "type": "object",
+    "properties": {
+        "verdict": {"type": "string", "enum": ["ok", "clarify", "contradicts_law"]},
+        "explanation": {"type": "string"},
+        "citation": {"type": "string"},
     },
+    "required": ["verdict", "explanation"],
 }
 
 
-def classify_clauses(clauses: list[str], law_sections: list[dict]) -> list[dict]:
-    """Classify many tenancy clauses against retrieved UK law sections in one Gemini call.
-
-    Returns one result per clause the model flagged or cleared, keyed by `clause_id`
-    (the clause's index in `clauses`).
-    """
+def classify_clause(clause: str, law_sections: list[dict]) -> dict:
+    """Classify one tenancy clause against retrieved UK law sections."""
     context = "\n\n".join(f"[{s['source']} {s['section']}]\n{s['text']}" for s in law_sections)
-    numbered = "\n\n".join(f"<clause id={i}>\n{c}\n</clause>" for i, c in enumerate(clauses))
     prompt = (
         "You help UK tenants understand their tenancy agreement.\n"
-        "Using ONLY the law sections below, classify every clause:\n"
+        "Using ONLY the law sections below, classify the clause:\n"
         "- ok: nothing to flag\n"
         "- clarify: ambiguous or worth confirming with the landlord\n"
         "- contradicts_law: conflicts with the cited law\n"
-        "Return one item per clause with its clause_id. Cite the section you relied on. "
-        "If the sections don't cover it, don't claim illegality.\n\n"
-        f"LAW SECTIONS:\n{context}\n\nCLAUSES:\n{numbered}"
+        "Cite the section you relied on. If the sections don't cover it, don't claim illegality.\n\n"
+        f"LAW SECTIONS:\n{context}\n\nCLAUSE:\n{clause}"
     )
     response = client().models.generate_content(
         model=config.GEMINI_MODEL,

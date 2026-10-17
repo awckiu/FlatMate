@@ -1,5 +1,22 @@
 # Tenancy Demystifier (IKU Hackathon 2026)
 
+## Rules for Claude (read first)
+
+1. **Never `git push` (including creating remote branches) without the user's explicit
+   confirmation for that specific push.** Commit locally, then ask.
+2. Work on feature branches off `main` (`feature/<name>-<thing>`). Never commit to `main`
+   directly.
+3. Never read, print or commit secrets (`.env`, API keys). `.env.example` holds empty
+   placeholders only.
+4. Stick to the MVP scope below. Ask before adding features, new dependencies or new services.
+5. Before saying something works, actually run it: backend starts, `/api/health` responds,
+   `npm run build` passes, plus whatever the change touches.
+6. Report every change as a precise list: files added/changed (one line each on what and
+   why), what you tested and the result, and what you did *not* test.
+7. Follow `.claude/skills/feature-workflow/SKILL.md` for any code change.
+
+---
+
 24-hour hackathon project, **Society Track** (a real problem people face during a transition).
 Ours: students and people new to UK renting sign long tenancy agreements they don't fully
 understand, and miss clauses that cause legal or communication problems later.
@@ -80,29 +97,41 @@ kept for the bills and area features later.
   - Law knowledge base: each source's sections and embeddings, stored once, with the
     source's last-updated date.
   - User data: tenancies (case number, tenants, address), extracted clauses and flags,
-    and photo records (link to the file in Vultr, date, room). Schema to be designed.
+    and photo records (link to the file in Vultr, date, room). Schema: `backend/db/schema.sql`.
 - **incident.io**: future extension, not in the MVP (see Later).
 
 ## Stack
 
-- `frontend/`: React 19 + Vite + TypeScript (`src/App.tsx`).
+- `index.html`: standalone upload/results page served by FastAPI when present.
+- `frontend/`: React 19 + Vite + TypeScript alternative frontend (`src/App.tsx`).
 - `backend/`: FastAPI (Python). Routes live under `/api`: `GET /api/health`,
-  `POST /api/analyze` (multipart: `agreement` PDF, `tenant_name`, `property_address`).
-  Config in `app/config.py`, read from `backend/.env` (copy `backend/.env.example`).
-- In production FastAPI serves the built frontend (`frontend/dist`), so the app is one
-  process on one URL. In dev, Vite proxies `/api` to FastAPI on port 8000.
+  `POST /api/analyze`. Config in `app/config.py`, read from `backend/.env` (copy
+  `backend/.env.example`).
+- The analysis form accepts the PDF, `lead_tenant`, optional comma-separated `co_tenants`,
+  and `property_address`. The response includes a summary, need-to-knows, flags,
+  citations, email, analysis mode, and whether relevant law sections were found. The older
+  `tenant_name` form field remains accepted for compatibility.
+- FastAPI serves the standalone `index.html` at `/` when it exists; otherwise it serves the
+  built React frontend (`frontend/dist`). The app is one process on one URL. In dev, Vite
+  proxies `/api` to FastAPI on port 8000.
 
 ## Analysis pipeline (RAG over UK housing law)
 
 `POST /api/analyze` (`backend/app/pipeline.py`):
 
-1. PDF → text (pypdf) → split into numbered clauses.
-2. For each clause, retrieve the top-k relevant law sections (`app/rag/retrieve.py`).
-3. Gemini with structured JSON output classifies the clause as `ok` / `clarify` /
-   `contradicts_law`, citing a retrieved section (`app/llm.py`).
-4. Draft the landlord email from the flags.
+1. PDF → text (pypdf); reject scanned PDFs with no selectable text and documents over the
+   100,000-character analysis limit.
+2. Split into clauses and batch their embeddings to retrieve relevant law sections
+   (`app/rag/retrieve.py`).
+3. Gemini makes one structured call for the agreement summary, need-to-knows, and flags
+   (`app/llm.py`). Legal flags are only retained when their citation matches a retrieved
+   source and section.
+4. Draft the landlord email from the verified or clarification flags.
 
-Without `GEMINI_API_KEY` the endpoint returns placeholder flags (`mode: "placeholder"`).
+Without `GEMINI_API_KEY` the endpoint returns an explicit unanalyzed placeholder response
+(`mode: "placeholder"`). Law source files are not included; add them under
+`backend/data/law/` before expecting law-grounded results. Re-running ingestion replaces the
+chunks for each supplied source rather than appending duplicates.
 
 Knowledge base:
 - Sources (list in `scripts/ingest_law.py`): Housing Act 1988, Housing Act 2004, Tenant
@@ -124,14 +153,19 @@ Backend:
     .venv\Scripts\pip install -r requirements.txt
     .venv\Scripts\uvicorn main:app --reload --port 8000
 
-Frontend (second terminal):
+Standalone app (after starting the backend):
+
+    # Open http://localhost:8000
+
+Alternative React frontend (second terminal):
 
     cd frontend
     npm install
     npm run dev          # http://localhost:5173
 
-Production-style (one process): `cd frontend; npm run build`, then run uvicorn as above
-and open http://localhost:8000.
+Production-style (one process): run uvicorn as above and open http://localhost:8000. To use the
+React frontend instead, build it with `cd frontend; npm run build` and remove or rename the
+standalone `index.html` so FastAPI serves `frontend/dist`.
 
 ## Deploy on Vultr
 
@@ -145,9 +179,9 @@ Tiger Data stays a separate hosted database.
   `awckiu`). Give commands for PowerShell.
 - Secrets (Gemini, Vultr, Tiger Data) go in `.env` files, which are git-ignored. Never
   commit them.
-- **Ask before pushing.** Never commit, push or open a PR until a team member has
-  approved it. Before asking, show every change in the chat in full: the complete
-  diff, or the whole file for new files. A summary or an attachment alone is not enough.
+- **Ask before pushing.** Never push or open a PR until a team member has approved it.
+  Before asking, show every change in the chat in full: the complete diff, or the whole
+  file for new files. A summary or an attachment alone is not enough.
 - Never commit secrets (API keys, `.env` files), and never paste them into diffs shown
   in chat.
 - Keep changes small and demoable; commit working states often.
