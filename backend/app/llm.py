@@ -17,7 +17,11 @@ def client() -> genai.Client:
 
 
 def embed(texts: list[str]) -> list[list[float]]:
-    result = client().models.embed_content(model=config.GEMINI_EMBED_MODEL, contents=texts)
+    result = client().models.embed_content(
+        model=config.GEMINI_EMBED_MODEL,
+        contents=texts,
+        config=types.EmbedContentConfig(output_dimensionality=config.EMBED_DIM),
+    )
     return [e.values for e in result.embeddings]
 
 
