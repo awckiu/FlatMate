@@ -41,24 +41,35 @@ who sign tenancy agreements they don't fully understand.
 
 ## Stack
 
-- `frontend/`: React + Vite + TypeScript. Upload page (PDF, tenant name, address).
+- `index.html`: standalone upload/results page served by FastAPI when present.
+- `frontend/`: React + Vite + TypeScript alternative frontend.
 - `backend/`: FastAPI (Python). Routes live under `/api` (`/api/health`, `POST /api/analyze`,
-  which is a stub for now). Reads `GEMINI_API_KEY` from `backend/.env`. Copy
+  which analyzes uploaded PDFs). Reads `GEMINI_API_KEY` from `backend/.env`. Copy
   `backend/.env.example` to create it.
-- In production, FastAPI serves the built frontend (`frontend/dist`), so the app runs as one
-  process on one URL. In dev, Vite proxies `/api` to FastAPI on port 8000.
+- The analysis form accepts `lead_tenant`, optional comma-separated `co_tenants`, and
+  `property_address` with the PDF. The response includes a summary, need-to-knows, flags,
+  citations, email, analysis mode, and whether relevant law sections were found. The older
+  `tenant_name` form field remains accepted for compatibility.
+- FastAPI serves the standalone `index.html` at `/` when it exists; otherwise it serves the
+  built React frontend (`frontend/dist`). Vite proxies `/api` to FastAPI on port 8000.
 
 ## Target architecture (RAG over UK housing law)
 
 `POST /api/analyze` pipeline (`backend/app/pipeline.py`):
 
-1. PDF → text (pypdf) → split into numbered clauses.
-2. For each clause, retrieve the top-k relevant law sections (`app/rag/retrieve.py`).
-3. Gemini with structured JSON output classifies the clause as `ok` / `clarify` /
-   `contradicts_law`, citing a retrieved section (`app/llm.py`).
-4. Draft the landlord email from the flags.
+1. PDF → text (pypdf); reject scanned PDFs with no selectable text and documents over the
+   100,000-character analysis limit.
+2. Split into clauses and batch their embeddings to retrieve relevant law sections
+   (`app/rag/retrieve.py`).
+3. Gemini makes one structured call for the agreement summary, need-to-knows, and flags
+   (`app/llm.py`). Legal flags are only retained when their citation matches a retrieved
+   source and section.
+4. Draft the landlord email from the verified or clarification flags.
 
-Without `GEMINI_API_KEY` the endpoint returns placeholder flags (`mode: "placeholder"`).
+Without `GEMINI_API_KEY` the endpoint returns an explicit unanalyzed placeholder response
+(`mode: "placeholder"`). Law source files are not included; add them under
+`backend/data/law/` before expecting law-grounded results. Re-running ingestion replaces the
+chunks for each supplied source rather than appending duplicates.
 
 Knowledge base:
 - Sources: Housing Act 1988, Housing Act 2004, Tenant Fees Act 2019, Renters' Rights Act 2025,
@@ -82,14 +93,19 @@ Backend:
     .venv\Scripts\pip install -r requirements.txt
     .venv\Scripts\uvicorn main:app --reload --port 8000
 
-Frontend (second terminal):
+Standalone app (after starting the backend):
+
+    # Open http://localhost:8000
+
+Alternative React frontend (second terminal):
 
     cd frontend
     npm install
     npm run dev          # http://localhost:5173
 
-Production-style (one process): `cd frontend; npm run build`, then run uvicorn as above
-and open http://localhost:8000.
+Production-style (one process): run uvicorn as above and open http://localhost:8000. To use the
+React frontend instead, build it with `cd frontend; npm run build` and remove or rename the
+standalone `index.html` so FastAPI serves `frontend/dist`.
 
 ## Deploy on Vultr
 

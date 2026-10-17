@@ -25,7 +25,11 @@ def chunk_by_section(text: str, source: str, url: str = "") -> list[Chunk]:
 
 
 def ingest(store: VectorStore, chunks: list[Chunk], batch_size: int = 50) -> int:
+    if not chunks:
+        return 0
+    embeddings = []
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i : i + batch_size]
-        store.add(batch, llm.embed([c.text for c in batch]))
+        embeddings.extend(llm.embed([c.text for c in batch]))
+    store.replace_source(chunks[0].source, chunks, embeddings)
     return len(chunks)

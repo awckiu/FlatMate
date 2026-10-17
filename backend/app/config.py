@@ -18,3 +18,4 @@ LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
 
 FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
+STANDALONE_FRONTEND = BACKEND_DIR.parent / "index.html"

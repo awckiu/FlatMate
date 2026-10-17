@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flatmate - Tenancy Demystifier</title>
+    <!-- Tailwind CSS for rapid UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-house-user"></i> flatmate
+            </h1>
+            <p class="text-gray-500 mt-2">Demystifying your tenancy agreement. Know your rights, spot the red flags.</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- INPUT SECTION -->
+        <section id="input-section" class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+            <h2 class="text-xl font-semibold mb-6 border-b pb-2">Your Details</h2>
+
+            <form id="analysis-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Name Input -->
+                    <div>
+                        <label for="tenant-name" class="block text-sm font-medium text-gray-700 mb-1">Lead Tenant / Co-tenant Name</label>
+                        <input type="text" id="tenant-name" required placeholder="e.g. Jane Doe"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    </div>
+
+                    <div>
+                        <label for="co-tenants" class="block text-sm font-medium text-gray-700 mb-1">Co-tenant names (optional)</label>
+                        <input type="text" id="co-tenants" placeholder="Separate names with commas"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    </div>
+
+                    <!-- Address Input -->
+                    <div>
+                        <label for="property-address" class="block text-sm font-medium text-gray-700 mb-1">Property Address</label>
+                        <input type="text" id="property-address" required placeholder="e.g. 10 Downing Street, London"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="pt-2">
+                    <p class="block text-sm font-medium text-gray-700 mb-1">Tenancy Agreement (PDF)</p>
+                    <div id="drop-zone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-indigo-400 transition-colors bg-gray-50">
+                        <div class="space-y-1 text-center">
+                            <i class="fa-solid fa-file-pdf text-4xl text-gray-400 mb-2"></i>
+                            <div class="flex text-sm text-gray-600 justify-center">
+                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 px-1">
+                                    <span>Upload a file</span>
+                                    <input id="file-upload" name="file-upload" type="file" class="sr-only" accept=".pdf,application/pdf" required aria-describedby="file-help file-name-display">
+                                </label>
+                                <p class="pl-1">or drag and drop</p>
+                            </div>
+                            <p id="file-help" class="text-xs text-gray-500">PDF up to 10MB. Choose a file or drop it here.</p>
+                            <p id="file-name-display" class="text-sm font-semibold text-indigo-600 mt-2 hidden"></p>
+                            <p id="file-error" class="text-sm text-red-600 mt-2 hidden" role="alert"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors flex justify-center items-center gap-2">
+                    <span>Analyse Agreement</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </button>
+            </form>
+        </section>
+
+        <!-- LOADING STATE (Hidden by default) -->
+        <section id="loading-section" class="hidden flex-col items-center justify-center py-12" role="status" aria-live="polite">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
+            <p class="text-lg text-gray-600 font-medium">Flatmate AI is reading your agreement...</p>
+            <p class="text-sm text-gray-400 mt-1">Reviewing the agreement and available law references...</p>
+        </section>
+
+        <!-- RESULTS SECTION (Hidden by default) -->
+        <section id="results-section" class="hidden space-y-8">
+
+            <!-- Summary -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-green-500"></i> Key Takeaways
+                </h3>
+                <p id="analysis-meta" class="text-sm text-gray-500 mb-3"></p>
+                <p id="analysis-summary" class="text-gray-600 leading-relaxed"></p>
+                <h4 class="text-lg font-semibold text-gray-800 mt-5 mb-2">Need-to-knows</h4>
+                <ul id="need-to-know-list" class="space-y-2 text-gray-700"></ul>
+                <p id="no-need-to-knows" class="hidden text-sm text-gray-500">No key details were returned.</p>
+                <p id="analysis-mode" class="hidden mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900" role="status"></p>
+                <p class="mt-3 text-sm text-gray-500">This tool provides information, not legal advice. Verify important legal questions with a qualified adviser.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Clarifications / Questions -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                    <h3 class="text-lg font-bold text-amber-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-question"></i> Questions to ask
+                    </h3>
+                    <ul id="clarification-list" class="space-y-3"></ul>
+                    <p id="no-clarifications" class="hidden text-sm text-amber-900">No clarification flags were returned.</p>
+                </div>
+
+                <!-- Legal Contradictions / Flags -->
+                <div class="bg-red-50 p-6 rounded-xl border border-red-200">
+                    <h3 class="text-lg font-bold text-red-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Possible legal issues
+                    </h3>
+                    <ul id="legal-list" class="space-y-3"></ul>
+                    <p id="no-legal-flags" class="hidden text-sm text-red-900">No legal flags were returned. This is not a guarantee that the agreement complies with the law.</p>
+                    <p id="law-data-warning" class="hidden text-sm text-red-900">No relevant law reference sections were available, so legal issues could not be checked.</p>
+                </div>
+            </div>
+
+            <!-- Email Draft -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope-open-text text-indigo-500"></i> Draft Email to Landlord
+                    </h3>
+                    <button id="copy-btn" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2">
+                        <i class="fa-regular fa-copy"></i> Copy Email
+                    </button>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <pre id="email-content" class="whitespace-pre-wrap font-sans text-gray-700 text-sm leading-relaxed"></pre>
+                </div>
+            </div>
+
+            <button type="button" id="new-analysis-btn" class="bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                Analyse another agreement
+            </button>
+        </section>
+
+        <p id="request-error" class="hidden text-red-700 bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert"></p>
+    </main>
+
+    <!-- UI Logic Script -->
+    <script>
+        // DOM Elements
+        const form = document.getElementById('analysis-form');
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const inputSection = document.getElementById('input-section');
+        const loadingSection = document.getElementById('loading-section');
+        const resultsSection = document.getElementById('results-section');
+        const copyBtn = document.getElementById('copy-btn');
+        const emailContent = document.getElementById('email-content');
+        const dropZone = document.getElementById('drop-zone');
+        const fileError = document.getElementById('file-error');
+        const requestError = document.getElementById('request-error');
+        const submitBtn = document.getElementById('submit-btn');
+        const newAnalysisBtn = document.getElementById('new-analysis-btn');
+
+        // Dynamic displays
+        const tenantNameInput = document.getElementById('tenant-name');
+        const coTenantsInput = document.getElementById('co-tenants');
+        const propertyAddressInput = document.getElementById('property-address');
+        const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+        function showFile(file) {
+            fileError.textContent = '';
+            fileError.classList.add('hidden');
+            fileNameDisplay.classList.add('hidden');
+            if (!file) return false;
+
+            if (!file.name.toLowerCase().endsWith('.pdf')) {
+                fileError.textContent = 'Please select a PDF file.';
+            } else if (file.size > MAX_FILE_SIZE) {
+                fileError.textContent = 'The PDF must be 10MB or smaller.';
+            } else {
+                fileNameDisplay.textContent = 'Selected: ' + file.name;
+                fileNameDisplay.classList.remove('hidden');
+                return true;
+            }
+            fileError.classList.remove('hidden');
+            fileInput.value = '';
+            return false;
+        }
+
+        fileInput.addEventListener('change', function() {
+            showFile(fileInput.files[0]);
+        });
+
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                dropZone.classList.add('border-indigo-500', 'bg-indigo-50');
+            });
+        });
+        ['dragleave', 'drop'].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+            });
+        });
+        dropZone.addEventListener('drop', (event) => {
+            const file = event.dataTransfer.files[0];
+            if (file && showFile(file)) {
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                fileInput.files = transfer.files;
+            }
+        });
+
+        function appendFlag(list, flag, kind) {
+            const item = document.createElement('li');
+            item.className = kind === 'legal'
+                ? 'bg-white p-3 rounded-lg border border-red-100 shadow-sm text-sm text-red-900'
+                : 'bg-white p-3 rounded-lg border border-amber-100 shadow-sm text-sm text-amber-900';
+            const clause = document.createElement('strong');
+            clause.textContent = flag.clause_ref
+                ? `Clause ${flag.clause_ref}`
+                : (flag.clause_excerpt || 'Agreement clause');
+            item.append(clause, document.createTextNode(': ' + (flag.explanation || flag.message || 'No explanation provided.')));
+            if (flag.citation) {
+                const citation = document.createElement('em');
+                citation.textContent = typeof flag.citation === 'string'
+                    ? ' (' + flag.citation + ')'
+                    : ` (${flag.citation.source} ${flag.citation.section})`;
+                item.append(citation);
+                if (typeof flag.citation === 'object' && flag.citation.url) {
+                    const link = document.createElement('a');
+                    link.href = flag.citation.url;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.textContent = ' Source';
+                    item.append(link);
+                }
+            }
+            list.append(item);
+        }
+
+        function renderResults(result) {
+            const flags = Array.isArray(result.flags) ? result.flags : [];
+            const clarificationList = document.getElementById('clarification-list');
+            const legalList = document.getElementById('legal-list');
+            const needToKnowList = document.getElementById('need-to-know-list');
+            clarificationList.replaceChildren();
+            legalList.replaceChildren();
+            needToKnowList.replaceChildren();
+            flags.forEach((flag) => {
+                if (flag.kind === 'contradicts_law' || flag.kind === 'legal') appendFlag(legalList, flag, 'legal');
+                else if (flag.kind === 'clarify' || flag.kind === 'clarification') appendFlag(clarificationList, flag, 'clarification');
+            });
+            document.getElementById('no-clarifications').classList.toggle(
+                'hidden', flags.some((flag) => flag.kind === 'clarification' || flag.kind === 'clarify')
+            );
+            document.getElementById('no-legal-flags').classList.toggle(
+                'hidden', !result.law_data_available || flags.some((flag) => flag.kind === 'legal' || flag.kind === 'contradicts_law')
+            );
+            document.getElementById('analysis-meta').textContent =
+                `${result.filename || 'Agreement'} · ${result.pages} page(s) · ${result.property_address}`;
+            document.getElementById('analysis-summary').textContent = result.summary ||
+                'No summary was returned for this agreement.';
+            const needToKnows = Array.isArray(result.need_to_knows) ? result.need_to_knows : [];
+            needToKnows.forEach((item) => {
+                const entry = document.createElement('li');
+                const topic = document.createElement('strong');
+                topic.textContent = item.topic || 'Key detail';
+                entry.append(topic, document.createTextNode(': ' + (item.text || '')));
+                if (item.clause_ref) entry.append(document.createTextNode(` (Clause ${item.clause_ref})`));
+                needToKnowList.append(entry);
+            });
+            document.getElementById('no-need-to-knows').classList.toggle('hidden', needToKnows.length > 0);
+            const modeNote = document.getElementById('analysis-mode');
+            modeNote.textContent = result.mode === 'placeholder'
+                ? 'Gemini is not configured on the server. This document was not analyzed.'
+                : result.law_data_available
+                    ? 'AI-generated information can be incomplete or incorrect.'
+                    : 'No relevant law reference sections were available. The summary is AI-generated, but legal issues could not be checked against the reference laws.';
+            modeNote.classList.remove('hidden');
+            document.getElementById('law-data-warning').classList.toggle(
+                'hidden', result.mode === 'placeholder' || result.law_data_available
+            );
+            emailContent.textContent = result.email || 'No email draft was generated because no issues were flagged.';
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent page reload
+
+            const file = fileInput.files[0];
+            if (!file || !showFile(file)) {
+                if (!file) {
+                    fileError.textContent = 'Please upload a tenancy agreement PDF.';
+                    fileError.classList.remove('hidden');
+                }
+                return;
+            }
+
+            requestError.textContent = '';
+            requestError.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            inputSection.classList.add('hidden');
+            loadingSection.classList.remove('hidden');
+            loadingSection.classList.add('flex');
+            submitBtn.disabled = true;
+
+            const body = new FormData();
+            body.append('agreement', file);
+            body.append('lead_tenant', tenantNameInput.value);
+            body.append('co_tenants', coTenantsInput.value);
+            body.append('property_address', propertyAddressInput.value);
+
+            try {
+                const response = await fetch('/api/analyze', { method: 'POST', body });
+                let result;
+                try {
+                    result = await response.json();
+                } catch {
+                    throw new Error('The server returned an invalid response.');
+                }
+                if (!response.ok) {
+                    throw new Error(result.detail || 'Agreement analysis failed.');
+                }
+                renderResults(result);
+                resultsSection.classList.remove('hidden');
+            } catch (error) {
+                requestError.textContent = error instanceof Error
+                    ? error.message
+                    : 'Could not analyze the agreement. Please try again.';
+                requestError.classList.remove('hidden');
+                inputSection.classList.remove('hidden');
+            } finally {
+                loadingSection.classList.remove('flex');
+                loadingSection.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Handle Copy to Clipboard
+        copyBtn.addEventListener('click', function() {
+            const textToCopy = emailContent.textContent;
+            if (!navigator.clipboard) {
+                alert("Clipboard access isn't available in this browser. Please select and copy the email manually.");
+                return;
+            }
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Temporary change button text to show success
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert("Failed to copy to clipboard.");
+            });
+        });
+
+        newAnalysisBtn.addEventListener('click', () => {
+            form.reset();
+            fileNameDisplay.textContent = '';
+            fileNameDisplay.classList.add('hidden');
+            fileError.textContent = '';
+            fileError.classList.add('hidden');
+            requestError.textContent = '';
+            requestError.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            inputSection.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
