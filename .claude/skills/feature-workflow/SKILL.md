@@ -1,6 +1,6 @@
 ---
 name: feature-workflow
-description: Workflow for any code change in Tenancy Demystifier - branch off dev, implement within MVP scope, test, report precisely, and only push after explicit user confirmation. Use before starting any feature, fix or refactor in this repo.
+description: Workflow for any code change in Tenancy Demystifier - branch off dev, implement within MVP scope, test, report precisely, and only git push after explicit user confirmation. Use before starting any feature, fix or refactor in this repo.
 ---
 
 # Feature workflow
@@ -11,7 +11,7 @@ Follow these steps for every change. Don't skip the test or the ask.
 
 ```
 git switch dev
-git pull            # only if the user has said it's OK to fetch; it's read-only, so normally fine
+git pull
 git switch -c feature/<name>-<thing>
 ```
 
@@ -51,4 +51,4 @@ Tell the user:
 - **Proposed push**: the exact commands, e.g.
   `git push -u origin feature/<name>-<thing>` and `gh pr create --base dev`
 
-Then **stop and wait for explicit confirmation** before pushing or opening a PR.
+Then **stop and wait for explicit confirmation** before any `git push`.
