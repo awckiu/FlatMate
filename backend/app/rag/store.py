@@ -44,6 +44,9 @@ class LocalStore:
         new /= np.linalg.norm(new, axis=1, keepdims=True)
         self.vectors = new if self.vectors.size == 0 else np.vstack([self.vectors, new])
         self.chunks.extend(chunks)
+        self._save()
+
+    def _save(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(self.path, vectors=self.vectors, chunks=json.dumps([asdict(c) for c in self.chunks]))
 
@@ -74,38 +77,52 @@ class LocalStore:
 
 
 class PgVectorStore:
-    """Postgres + pgvector on Tiger Data."""
+    """Postgres + pgvector on Tiger Data. Tables come from db/schema.sql."""
 
-    def __init__(self, url: str, dim: int = 3072):
+    def __init__(self, url: str):
         import psycopg
         from pgvector.psycopg import register_vector
 
         self.conn = psycopg.connect(url, autocommit=True)
-        self.conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
+        self.conn.execute(config.SCHEMA_PATH.read_text(encoding="utf-8"))
         register_vector(self.conn)
-        self.conn.execute(
-            f"""CREATE TABLE IF NOT EXISTS law_sections (
-                id bigserial PRIMARY KEY,
-                source text, section text, text text, url text,
-                embedding vector({dim}))"""
-        )
 
     def add(self, chunks, embeddings):
         with self.conn.cursor() as cur:
+            source_ids = {}
+            for c in chunks:
+                if c.source not in source_ids:
+                    cur.execute(
+                        """INSERT INTO law_sources (name, url) VALUES (%s, %s)
+                           ON CONFLICT (name) DO UPDATE SET url = EXCLUDED.url RETURNING id""",
+                        (c.source, c.url),
+                    )
+                    source_ids[c.source] = cur.fetchone()[0]
             cur.executemany(
-                "INSERT INTO law_sections (source, section, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
-                [(c.source, c.section, c.text, c.url, np.asarray(e)) for c, e in zip(chunks, embeddings)],
+                "INSERT INTO law_sections (source_id, section_ref, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
+                [
+                    (source_ids[c.source], c.section, c.text, c.url, np.asarray(e))
+                    for c, e in zip(chunks, embeddings)
+                ],
             )
 
     def replace_source(self, source, chunks, embeddings):
         if any(chunk.source != source for chunk in chunks):
             raise ValueError("All replacement chunks must belong to the requested source")
+        url = chunks[0].url if chunks else None
         with self.conn.transaction():
-            self.conn.execute("DELETE FROM law_sections WHERE source = %s", (source,))
             with self.conn.cursor() as cur:
+                cur.execute(
+                    """INSERT INTO law_sources (name, url) VALUES (%s, %s)
+                       ON CONFLICT (name) DO UPDATE SET url = EXCLUDED.url, ingested_at = now()
+                       RETURNING id""",
+                    (source, url),
+                )
+                source_id = cur.fetchone()[0]
+                cur.execute("DELETE FROM law_sections WHERE source_id = %s", (source_id,))
                 cur.executemany(
-                    "INSERT INTO law_sections (source, section, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
-                    [(c.source, c.section, c.text, c.url, np.asarray(e)) for c, e in zip(chunks, embeddings)],
+                    "INSERT INTO law_sections (source_id, section_ref, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
+                    [(source_id, c.section, c.text, c.url, np.asarray(e)) for c, e in zip(chunks, embeddings)],
                 )
 
     def is_empty(self):
@@ -113,7 +130,9 @@ class PgVectorStore:
 
     def search(self, embedding, k):
         rows = self.conn.execute(
-            "SELECT source, section, text, url FROM law_sections ORDER BY embedding <=> %s LIMIT %s",
+            """SELECT src.name, s.section_ref, s.text, s.url
+               FROM law_sections s JOIN law_sources src ON src.id = s.source_id
+               ORDER BY s.embedding <=> %s LIMIT %s""",
             (np.asarray(embedding), k),
         ).fetchall()
         return [Chunk(*r) for r in rows]
