@@ -41,6 +41,11 @@ def fetch(url: str) -> bytes:
 # ===== legislation.gov.uk =====
 
 
+def _flat(text: str | None) -> str:
+    """XML layout whitespace (some files are pretty-printed) is a space; line breaks come from the structure."""
+    return re.sub(r"\s*\n\s*", " ", text or "")
+
+
 def _render(el: ET.Element, number_paragraphs: bool, parent: str = "") -> str:
     """Plain text of a CLML element, one line per paragraph."""
     tag = el.tag.removeprefix(LEG)
@@ -55,9 +60,9 @@ def _render(el: ET.Element, number_paragraphs: bool, parent: str = "") -> str:
             # A section's own number is already its section_ref; schedule paragraphs keep theirs.
             return f"\n{number} " if number_paragraphs else ""
         return f"\n({number}) "
-    out = el.text or ""
+    out = _flat(el.text)
     for child in el:
-        out += _render(child, number_paragraphs, tag) + (child.tail or "")
+        out += _render(child, number_paragraphs, tag) + _flat(child.tail)
     if tag in ("Text", "Title"):
         out += "\n"
     return out

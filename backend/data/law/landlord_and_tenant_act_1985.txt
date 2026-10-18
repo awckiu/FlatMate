@@ -134,8 +134,7 @@ and the house or dwelling shall be regarded as unfit for human habitation if, an
 (i) forms part of any part of a building in which the lessor has an estate or interest; or
 (ii) is owned by the lessor or under his control.
 (1B) Nothing in subsection (1A) shall be construed as requiring the lessor to carry out any works or repairs unless the disrepair (or failure to maintain in working order) is such as to affect the lessee’s enjoyment of the dwelling-house or of any common parts, as defined in section 60(1) of the Landlord and Tenant Act 1987, which the lessee, as such, is entitled to use.
-(2) The covenant implied by subsection (1)
-(“the lessor’s repairing covenant”) shall not be construed as requiring the lessor—
+(2) The covenant implied by subsection (1) (“the lessor’s repairing covenant”) shall not be construed as requiring the lessor—
 (a) to carry out works or repairs for which the lessee is liable by virtue of his duty to use the premises in a tenant-like manner, or would be so liable but for an express covenant on his part,
 (b) to rebuild or reinstate the premises in the case of destruction or damage by fire, or by tempest, flood or other inevitable accident, or
 (c) to keep in repair or maintain anything which the lessee is entitled to remove from the dwelling-house.

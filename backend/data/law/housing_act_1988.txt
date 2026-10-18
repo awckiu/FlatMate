@@ -9,8 +9,7 @@ last_updated: 2026-06-30
 (c) the tenancy is not one which, by virtue of subsection (2) or subsection (6) below, cannot be an assured tenancy.
 (1A) Subsection (1) has effect subject to section 15A (loss of assured tenancy status).
 (2) Subject to subsection (3) below, if and so long as a tenancy falls within any paragraph in Part I of Schedule 1 to this Act, it cannot be an assured tenancy; and in that Schedule—
-(a)
-“tenancy” means a tenancy under which a dwelling-house is let as a separate dwelling;
+(a) “tenancy” means a tenancy under which a dwelling-house is let as a separate dwelling;
 (b) Part II has effect for determining the rateable value of a dwelling-house for the purposes of Part I; and
 (c) Part III has effect for supplementing paragraph 10 in Part I.
 (2A) The Secretary of State may by order replace any amount referred to in paragraphs 2 and 3A of Schedule 1 to this Act by such amount as is specified in the order; and such an order shall be made by statutory instrument which shall be subject to annulment in pursuance of a resolution of either House of Parliament.
@@ -107,8 +106,7 @@ and, accordingly, the service by the landlord of a notice to quit is of no effec
 ### s.7 | Orders for possession. | https://www.legislation.gov.uk/ukpga/1988/50/section/7
 (1) The court shall not make an order for possession of a dwelling-house let on an assured tenancy except on one or more of the grounds set out in Schedule 2 to this Act; but nothing in this Part of this Act relates to proceedings for possession of such a dwelling-house which are brought by a mortgagee, within the meaning of the Law of Property Act 1925, who has lent money on the security of the assured tenancy.
 (2) The following provisions of this section have effect, subject to section 8 below, in relation to proceedings for the recovery of possession of a dwelling-house let on an assured tenancy.
-(3) If the court is satisfied that any of the grounds in Part I of Schedule 2 to this Act is established then , subject to the following provisions of this section and section 10A
-below (and to any available defence based on the tenant's Convention rights, within the meaning of the Human Rights Act 1998), the court shall make an order for possession.
+(3) If the court is satisfied that any of the grounds in Part I of Schedule 2 to this Act is established then , subject to the following provisions of this section and section 10A below (and to any available defence based on the tenant's Convention rights, within the meaning of the Human Rights Act 1998), the court shall make an order for possession.
 (4) If the court is satisfied that any of the grounds in Part II of Schedule 2 to this Act is established, then, the court may make an order for possession if it considers it reasonable to do so.
 (5) Part III of Schedule 2 to this Act shall have effect for supplementing Ground 9 in that Schedule .
 (5ZA) The court may not make an order for possession of a dwelling-house on any of Grounds 1 to 5H or Ground 6A where—
@@ -1113,24 +1111,14 @@ In this Ground—
 “riot” is to be construed in accordance with section 1 of the Public Order Act 1986.
 This Ground applies only in relation to dwelling-houses in England.
 Ground 14A
-The dwelling-house was occupied (whether alone or with others) by
-a married couple, a couple who are civil partners of each other...
-or a couple living together as if they were a married couple or civil partners
-and—
+The dwelling-house was occupied (whether alone or with others) by a married couple, a couple who are civil partners of each other... or a couple living together as if they were a married couple or civil partners and—
 (a) one or both of the partners is a tenant of the dwelling-house,
 (b) the landlord who is seeking possession is a non-profit registered provider of social housing, a registered social landlord or a charitable housing trust or, where the dwelling-house is social housing within the meaning of Part 2 of the Housing and Regeneration Act 2008, a profit-making registered provider of social housing,
 (c) one partner has left the dwelling-house because of violence or threats of violence by the other towards—
 (i) that partner, or
 (ii) a member of the family of that partner who was residing with that partner immediately before the partner left, and
 (d) the court is satisfied that the partner who has left is unlikely to return.
-For the purposes of this ground
-“registered social landlord” and
-“member of the family” have the same meaning as in Part I of the
-Housing Act 1996 and
-“
-charitable housing trust
-” means a housing trust, within the meaning of the
-Housing Associations Act 1985, which is a charity ....
+For the purposes of this ground “registered social landlord” and “member of the family” have the same meaning as in Part I of the Housing Act 1996 and “ charitable housing trust ” means a housing trust, within the meaning of the Housing Associations Act 1985, which is a charity ....
 Ground 15
 The condition of any furniture provided for use under the tenancy has, in the opinion of the court, deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house and, in the case of ill-treatment by a person lodging with the tenant or by a sub-tenant of his, the tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
 Ground 5C
