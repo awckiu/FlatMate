@@ -24,6 +24,8 @@ SESSION_HTTPS_ONLY = os.getenv("SESSION_HTTPS_ONLY", "").lower() == "true"
 DATA_DIR = BACKEND_DIR / "data"
 LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
+# Checklist Gemini follows for the quick read (summary + need-to-knows). Skipped if missing.
+CHECKLIST_PATH = BACKEND_DIR.parent / "docs" / "things_to_check.txt"
 
 FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
 STANDALONE_FRONTEND = BACKEND_DIR.parent / "index.html"
