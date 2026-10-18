@@ -2172,19 +2172,8 @@
             $('tenancy-start-wrap').classList.toggle('hidden', !signed);
         });
 
-        // The agreement can't be signed after the tenancy starts: each date picker limits the other.
-        function linkSigningDates(signedId, startId) {
-            const sync = () => {
-                $(startId).min = $(signedId).value || '';
-                $(signedId).max = $(startId).value || '';
-            };
-            $(signedId).addEventListener('change', sync);
-            $(startId).addEventListener('change', sync);
-            return sync;
-        }
-        linkSigningDates('signed-on', 'tenancy-start');
-        const syncWorkspaceDates = linkSigningDates('workspace-signed-on', 'workspace-tenancy-start');
-
+        // The agreement can't be signed after the tenancy starts. This is checked when the dates are saved,
+        // not with min/max on the inputs: changing those while someone types the year resets the field.
         function signingDateProblem(signedOn, tenancyStart) {
             return signedOn && tenancyStart && signedOn > tenancyStart
                 ? "The date you signed can't be after the tenancy start date. Check both dates."
@@ -2731,7 +2720,6 @@
                 : 'Add the date you signed and your tenancy start date. Photos and the shared tenancy code unlock on the start date.';
             $('workspace-signed-on').value = profile.signed_on || '';
             $('workspace-tenancy-start').value = profile.tenancy_start || '';
-            syncWorkspaceDates();
             $('save-signing-details').disabled = !isOwner;
             setNotice('signing-error', isOwner ? '' : 'Only the person who set up this tenancy can change the dates.');
             $('tenancy-code-block').classList.toggle('hidden', !profile.code);
