@@ -62,10 +62,11 @@ kept for the bills and area features later.
   for moving out. The same calendar holds bill-payment and meter-reading reminders.
 - **Next-steps advisor**: council tax, bills to set up (energy, WiFi, parking permits) and
   how to reduce them, based on the address.
-- **Bills estimate by region**: EPC rating, council tax, average energy prices (track rises
-  and notify), parking permits; toggle off what the agreement already includes. Also check
-  whether WiFi is included, and cover other relevant bills (e.g. bikes). Throughout the
-  tenancy, remind the tenant to pay bills and submit meter readings on time.
+- **Bills estimate by region**: an initial illustrative household-bill estimator is available
+  after agreement review, with adjustable household size, included-in-rent checks and an
+  optional student-status assumption. Its amounts are not live supplier/council quotes.
+  Property-specific EPC lookup and live energy/water rates, price alerts, and bill reminders
+  remain future work.
 - **Move-in photos**: upload photos at move-in and store them in the database as dated
   evidence, in case a landlord raises an issue later (e.g. deposit deductions). Photos are
   stored only; no LLM analysis of images. Also doubles as a reference tenants can pull from
@@ -112,7 +113,6 @@ kept for the bills and area features later.
   offer is for the Gemini app, not the API; the API runs on an AI Studio key.
 - **Vultr**:
   - Cloud Compute VM running the app (frontend + backend, one process).
-  - Object Storage (S3-compatible) for move-in photo files.
 - **Tiger Data** (Postgres + pgvector):
   - Law knowledge base: each source's sections and embeddings, stored once, with the
     source's last-updated date.
@@ -229,4 +229,3 @@ Tiger Data stays a separate hosted database.
 The Google Doc calls the product "flatmate"; the repo currently calls it Tenancy
 Demystifier. Header copy should be the product name plus a short explanation line (see
 OPEN-4 in project_plan.md for the open branding decision).
-
