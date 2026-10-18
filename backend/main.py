@@ -498,6 +498,20 @@ def get_tenancy_chat(
     return tenancies.list_chat_messages(profile_id, account["id"])
 
 
+@app.get("/api/tenancies/{profile_id}/clause-issues")
+def get_tenancy_clause_issues(
+    profile_id: str,
+    account: dict[str, str] = Depends(current_account),
+):
+    profile = _profile_or_404(tenancies.get_profile(profile_id, account["id"]))
+    if not profile["agreement_signed"]:
+        raise HTTPException(status_code=409, detail="Clause status tracking unlocks once the agreement is signed.")
+    try:
+        return tenancies.list_clause_issues(profile_id, account["id"])
+    except PermissionError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+
+
 @app.post("/api/tenancies/{profile_id}/chat")
 def tenancy_chat(
     profile_id: str,
@@ -517,12 +531,21 @@ def tenancy_chat(
         ]
     )[0]
     try:
+        clause_issues = tenancies.list_clause_issues(profile_id, account["id"])
         result = llm.tenancy_buddy_reply(
             body.message.strip(),
             profile,
             sections,
             body.contact_preference,
             body.request_landlord_draft,
+            clause_issues,
+        )
+        memory_updates = tenancies.record_clause_status_updates(
+            profile_id,
+            account["id"],
+            profile["review"],
+            result["issue_updates"],
+            body.message.strip(),
         )
         message_id = tenancies.add_chat_message(
             profile_id,
@@ -536,10 +559,13 @@ def tenancy_chat(
         raise HTTPException(status_code=502, detail="The tenancy buddy could not answer just now.") from error
     except RuntimeError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
+    except PermissionError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
     return {
         "id": message_id,
         "reply": result["reply"],
         "landlord_draft": result["landlord_draft"],
+        "memory_updates": memory_updates,
         "law_data_available": bool(sections),
         "disclaimer": "FlatMate prepares drafts only and does not send messages. This is not legal advice.",
     }

@@ -23,7 +23,8 @@ those sections. That keeps its answers grounded in real law instead of guesses.
 
 | Part | Tech |
 |---|---|
-| Frontend | React + Vite + TypeScript (`frontend/`) |
+| Main app | Standalone HTML/CSS/JavaScript (`index.html`), served by FastAPI |
+| Review UI | React + Vite + TypeScript (`frontend/`), an alternate agreement-review client |
 | Backend | Python FastAPI (`backend/`) |
 | AI | Google Gemini API (analysis + embeddings) |
 | Law database | Tiger Data (Postgres + pgvector); a local file is used until it's set up |
@@ -31,14 +32,14 @@ those sections. That keeps its answers grounded in real law instead of guesses.
 
 ## Run it on your laptop
 
-You need **Node.js 20+**, **Python 3.11+** and **Git**.
+You need **Python 3.11+** and **Git** to run the complete app.
 
 ```powershell
 git clone https://github.com/awckiu/tenancy-demystifier.git
 cd tenancy-demystifier
 ```
 
-**1. Backend** (terminal 1):
+**Backend and complete app** (from the repository root):
 
 ```powershell
 cd backend
@@ -49,10 +50,13 @@ copy .env.example .env        # then open .env and paste your GEMINI_API_KEY
 ```
 
 Run the command from the `backend` directory so Python uses the backend virtual environment
-and can find `main.py`. On macOS/Linux use `.venv/bin/python -m uvicorn ...` and `cp` instead
-of `copy`.
+and can find `main.py`. Open http://127.0.0.1:8000 for the full account, tenancy, calendar,
+photo, and chatbot experience. On macOS/Linux use `.venv/bin/python -m uvicorn ...` and `cp`
+instead of `copy`.
 
-**2. Frontend** (terminal 2):
+The React/Vite client is an optional alternate interface for agreement review; it does not yet
+include all tenancy-workspace features. To run it, install Node.js 20+, start the backend on
+port 8000, then use a second terminal:
 
 ```powershell
 cd frontend
@@ -60,8 +64,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. If no Gemini key is set yet, the page shows a yellow
-"Gemini API key missing" banner, and the app returns example flags instead of a real analysis.
+Open the Vite URL printed in the terminal (usually http://localhost:5173). Its `/api` requests
+are proxied to the backend on port 8000.
 
 **Never commit `backend/.env`.** It holds secret keys, and this repo is public. `.gitignore`
 already excludes it, so don't force-add it.
@@ -97,9 +101,11 @@ profile. The `HOME-...` tenancy code is issued later and is required to join the
 ongoing-tenancy workspace.
 
 After signing, the tenancy buddy can use saved agreement details to prepare general responses
-and optional landlord email/text drafts. FlatMate does **not** send messages. Move-in photos
-unlock when the tenancy starts; supported image uploads are stored as evidence and are not
-analysed by AI.
+and optional landlord email/text drafts. It also tracks whether flagged clauses and key
+agreement points are reported as resolved or still outstanding when tenants explicitly say so;
+these status notes are shared with members of that tenancy. FlatMate does **not** send messages.
+Move-in photos unlock when the tenancy starts; supported image uploads are stored as evidence
+and are not analysed by AI.
 
 For local development, photos are stored under `backend/data/photos`. To use private
 S3-compatible storage, set `PHOTO_STORAGE_ENDPOINT`, `PHOTO_STORAGE_BUCKET`,
