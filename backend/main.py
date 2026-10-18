@@ -663,6 +663,7 @@ def _analysis_http_error(error: Exception) -> HTTPException:
 @app.post("/api/cases/{code}/amendments")
 async def amend_case(
     code: str,
+    request: Request,
     agreement: UploadFile | None = File(default=None),
     amendment_text: str = Form(default="", max_length=20_000),
 ):
@@ -675,6 +676,15 @@ async def amend_case(
     if (agreement is None) == (not amendment_text):
         raise HTTPException(status_code=422, detail="Upload the new agreement PDF or paste the amendment text (one of the two).")
     code = cases.normalize_code(code)
+    # A case code is shared read-only; only members of a tenancy built on it can change it.
+    account = optional_account(request)
+    if account is None:
+        raise HTTPException(status_code=401, detail="Log in to update this agreement.")
+    if not tenancies.is_member_of_review(code, account["id"]):
+        raise HTTPException(
+            status_code=403,
+            detail="Only tenants in this tenancy can update the agreement. Join it with your HOME- tenancy code first.",
+        )
     try:
         with cases.connect() as conn:
             source = cases.get_agreement_source(conn, code)

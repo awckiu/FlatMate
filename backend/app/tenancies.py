@@ -548,6 +548,23 @@ def update_signing(
     return get_profile(profile_id, account_id)
 
 
+def is_member_of_review(review_id: str, account_id: str) -> bool:
+    """True if the account belongs to a tenancy made from this FLAT- case code."""
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        row = connection.execute(
+            _sql(
+                """
+                SELECT 1 FROM tenancy_profiles p
+                JOIN tenancy_members m ON m.profile_id = p.id
+                WHERE p.review_id = ? AND m.account_id = ?
+                """
+            ),
+            (review_id, account_id),
+        ).fetchone()
+    return row is not None
+
+
 def update_progress(
     profile_id: str,
     account_id: str,

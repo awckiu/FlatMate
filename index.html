@@ -2452,7 +2452,8 @@
                     ? `Updated ${new Date(lastAmendment.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} (${lastAmendment.kind === 'pdf' ? 'new PDF' : 'written amendment'})`
                     : '',
             ].filter(Boolean).join(' · ');
-            $('amend-open').classList.toggle('hidden', !result.case_code);
+            // Only tenants in a tenancy built on this review can change it (the server checks too).
+            $('amend-open').classList.toggle('hidden', !result.case_code || !state.profiles.some((profile) => profile.review_id === result.case_code));
             $('analysis-summary').textContent = result.summary || 'No summary was returned for this agreement.';
             const needToKnows = Array.isArray(result.need_to_knows) ? result.need_to_knows : [];
             needToKnows.forEach((item) => {
