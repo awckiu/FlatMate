@@ -1,0 +1,275 @@
+source: Tenant Fees Act 2019
+url: https://www.legislation.gov.uk/ukpga/2019/4
+last_updated: 2026-06-19
+
+### s.1 | Prohibitions applying to landlords | https://www.legislation.gov.uk/ukpga/2019/4/section/1
+(1) A landlord must not require a relevant person to make a prohibited payment to the landlord in connection with a tenancy of housing in England.
+(2) A landlord must not require a relevant person to make a prohibited payment to a third party in connection with a tenancy of housing in England.
+(3) A landlord must not require a relevant person to enter into a contract with a third party in connection with a tenancy of housing in England if that contract is—
+(a) a contract for the provision of a service, or
+(b) a contract of insurance.
+(4) Subsection (3) does not apply if the contract is for—
+(a) the provision of a utility to the tenant, or
+(b) the provision of a communication service to the tenant.
+(5) A landlord must not require a relevant person to make a loan to any person in connection with a tenancy of housing in England.
+(6) For the purposes of this section, a landlord requires a relevant person to make a payment, enter into a contract or make a loan in connection with a tenancy of housing in England if and only if the landlord—
+(a) requires the person to do any of those things in consideration of the grant, renewal, continuance, variation, assignment, novation or termination of such a tenancy,
+(b) requires the person to do any of those things pursuant to a provision of a tenancy agreement relating to such a tenancy which requires or purports to require the person to do any of those things in the event of an act or default of a relevant person,
+(c) requires the person to do any of those things pursuant to a provision of a tenancy agreement relating to such a tenancy which requires or purports to require the person to do any of those things if the tenancy is varied, assigned, novated or terminated,
+(d) enters into a tenancy agreement relating to such a tenancy which requires or purports to require the person to do any of those things other than in the circumstances mentioned in paragraph (b) or (c),
+(e) requires the person to do any of those things—
+(i) as a result of an act or default of a relevant person relating to such a tenancy or housing let under it, and
+(ii) otherwise than pursuant to, or for the breach of, a provision of a tenancy agreement, or
+(f) requires the person to do any of those things in consideration of providing a reference in relation to that person in connection with the person's occupation of housing in England.
+(7) For the purposes of this section, a landlord does not require a relevant person to make a payment, enter into a contract or make a loan if the landlord gives the person the option of doing any of those things as an alternative to complying with another requirement imposed by the landlord or a letting agent.
+(8) Subsection (7) does not apply if—
+(a) the other requirement is prohibited by this section or section 2 (ignoring subsection (7) or section 2(6)), or
+(b) it would be unreasonable to expect a relevant person to comply with the other requirement.
+(9) In this Act “relevant person” means—
+(a) a tenant, or
+(b) subject to subsection (10), a person acting on behalf of, or who has guaranteed the payment of rent by, a tenant.
+(10) The reference in subsection (9)(b) to a person does not include—
+(a) a local housing authority within the meaning of the Housing Act 1985 (see section 1 of that Act),
+(b) the Greater London Authority, or
+(c) a person acting on behalf of an authority within paragraph (a) or the Greater London Authority.
+
+### s.2 | Prohibitions applying to letting agents | https://www.legislation.gov.uk/ukpga/2019/4/section/2
+(1) A letting agent must not require a relevant person to make a prohibited payment to the letting agent in connection with a tenancy of housing in England.
+(2) A letting agent must not require a relevant person to make a prohibited payment to a third party in connection with a tenancy of housing in England.
+(3) A letting agent must not require a relevant person to enter into a contract with the agent or a third party in connection with a tenancy of housing in England if the contract is—
+(a) a contract for the provision of a service, or
+(b) a contract of insurance.
+(4) A letting agent must not require a relevant person to make a loan to any person in connection with a tenancy of housing in England.
+(5) For the purposes of this section, a letting agent requires a relevant person to make a payment, enter into a contract or make a loan in connection with a tenancy of housing in England if and only if the letting agent—
+(a) requires the person to do any of those things in consideration of arranging the grant, renewal, continuance, variation, assignment, novation or termination of such a tenancy,
+(b) requires the person to do any of those things pursuant to a provision of an agreement with the person relating to such a tenancy which requires or purports to require the person to do any of those things in the event of an act or default of a relevant person,
+(c) requires the person to do any of those things pursuant to a provision of an agreement with the person relating to such a tenancy which requires or purports to require the person to do any of those things if the tenancy is varied, assigned, novated or terminated,
+(d) requires the person to do any of those things—
+(i) as a result of an act or default of a relevant person relating to such a tenancy or housing let under it, and
+(ii) otherwise than pursuant to, or for the breach of, an agreement entered into before the act or default, or
+(e) requires the person to do any of those things in consideration of providing a reference in relation to that person in connection with the person's occupation of housing in England.
+(6) For the purposes of this section, a letting agent does not require a relevant person to make a payment, enter into a contract or make a loan if the letting agent gives the person the option of doing any of those things as an alternative to complying with another requirement imposed by the letting agent or the landlord.
+(7) Subsection (6) does not apply if—
+(a) the other requirement is prohibited by this section or section 1 (ignoring subsection (6) or section 1(7)), or
+(b) it would be unreasonable to expect a relevant person to comply with the other requirement.
+(8) This section does not apply to a requirement imposed by a letting agent on a relevant person if—
+(a) the requirement is imposed by the letting agent in consideration of providing a service to a tenant,
+(b) as part of that service the agent finds housing for the tenant to rent and the tenant rents that housing, and
+(c) the agent does not act on behalf of the landlord of that housing, whether in relation to that housing or any other housing.
+
+### s.3 | Prohibited and permitted payments | https://www.legislation.gov.uk/ukpga/2019/4/section/3
+(1) For the purposes of this Act a payment is a prohibited payment unless it is a permitted payment by virtue of Schedule 1.
+(2) The Secretary of State may by regulations made by statutory instrument amend Schedule 1 by adding, modifying or removing a reference to a permitted payment.
+(3) The power in subsection (2) does not extend to removing rent from the categories of payment which are permitted payments under this Act.
+(4) Regulations under this section—
+(a) may make different provision for different purposes;
+(b) may make supplemental, incidental, consequential, transitional, transitory or saving provision.
+(5) Subject to subsection (6), a statutory instrument containing regulations under this section may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.
+(6) Subsection (5) does not apply to a statutory instrument containing only regulations under this section which amend the amount for the time being set out in paragraph 6(2)(a) of Schedule 1 (maximum amount of permitted payment on variation, assignment or novation of a tenancy) for the purposes only of reflecting changes in the value of money.
+(7) A statutory instrument to which subsection (6) applies is subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.4 | Effect of a breach of section 1 or 2 | https://www.legislation.gov.uk/ukpga/2019/4/section/4
+(1) A term of a tenancy agreement which breaches section 1 is not binding on a relevant person.
+(2) A term of an agreement between a letting agent and a relevant person which breaches section 2 is not binding on a relevant person.
+(3) Where a term of an agreement is not binding on a relevant person as a result of this section, the agreement continues, so far as practicable, to have effect in every other respect.
+(4) If a relevant person makes a loan to a person pursuant to a requirement which breaches section 1(5) or 2(4), the loan is repayable by the borrower to the relevant person on demand.
+
+### s.5 | Treatment of holding deposit | https://www.legislation.gov.uk/ukpga/2019/4/section/5
+Schedule 2 makes provision about the treatment of holding deposits.
+
+### s.5A | Pre-tenancy payments of rent: prohibitions | https://www.legislation.gov.uk/ukpga/2019/4/section/5A
+(1) A landlord must not—
+(a) invite or encourage a relevant person to make a prohibited pre-tenancy payment of rent to the landlord in connection with an assured tenancy of housing in England,
+(b) accept an offer from a relevant person to make a prohibited pre-tenancy payment of rent to the landlord in connection with an assured tenancy of housing in England, or
+(c) accept from a relevant person a prohibited pre-tenancy payment of rent in connection with an assured tenancy of housing in England.
+(2) A landlord must not—
+(a) invite or encourage a relevant person to make a prohibited pre-tenancy payment of rent to a third party in connection with an assured tenancy of housing in England,
+(b) accept an offer from a relevant person to make a prohibited pre-tenancy payment of rent to a third party in connection with an assured tenancy of housing in England, or
+(c) accept from a third party a prohibited pre-tenancy payment of rent in connection with an assured tenancy of housing in England.
+(3) A letting agent must not—
+(a) invite or encourage a relevant person to make a prohibited pre-tenancy payment of rent to the letting agent in connection with an assured tenancy of housing in England,
+(b) accept an offer from a relevant person to make a prohibited pre-tenancy payment of rent to the letting agent in connection with an assured tenancy of housing in England, or
+(c) accept from a relevant person a prohibited pre-tenancy payment of rent in connection with an assured tenancy of housing in England.
+(4) A letting agent must not—
+(a) invite or encourage a relevant person to make a prohibited pre-tenancy payment of rent to a third party in connection with an assured tenancy of housing in England,
+(b) accept an offer from a relevant person to make a prohibited pre-tenancy payment of rent to a third party in connection with an assured tenancy of housing in England, or
+(c) accept from a third party a prohibited pre-tenancy payment of rent in connection with an assured tenancy of housing in England.
+(5) The Secretary of State may, by regulations made by statutory instrument, amend this section for the purpose of making provision about the descriptions of rent due in advance to which any provision of subsection (1), (2), (3) or (4) applies.
+For this purpose “rent due in advance” means rent due before the period for which it is payable.
+(6) Regulations under subsection (5)—
+(a) may make different provision for different purposes;
+(b) may make supplemental, incidental, consequential, transitional, transitory or saving provision;
+(c) are to be made by statutory instrument.
+(7) A statutory instrument containing regulations under subsection (5) may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.
+(8) In this section “prohibited pre-tenancy payment of rent” means a payment of rent that is prohibited by paragraph 1(1A) of Schedule 1.
+
+### s.5B | Effect of a breach of section 5A | https://www.legislation.gov.uk/ukpga/2019/4/section/5B
+(1) A term of an agreement between a letting agent and a relevant person which breaches section 5A is not binding on a relevant person.
+(2) Where a term of an agreement is not binding on a relevant person as a result of this section, the agreement continues, so far as practicable, to have effect in every other respect.
+
+### Sch 1 | Permitted payments | https://www.legislation.gov.uk/ukpga/2019/4/schedule/1
+Rent
+1
+(1) A payment of rent under a tenancy is a permitted payment.
+(1A) But a payment of rent is a prohibited payment if—
+(a) it is payable before the tenancy is entered into, and
+(b) the tenancy is an assured tenancy.
+(1B) This paragraph is subject to paragraph 1A.
+Increased rent
+1A
+(1) If the amount of rent payable in respect of any relevant period (“P1”) is more than the amount of rent payable in respect of any later relevant period (“P2”), the additional amount payable in respect of P1 is a prohibited payment.
+(2) That is subject to the following provisions of this paragraph.
+(3) Where there is more than one later relevant period in respect of which the amount of rent payable is lower than the amount of rent payable in respect of P1—
+(a) if different amounts of rent are payable for different later relevant periods, P2 is the relevant period for which the lowest amount of rent is payable;
+(b) if the same amount of rent is payable for more than one later relevant periods, P2 is the first of those periods.
+(4) The following provisions apply for the purposes of determining—
+(a) whether the amount of rent payable in respect of a relevant period is more than the amount of rent payable in respect of a later relevant period, and
+(b) the difference between the amount of rent payable in respect of the earlier relevant period and that payable in respect of the later relevant period.
+(5) Where the later relevant period is a different length of time to the earlier relevant period, the amount of rent payable in respect of the later period is to be treated as the proportionate amount of rent that would be payable in respect of that period if it were the same length of time as the earlier period.
+(6) There is to be left out of account any difference between the rent payable in respect of the earlier relevant period and the rent payable in respect of the later relevant period as a result of a variation of the rent payable in respect of the later period—
+(a) pursuant to a term in the tenancy agreement which enables the rent under the tenancy to be increased or reduced, according to the circumstances, or
+(b) by agreement between the landlord and the tenant after the tenancy agreement has been entered into.
+(7) In this paragraph “relevant period”, in relation to a tenancy, means any period of time in respect of which rent is payable under the tenancy.
+(8) But “relevant period” does not include a period of time which begins after the end of one year beginning with the first day of the tenancy.
+Tenancy deposit
+2
+(1) A payment of a tenancy deposit is a permitted payment.
+(2) In this Act “tenancy deposit” means money intended to be held (by a landlord or otherwise) as security for—
+(a) the performance of any obligations of a tenant, or
+(b) the discharge of any liability of a tenant,
+arising under or in connection with a tenancy.
+(3) But if the amount of the tenancy deposit exceeds—
+(a) the amount of five weeks' rent, where the annual rent in respect of the tenancy immediately after its grant, renewal or continuance is less than £50,000, or
+(b) the amount of six weeks' rent, where the annual rent in respect of the tenancy immediately after its grant, renewal or continuance is £50,000 or more,
+the amount of the excess is a prohibited payment.
+(4) In this paragraph—
+(a) “five weeks' rent” means five times one week's rent,
+(b) “six weeks' rent” means six times one week's rent, and
+(c) “one week's rent” means the amount of the annual rent payable in respect of the tenancy immediately after its grant, renewal or continuance divided by 52.
+Holding deposit
+3
+(1) Subject to sub-paragraphs (3) to (6), a payment of a holding deposit is a permitted payment.
+(2) In this Act “holding deposit” means money which is paid by or on behalf of a tenant to a landlord or letting agent before the grant of a tenancy with the intention that it should be dealt with by the landlord or letting agent in accordance with Schedule 2 (treatment of holding deposit).
+(3) If the amount of the holding deposit exceeds one week's rent, the amount of the excess is a prohibited payment.
+(4) In sub-paragraph (3) “one week's rent” means the amount of the annual rent payable in respect of the tenancy immediately after its grant, renewal or continuance divided by 52.
+(5) A payment of a holding deposit is not a permitted payment if—
+(a) the landlord or letting agent to whom the deposit was paid has previously received a holding deposit (“the earlier deposit”) in relation to the same housing,
+(b) the landlord or letting agent has not repaid all or part of the earlier deposit, and
+(c) none of paragraphs 6 to 12 of Schedule 2 have applied so as to permit the landlord or letting agent not to repay the earlier deposit or the part that has not been repaid.
+(6) The reference in sub-paragraph (5)(a) to a landlord or letting agent receiving a holding deposit does not include the landlord or letting agent doing so before the coming into force of Schedule 2.
+Payment in the event of a default
+4
+(1) Subject to sub-paragraphs (3) to (8), a payment in the event of a relevant default by the tenant is a permitted payment if the tenancy agreement requires the payment to be made.
+(2) In this paragraph “relevant default” means—
+(a) the loss of a key to, or other security device giving access to, the housing to which the tenancy relates, or
+(b) a failure to make a payment of rent in full before the end of the period of 14 days beginning with the date (“the due date”) on which the payment is required to be made in accordance with the tenancy agreement.
+(3) If, in the case of a payment required to be made to a landlord or letting agent in respect of a relevant default within sub-paragraph (2)(a), the amount of the payment exceeds the costs which—
+(a) are reasonably incurred by the landlord or letting agent as a result of the default, and
+(b) are supported by evidence in writing which is provided to the person on whom the requirement to make the payment is imposed,
+the amount of the excess is a prohibited payment.
+(4) If, in the case of a payment required to be made to a landlord or a letting agent in respect of a relevant default within sub-paragraph (2)(b), the amount of the payment exceeds the amount determined in accordance with sub-paragraph (5), the amount of the excess is a prohibited payment.
+(5) The amount referred to in sub-paragraph (4) is the aggregate of the amounts found by applying, in relation to each day after the due date for which the rent remains unpaid, an annual percentage rate of 3% above the Bank of England base rate to the amount of rent that remains unpaid at the end of that day.
+(6) In sub-paragraph (5) “Bank of England base rate” means—
+(a) the percentage rate announced from time to time by the Monetary Policy Committee of the Bank of England as the official dealing rate, being the rate at which the Bank is willing to enter into transactions for providing short term liquidity in the money markets, or
+(b) where an order under section 19 of the Bank of England Act 1998 is in force, any equivalent percentage rate determined by the Treasury under that section.
+(7) If—
+(a) a landlord requires a relevant person to make a payment to the landlord in respect of a relevant default within sub-paragraph (2)(b), and
+(b) a letting agent subsequently requires a payment to be made to the letting agent in respect of the same default,
+the payment referred to in paragraph (b) is a prohibited payment.
+(8) If—
+(a) a letting agent requires a relevant person to make a payment to the letting agent in respect of a relevant default within sub-paragraph (2)(b), and
+(b) a landlord subsequently requires a payment to be made to the landlord in respect of the same default,
+the payment referred to in paragraph (b) is a prohibited payment.
+5 A payment of damages for breach of a tenancy agreement or an agreement between a letting agent and a relevant person is a permitted payment.
+Payment on variation, assignment or novation of a tenancy
+6
+(1) A payment is a permitted payment if it is a payment—
+(a) to a landlord in consideration of the variation, assignment or novation of a tenancy at the tenant's request, or
+(b) to a letting agent in consideration of arranging the variation, assignment or novation of a tenancy at the tenant's request.
+(2) But if the amount of the payment exceeds the greater of—
+(a) £50, or
+(b) the reasonable costs of the person to whom the payment is to be made in respect of the variation, assignment or novation of the tenancy,
+the amount of the excess is a prohibited payment.
+Payment on termination of a tenancy
+7
+(1) A payment is a permitted payment if it is a payment to a landlord in consideration of the termination of a tenancy at the tenant's request—
+(a) in the case of a fixed term tenancy, before the end of the term, or
+(b) in the case of a periodic tenancy, without the tenant giving the period of notice required under the tenancy agreement or by virtue of any rule of law.
+(2) But if the amount of the payment exceeds the loss suffered by the landlord as a result of the termination of the tenancy, the amount of the excess is a prohibited payment.
+(3) A payment is a permitted payment if it is a payment to a letting agent in consideration of arranging the termination of a tenancy at the tenant's request—
+(a) in the case of a fixed term tenancy, before the end of the term, or
+(b) in the case of a periodic tenancy, without the tenant giving the period of notice required under the tenancy agreement or by virtue of any rule of law.
+(4) But if the amount of the payment exceeds the reasonable costs of the letting agent in respect of the termination of the tenancy, the amount of the excess is a prohibited payment.
+(5) In this paragraph “fixed term tenancy” means any tenancy other than a periodic tenancy.
+Payment in respect of council tax
+8
+(1) A payment to a billing authority in respect of council tax is a permitted payment.
+(2) In this paragraph “billing authority” has the same meaning as in Part 1 of the Local Government Finance Act 1992 (see section 1(2) of that Act).
+Payment in respect of utilities etc
+9
+(1) A payment for or in connection with the provision of a utility is a permitted payment if the tenancy agreement requires the payment to be made.
+(2) A payment towards energy efficiency improvements under a green deal plan (within the meaning of section 1 of the Energy Act 2011) is a permitted payment if the tenancy agreement requires the payment to be made.
+(3) In this Act “utility” means—
+(a) electricity, gas or other fuel, or
+(b) water or sewerage.
+Payment in respect of a television licence
+10
+(1) A payment to the British Broadcasting Corporation in respect of a television licence is a permitted payment if the tenancy agreement requires the payment to be made.
+(2) In this Act “television licence” means a licence for the purposes of section 363 of the Communications Act 2003.
+Payment in respect of communication services
+11
+(1) A payment for or in connection with the provision of a communication service is a permitted payment if the tenancy agreement requires the payment to be made.
+(2) But, in the case of a payment to a landlord, if the amount of the payment exceeds the reasonable costs incurred by the landlord for or in connection with the provision of the service, the amount of the excess is a prohibited payment.
+(3) In this Act “communication service” means a service enabling any of the following to be used—
+(a) a telephone other than a mobile telephone;
+(b) the internet;
+(c) cable television;
+(d) satellite television.
+
+### Sch 2 | Treatment of holding deposit | https://www.legislation.gov.uk/ukpga/2019/4/schedule/2
+Application
+1 This Schedule applies where a holding deposit is paid to a landlord or letting agent in respect of a proposed tenancy of housing in England.
+Interpretation
+2
+(1) In this Schedule “the deadline for agreement” means the fifteenth day of the period beginning with the day on which the landlord or letting agent receives the holding deposit.
+(2) But the landlord or the letting agent may agree with the tenant in writing that a different day is to be the deadline for agreement for the purposes of this Schedule.
+Requirement to repay holding deposit
+3 Subject as follows, the person who received the holding deposit must repay it if—
+(a) the landlord and the tenant enter into a tenancy agreement relating to the housing,
+(b) the landlord decides before the deadline for agreement not to enter into a tenancy agreement relating to the housing, or
+(c) the landlord and the tenant fail to enter into a tenancy agreement relating to the housing before the deadline for agreement.
+4 If paragraph 3 applies, the deposit must be repaid within the period of 7 days beginning with—
+(a) where paragraph 3(a) applies, the date of the tenancy agreement,
+(b) where paragraph 3(b) applies, the date on which the landlord decides not to enter into the tenancy agreement, or
+(c) where paragraph 3(c) applies, the deadline for agreement.
+5
+(1) The person who received the holding deposit must repay it if—
+(a) that person believes that any of paragraphs 8 to 12 applies in relation to the deposit, but
+(b) that person does not give the person who paid the deposit a notice in writing within the relevant period explaining why the person who received it intends not to repay it.
+(2) In sub-paragraph (1) “the relevant period” means—
+(a) where the landlord decides not to enter into a tenancy agreement before the deadline for agreement, the period of 7 days beginning with the date on which the landlord decides not to do so;
+(b) where the landlord and tenant fail to enter into a tenancy agreement before the deadline for agreement, the period of 7 days beginning with the deadline for agreement.
+Exceptions
+6 Paragraph 3(a) does not apply if or to the extent that the amount of the deposit is applied, with the consent of the person by whom it was paid—
+(a) towards the first payment of rent under the tenancy, or
+(b) towards the payment of the tenancy deposit in respect of the tenancy.
+7 If all or part of the amount of the deposit is applied in accordance with paragraph 6(b), the amount applied is treated for the purposes of section 213 of the Housing Act 2004 (requirements in connection with deposits) as having been received by the landlord on the date of the tenancy agreement.
+8 Paragraph 3(b) or (c) does not apply if—
+(a) the landlord is prohibited by section 22 of the Immigration Act 2014 (persons disqualified by immigration status) from granting a tenancy of the housing to the tenant,
+(b) the landlord did not know, and could not reasonably have been expected to know, the prohibition applied before the deposit was accepted, and
+(c) if the landlord has instructed a letting agent in relation to the proposed tenancy, the letting agent did not know, and could not reasonably have been expected to know, the prohibition applied before the deposit was accepted.
+9 Paragraph 3(b) or (c) does not apply if the tenant provides false or misleading information to the landlord or letting agent and—
+(a) the landlord is reasonably entitled to take into account the difference between the information provided by the tenant and the correct information in deciding whether to grant a tenancy to the tenant, or
+(b) the landlord is reasonably entitled to take the tenant's action in providing false or misleading information into account in deciding whether to grant such a tenancy.
+10 Subject to paragraph 13, paragraph 3(c) does not apply if the tenant notifies the landlord or letting agent before the deadline for agreement that the tenant has decided not to enter into a tenancy agreement.
+11 Subject to paragraph 13, paragraph 3(c) does not apply where the deposit is paid to the landlord if—
+(a) the landlord takes all reasonable steps to enter into a tenancy agreement before the deadline for agreement, and
+(b) if the landlord has instructed a letting agent in relation to the proposed tenancy, the agent takes all reasonable steps to assist the landlord to enter into a tenancy agreement before that date, but
+(c) the tenant fails to take all reasonable steps to enter into a tenancy agreement before that date.
+12 Subject to paragraph 13, paragraph 3(c) does not apply where the deposit is paid to the letting agent if—
+(a) the agent takes all reasonable steps to assist the landlord to enter into a tenancy agreement before the deadline for agreement, and
+(b) the landlord takes all reasonable steps to enter into a tenancy agreement before that date, but
+(c) the tenant fails to take all reasonable steps to enter into a tenancy agreement before that date.
+13 Paragraph 10, 11 or 12 does not apply (so that paragraph 3(c) does apply) if, before the deadline for agreement—
+(a) the landlord or a letting agent instructed by the landlord in relation to the proposed tenancy breaches section 1 or 2 by imposing a requirement under that section on the tenant or a person who is a relevant person in relation to the tenant, or
+(b) the landlord or a letting agent instructed by the landlord in relation to the proposed tenancy behaves towards the tenant, or a person who is a relevant person in relation to the tenant, in such a way that it would be unreasonable to expect the tenant to enter into a tenancy agreement with the landlord.

@@ -115,32 +115,20 @@ CREATE TABLE IF NOT EXISTS photos (
   note         text
 );
 
--- Completed analysis results, retained independently of user accounts/case setup.
-CREATE TABLE IF NOT EXISTS tenancy_reviews (
-  id                text PRIMARY KEY,
-  lead_tenant       text NOT NULL,
-  co_tenants        jsonb NOT NULL,
-  property_address  text NOT NULL,
-  filename          text,
-  review            jsonb NOT NULL,
-  owner_account_id  text,
-  created_at        timestamptz NOT NULL DEFAULT now()
-);
+-- Saved analyses: what the results page needs to show a case again.
+ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'gemini' or 'placeholder'
+ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
+ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
+ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;
 
--- FlatMate account-backed tenancy profiles. Shared codes are only issued after
+-- FlatMate tenancy profiles. flatmate_accounts mirrors users (app/tenancies.py sync_account). Shared codes are only issued after
 -- the agreement is signed and the tenancy start date has arrived.
 CREATE TABLE IF NOT EXISTS flatmate_accounts (
   id            text PRIMARY KEY,
   email         text NOT NULL UNIQUE,
   display_name  text NOT NULL,
-  password_hash text NOT NULL,
+  password_hash text NOT NULL DEFAULT '',
   created_at    text NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS flatmate_sessions (
-  token_hash text PRIMARY KEY,
-  account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
-  expires_at text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tenancy_profiles (

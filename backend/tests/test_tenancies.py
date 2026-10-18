@@ -1,14 +1,18 @@
+import copy
 import tempfile
+import uuid
+from contextlib import nullcontext
 import unittest
 from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
+from fastapi import Request
 from fastapi.testclient import TestClient
 
 from app import calendar as tenancy_calendar
-from app import config, reviews, tenancies
-from main import app
+from app import config, tenancies
+from main import app, optional_account
 
 
 class TenancyApiTests(unittest.TestCase):
@@ -21,25 +25,41 @@ class TenancyApiTests(unittest.TestCase):
         self.database_patch.start()
         self.url_patch.start()
         self.photo_patch.start()
+        # Logins come from app.auth (Postgres); here each client names its account in a header.
+        self.accounts = {}
+        self.cases = {}
+
+        def test_account(request: Request):
+            account = self.accounts.get(request.headers.get("x-test-account", ""))
+            if account:
+                tenancies.sync_account(account)
+            return account
+
+        app.dependency_overrides[optional_account] = test_account
+        self.case_patches = [
+            patch("main.cases.connect", side_effect=lambda: nullcontext()),
+            patch("main.cases.get_case", side_effect=lambda _conn, code: copy.deepcopy(self.cases.get(code))),
+        ]
+        for case_patch in self.case_patches:
+            case_patch.start()
         self.client = TestClient(app)
         self.account = self.register(self.client, "lead@example.test", "Lead Tenant")
 
     def tearDown(self):
         self.client.close()
+        for case_patch in self.case_patches:
+            case_patch.stop()
+        app.dependency_overrides.pop(optional_account, None)
         self.url_patch.stop()
         self.photo_patch.stop()
         self.database_patch.stop()
         self.temp_dir.cleanup()
 
-    @staticmethod
-    def register(client, email, name):
-        response = client.post(
-            "/api/auth/register",
-            json={"email": email, "display_name": name, "password": "correct-horse-battery"},
-        )
-        if response.status_code != 201:
-            raise AssertionError(response.text)
-        return response.json()
+    def register(self, client, email, name):
+        account = {"id": str(uuid.uuid4()), "email": email, "display_name": name}
+        self.accounts[account["id"]] = account
+        client.headers["x-test-account"] = account["id"]
+        return account
 
     def create_profile(
         self,
@@ -55,19 +75,17 @@ class TenancyApiTests(unittest.TestCase):
     ):
         client = client or self.client
         tenant_names = ["Friend Tenant"] if co_tenants is None else co_tenants
-        review_id = reviews.save_review(
-            lead_tenant,
-            tenant_names,
-            "10 Example Road, Leeds LS1 2AB",
-            "agreement.pdf",
-            {
-                "summary": "Quiet enjoyment and repair details.",
-                "need_to_knows": [{"topic": "Repairs", "clause_ref": "4", "text": "Report urgent leaks promptly."}],
-                "flags": [],
-                "bills_estimate": {"totals": {"total_monthly": 200}},
-            },
-            owner_account_id=self.account["id"],
-        )
+        case_code = f"FLAT-{len(self.cases) + 2:06d}"
+        self.cases[case_code] = {
+            "case_code": case_code,
+            "lead_tenant": lead_tenant,
+            "co_tenants": tenant_names,
+            "property_address": "10 Example Road, Leeds LS1 2AB",
+            "filename": "agreement.pdf",
+            "summary": "Quiet enjoyment and repair details.",
+            "need_to_knows": [{"topic": "Repairs", "clause_ref": "4", "text": "Report urgent leaks promptly."}],
+            "flags": [],
+        }
         body = {
             "household_mode": household_mode,
             "hmo_status": "unknown" if household_mode != "single" else "not_applicable",
@@ -79,23 +97,9 @@ class TenancyApiTests(unittest.TestCase):
             "agreement_signed": signed,
             "signed_on": date.today().isoformat() if signed else None,
             "tenancy_start": tenancy_start or date.today().isoformat(),
-            "review_id": review_id,
+            "case_code": case_code,
         }
         return client.post("/api/tenancies", json=body)
-
-    def test_account_registration_login_and_session_cookie(self):
-        self.assertIn("flatmate_session", self.client.cookies)
-        self.assertEqual(self.client.get("/api/auth/me").json()["id"], self.account["id"])
-
-        self.client.post("/api/auth/logout")
-        self.assertEqual(self.client.get("/api/auth/me").status_code, 401)
-        response = self.client.post(
-            "/api/auth/login",
-            json={"email": "LEAD@example.test", "password": "correct-horse-battery"},
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["id"], self.account["id"])
 
     def test_existing_profile_table_is_migrated_with_review_id(self):
         legacy_path = Path(self.temp_dir.name) / "legacy.sqlite3"

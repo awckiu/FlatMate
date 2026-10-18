@@ -121,7 +121,7 @@ export default function App() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`/api/reviews/${encodeURIComponent(code)}`)
+      const res = await fetch(`/api/cases/${encodeURIComponent(code)}`)
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail ?? `Could not open the review (${res.status}).`)
       setResult(data)

@@ -8,3 +8,4 @@ numpy
 psycopg[binary]
 pgvector
 boto3
+itsdangerous

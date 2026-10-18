@@ -1,8 +1,5 @@
-import json
-import sqlite3
 import tempfile
 import unittest
-from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
 
@@ -10,7 +7,6 @@ from fastapi.testclient import TestClient
 from google.genai.errors import APIError
 
 from app import pipeline
-from app import reviews
 from app.rag.ingest import ingest
 from app.rag.store import Chunk, LocalStore
 import app.rag.retrieve as retrieve_module
@@ -149,139 +145,48 @@ class LawIngestionTests(unittest.TestCase):
             self.assertEqual(store.search([1.0, 0.0], 1)[0].text, "Updated law text")
 
 
-class ReviewStorageTests(unittest.TestCase):
-    def test_save_review_persists_review_and_tenant_metadata(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            database_path = Path(temp_dir) / "reviews.sqlite3"
-            review = {"summary": "A short review.", "flags": []}
-            with (
-                patch.object(reviews.config, "REVIEWS_DB_PATH", database_path),
-                patch.object(reviews.config, "DATABASE_URL", None),
-            ):
-                review_id = reviews.save_review(
-                    "Lead Tenant",
-                    ["Co Tenant"],
-                    "Example Street",
-                    "agreement.pdf",
-                    review,
-                )
-
-            with closing(sqlite3.connect(database_path)) as connection:
-                row = connection.execute(
-                    """
-                    SELECT lead_tenant, co_tenants, property_address, filename, review
-                    FROM tenancy_reviews WHERE id = ?
-                    """,
-                    (review_id,),
-                ).fetchone()
-
-        self.assertIsNotNone(row)
-        self.assertEqual(row[0], "Lead Tenant")
-        self.assertEqual(json.loads(row[1]), ["Co Tenant"])
-        self.assertEqual(row[2], "Example Street")
-        self.assertEqual(row[3], "agreement.pdf")
-        self.assertEqual(json.loads(row[4]), review)
-
-    def test_review_code_reopens_a_shareable_report(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            database_path = Path(temp_dir) / "reviews.sqlite3"
-            review = {"summary": "A short review.", "flags": []}
-            with (
-                patch.object(reviews.config, "REVIEWS_DB_PATH", database_path),
-                patch.object(reviews.config, "DATABASE_URL", None),
-            ):
-                review_code = reviews.save_review(
-                    "Lead Tenant",
-                    ["Co Tenant"],
-                    "Example Street",
-                    "agreement.pdf",
-                    review,
-                )
-                client = TestClient(app)
-                try:
-                    response = client.get(f"/api/reviews/{review_code.removeprefix('FLAT-').lower()}")
-                    not_found = client.get("/api/reviews/FLAT-INVALID")
-                finally:
-                    client.close()
-
-        self.assertRegex(review_code, r"^FLAT-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{10}$")
-        self.assertEqual(response.status_code, 200, response.text)
-        self.assertEqual(response.json()["case_code"], review_code)
-        self.assertEqual(response.json()["review_id"], review_code)
-        self.assertEqual(response.json()["summary"], review["summary"])
-        self.assertEqual(response.json()["lead_tenant"], "Lead Tenant")
-        self.assertEqual(response.json()["co_tenants"], ["Co Tenant"])
-        self.assertEqual(not_found.status_code, 404)
-
-
 class AnalyzeApiTests(unittest.TestCase):
-    def test_analyze_saves_review_to_configured_sqlite_database(self):
+    def setUp(self):
+        # Never save test uploads to the real database from a developer's .env.
+        patcher = patch.object(pipeline.config, "DATABASE_URL", None)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_analyze_reports_busy_gemini_as_try_again_json(self):
         client = TestClient(app)
-        pipeline_result = {
-            "pages": 1,
-            "summary": "Persisted summary",
-            "need_to_knows": [],
-            "flags": [],
-            "email": "",
-            "mode": "gemini",
-            "law_data_available": False,
-            "disclaimer": "Information, not legal advice.",
-        }
-        with tempfile.TemporaryDirectory() as temp_dir:
-            database_path = Path(temp_dir) / "reviews.sqlite3"
-            with (
-                patch("main.pipeline.analyze", return_value=pipeline_result),
-                patch.object(reviews.config, "DATABASE_URL", None),
-                patch.object(reviews.config, "REVIEWS_DB_PATH", database_path),
-            ):
-                response = client.post(
-                    "/api/analyze",
-                    data={
-                        "lead_tenant": "Lead Tenant",
-                        "co_tenants": "Co Tenant",
-                        "property_address": "Example Street",
-                    },
-                    files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
-                )
+        with patch("main.pipeline.analyze", side_effect=APIError(
+            code=503,
+            response_json={"error": {"message": "high demand"}},
+        )):
+            response = client.post(
+                "/api/analyze",
+                data={
+                    "lead_tenant": "Lead Tenant",
+                    "property_address": "Example Street",
+                },
+                files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
+            )
 
-            self.assertEqual(response.status_code, 200)
-            review_id = response.json()["review_id"]
-            with closing(sqlite3.connect(database_path)) as connection:
-                row = connection.execute(
-                    "SELECT review FROM tenancy_reviews WHERE id = ?", (review_id,)
-                ).fetchone()
-
-        self.assertIsNotNone(row)
-        saved_review = json.loads(row[0])
-        self.assertEqual(saved_review["summary"], "Persisted summary")
-        self.assertIn("bills_estimate", saved_review)
-        self.assertFalse(saved_review["bills_estimate"]["live_data_available"])
+        self.assertEqual(response.status_code, 503)
+        self.assertIn("Gemini is busy", response.json()["detail"])
 
     def test_analyze_reports_gemini_api_failure_as_actionable_json(self):
         client = TestClient(app)
-        for provider_code, expected_status, expected_message in (
-            (429, 503, "Gemini is busy"),
-            (503, 503, "Gemini is busy"),
-            (400, 502, "Gemini could not analyze"),
-        ):
-            with self.subTest(provider_code=provider_code), patch(
-                "main.pipeline.analyze",
-                side_effect=APIError(
-                    code=provider_code,
-                    response_json={"error": {"message": "Provider failed"}},
-                ),
-            ):
-                response = client.post(
-                    "/api/analyze",
-                    data={
-                        "lead_tenant": "Lead Tenant",
-                        "property_address": "Example Street",
-                    },
-                    files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
-                )
-                self.assertEqual(response.status_code, expected_status)
-                self.assertIn(expected_message, response.json()["detail"])
-        client.close()
+        with patch("main.pipeline.analyze", side_effect=APIError(
+            code=400,
+            response_json={"error": {"message": "Bad request"}},
+        )):
+            response = client.post(
+                "/api/analyze",
+                data={
+                    "lead_tenant": "Lead Tenant",
+                    "property_address": "Example Street",
+                },
+                files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
+            )
+
+        self.assertEqual(response.status_code, 502)
+        self.assertIn("Gemini could not analyze", response.json()["detail"])
 
     def test_analyze_reports_malformed_gemini_output_as_json(self):
         client = TestClient(app)
@@ -299,6 +204,7 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 502)
         self.assertEqual(response.json()["detail"], "Gemini returned an unexpected answer. Please try again.")
 
+
     def test_analyze_accepts_the_planned_form_fields(self):
         client = TestClient(app)
         pipeline_result = {
@@ -311,10 +217,7 @@ class AnalyzeApiTests(unittest.TestCase):
             "law_data_available": True,
             "disclaimer": "Information, not legal advice.",
         }
-        with (
-            patch("main.pipeline.analyze", return_value=pipeline_result) as analyze,
-            patch("main.reviews.save_review", return_value="review-id") as save_review,
-        ):
+        with patch("main.pipeline.analyze", return_value=pipeline_result) as analyze:
             response = client.post(
                 "/api/analyze",
                 data={
@@ -335,8 +238,7 @@ class AnalyzeApiTests(unittest.TestCase):
             {"name": "Second Co-tenant", "role": "co_tenant"},
         ])
         self.assertEqual(body["summary"], "Summary")
-        self.assertEqual(body["review_id"], "review-id")
-        self.assertEqual(body["case_code"], "review-id")
+        self.assertIsNone(body["case_code"])
         analyze.assert_called_once_with(
             b"%PDF-test",
             "Lead Tenant",
@@ -347,14 +249,7 @@ class AnalyzeApiTests(unittest.TestCase):
         )
         self.assertEqual(body["household_mode"], "friends")
         self.assertEqual(body["hmo_status"], "yes")
-        save_review.assert_called_once_with(
-            "Lead Tenant",
-            ["First Co-tenant", "Second Co-tenant"],
-            "Example Street",
-            "agreement.pdf",
-            pipeline_result,
-            owner_account_id=None,
-        )
+        self.assertIn("bills_estimate", body)
 
     def test_analyze_rejects_removed_household_modes_and_missing_shared_hmo_status(self):
         client = TestClient(app)
@@ -373,11 +268,13 @@ class AnalyzeApiTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 422)
         client.close()
 
-    def test_analyze_returns_error_if_review_cannot_be_saved(self):
+    def test_analyze_still_returns_results_if_saving_fails(self):
         client = TestClient(app)
+        result = {"pages": 1, "summary": "Summary", "need_to_knows": [], "flags": []}
         with (
-            patch("main.pipeline.analyze", return_value={"summary": "Summary"}),
-            patch("main.reviews.save_review", side_effect=OSError("Database is unavailable")),
+            patch.object(pipeline.config, "DATABASE_URL", "postgresql://unreachable"),
+            patch("main.pipeline.analyze", return_value=result),
+            patch("main.cases.connect", side_effect=OSError("Database is unavailable")),
         ):
             response = client.post(
                 "/api/analyze",
@@ -385,8 +282,9 @@ class AnalyzeApiTests(unittest.TestCase):
                 files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
             )
 
-        self.assertEqual(response.status_code, 503)
-        self.assertIn("could not be saved", response.json()["detail"])
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.json()["saved"])
+        self.assertEqual(response.json()["summary"], "Summary")
 
     def test_analyze_keeps_legacy_tenant_name_field_compatible(self):
         client = TestClient(app)
@@ -400,10 +298,7 @@ class AnalyzeApiTests(unittest.TestCase):
             "law_data_available": False,
             "disclaimer": "Information, not legal advice.",
         }
-        with (
-            patch("main.pipeline.analyze", return_value=result),
-            patch("main.reviews.save_review", return_value="review-id"),
-        ):
+        with patch("main.pipeline.analyze", return_value=result):
             response = client.post(
                 "/api/analyze",
                 data={"tenant_name": "Legacy Tenant", "property_address": "Example Street"},

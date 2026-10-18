@@ -1,16 +1,13 @@
-"""Account, session and shared tenancy-profile persistence."""
+"""Shared tenancy-profile persistence. Logins live in app.auth; flatmate_accounts mirrors them."""
 
 from __future__ import annotations
 
-import base64
-import hashlib
-import hmac
 import json
 import secrets
 import sqlite3
 import uuid
-from contextlib import closing
-from datetime import date, datetime, timedelta, timezone
+from contextlib import closing, contextmanager
+from datetime import date, datetime, timezone
 from typing import Any
 
 import psycopg
@@ -18,8 +15,6 @@ from psycopg.rows import dict_row
 
 from app import config
 
-PASSWORD_ITERATIONS = 600_000
-SESSION_DAYS = 30
 HOUSEHOLD_MODES = {"single", "friends"}
 
 
@@ -31,6 +26,22 @@ def _connection():
     connection.execute("PRAGMA foreign_keys = ON")
     connection.row_factory = sqlite3.Row
     return connection
+
+
+@contextmanager
+def _transaction(connection):
+    """Commit on success, roll back on error. sqlite3's `with connection` does this, but
+    psycopg's closes the connection, which broke every later query on Tiger Data."""
+    if isinstance(connection, sqlite3.Connection):
+        with connection:
+            yield
+        return
+    try:
+        yield
+        connection.commit()
+    except BaseException:
+        connection.rollback()
+        raise
 
 
 def _sql(query: str) -> str:
@@ -45,19 +56,8 @@ def _ensure_schema(connection) -> None:
                 id text PRIMARY KEY,
                 email text NOT NULL UNIQUE,
                 display_name text NOT NULL,
-                password_hash text NOT NULL,
+                password_hash text NOT NULL DEFAULT '',
                 created_at text NOT NULL
-            )
-            """
-        )
-    )
-    connection.execute(
-        _sql(
-            """
-            CREATE TABLE IF NOT EXISTS flatmate_sessions (
-                token_hash text PRIMARY KEY,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
-                expires_at text NOT NULL
             )
             """
         )
@@ -207,111 +207,19 @@ def _timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _hash_password(password: str) -> str:
-    salt = secrets.token_bytes(16)
-    key = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, PASSWORD_ITERATIONS)
-    return "$".join(
-        (
-            "pbkdf2_sha256",
-            str(PASSWORD_ITERATIONS),
-            base64.urlsafe_b64encode(salt).decode(),
-            base64.urlsafe_b64encode(key).decode(),
-        )
-    )
-
-
-def _verify_password(password: str, encoded: str) -> bool:
-    try:
-        algorithm, iterations, salt_text, key_text = encoded.split("$", 3)
-        if algorithm != "pbkdf2_sha256":
-            return False
-        salt = base64.urlsafe_b64decode(salt_text.encode())
-        expected = base64.urlsafe_b64decode(key_text.encode())
-        actual = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, int(iterations))
-        return hmac.compare_digest(actual, expected)
-    except (ValueError, TypeError):
-        return False
-
-
-def _new_session(connection, account_id: str) -> str:
-    token = secrets.token_urlsafe(32)
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    expires = (datetime.now(timezone.utc) + timedelta(days=SESSION_DAYS)).isoformat()
-    connection.execute(
-        _sql("INSERT INTO flatmate_sessions (token_hash, account_id, expires_at) VALUES (?, ?, ?)"),
-        (token_hash, account_id, expires),
-    )
-    return token
-
-
-def register(email: str, display_name: str, password: str) -> tuple[dict[str, str], str]:
-    account_id = uuid.uuid4().hex
-    normalized_email = email.strip().casefold()
+def sync_account(account: dict[str, str]) -> None:
+    """Mirror a logged-in user (from app.auth) into flatmate_accounts, which the
+    tenancy, calendar and reminder tables reference."""
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             connection.execute(
                 _sql(
                     "INSERT INTO flatmate_accounts (id, email, display_name, password_hash, created_at) "
-                    "VALUES (?, ?, ?, ?, ?)"
+                    "VALUES (?, ?, ?, '', ?) "
+                    "ON CONFLICT (id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name"
                 ),
-                (account_id, normalized_email, display_name.strip(), _hash_password(password), _timestamp()),
-            )
-            token = _new_session(connection, account_id)
-    return {"id": account_id, "email": normalized_email, "display_name": display_name.strip()}, token
-
-
-def login(email: str, password: str) -> tuple[dict[str, str], str] | None:
-    normalized_email = email.strip().casefold()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with connection:
-            row = connection.execute(
-                _sql(
-                    "SELECT id, email, display_name, password_hash FROM flatmate_accounts WHERE email = ?"
-                ),
-                (normalized_email,),
-            ).fetchone()
-            if row is None or not _verify_password(password, row["password_hash"]):
-                return None
-            token = _new_session(connection, row["id"])
-    return {
-        "id": row["id"],
-        "email": row["email"],
-        "display_name": row["display_name"],
-    }, token
-
-
-def account_for_session(token: str | None) -> dict[str, str] | None:
-    if not token:
-        return None
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    now = _timestamp()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        row = connection.execute(
-            _sql(
-                """
-                SELECT a.id, a.email, a.display_name
-                FROM flatmate_sessions s
-                JOIN flatmate_accounts a ON a.id = s.account_id
-                WHERE s.token_hash = ? AND s.expires_at > ?
-                """
-            ),
-            (token_hash, now),
-        ).fetchone()
-    return dict(row) if row else None
-
-
-def logout(token: str | None) -> None:
-    if not token:
-        return
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with connection:
-            connection.execute(
-                _sql("DELETE FROM flatmate_sessions WHERE token_hash = ?"), (token_hash,)
+                (account["id"], account["email"], account["display_name"], _timestamp()),
             )
 
 
@@ -364,7 +272,7 @@ def create_profile(
     profile_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             connection.execute(
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
                 (account["id"],),
@@ -438,7 +346,7 @@ def _activate_due_profiles(connection, account_id: str | None = None) -> None:
 def get_profile(profile_id: str, account_id: str) -> dict[str, Any] | None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection, account_id)
         row = connection.execute(
             _sql(
@@ -458,7 +366,7 @@ def get_profile_by_code(code: str, account_id: str) -> dict[str, Any] | None:
     normalized = code.strip().upper()
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
         row = connection.execute(
             _sql(
@@ -488,7 +396,7 @@ def _decode_profile(row) -> dict[str, Any]:
 def list_profiles(account_id: str) -> list[dict[str, Any]]:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
         rows = connection.execute(
             _sql(
@@ -512,7 +420,7 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
         raise ValueError("Enter your name and choose your role on the agreement.")
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
             row = connection.execute(
                 _sql(
@@ -563,7 +471,7 @@ def update_signing(
         date.fromisoformat(tenancy_start)
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             row = connection.execute(
                 _sql(
                     """
@@ -610,7 +518,7 @@ def add_chat_message(
     message_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             member = connection.execute(
                 _sql(
                     """
@@ -674,7 +582,7 @@ def add_photo(
     photo_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             member = connection.execute(
                 _sql(
                     """
@@ -745,7 +653,7 @@ def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, str]
 def delete_photo(profile_id: str, photo_id: str, account_id: str) -> None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             connection.execute(
                 _sql(
                     """

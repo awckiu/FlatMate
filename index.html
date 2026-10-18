@@ -462,7 +462,8 @@
         #analysis-form > * { margin: 0; }
         #analysis-form > .grid { gap: 17px 20px; }
         #analysis-form label:not([for="file-upload"]) { display: block; margin-bottom: 7px; color: #34473e; font-size: 12px; font-weight: 680; }
-        #analysis-form input[type="text"] {
+        #analysis-form input[type="text"],
+        #case-code-input {
             width: 100%;
             min-height: 48px;
             padding: 12px 14px;
@@ -475,9 +476,15 @@
             transition: border-color .28s var(--spring-settle), box-shadow .32s var(--spring-motion), background .28s var(--spring-settle);
         }
 
-        #analysis-form input[type="text"]::placeholder { color: #a1aca5; }
-        #analysis-form input[type="text"]:hover { border-color: #b6c9b9; }
-        #analysis-form input[type="text"]:focus { border-color: #4c896b; background: white; box-shadow: 0 0 0 4px rgba(76, 137, 107, .12); }
+        #analysis-form input[type="text"]::placeholder, #case-code-input::placeholder { color: #a1aca5; }
+        #analysis-form input[type="text"]:hover, #case-code-input:hover { border-color: #b6c9b9; }
+        #analysis-form input[type="text"]:focus, #case-code-input:focus { border-color: #4c896b; background: white; box-shadow: 0 0 0 4px rgba(76, 137, 107, .12); }
+        #open-case-form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #edf0ec; }
+        #open-case-form label { display: block; margin-bottom: 7px; color: #34473e; font-size: 12px; font-weight: 680; }
+        .open-case-row { display: flex; gap: 10px; }
+        #case-code-input { flex: 1; min-width: 0; text-transform: uppercase; }
+        #open-case-btn { flex: 0 0 auto; padding: 0 18px; border: 1px solid #d9e5da; border-radius: 11px; background: #eef5ed; color: #315d43; font-weight: 650; transition: background .28s var(--spring-settle); }
+        #open-case-btn:hover { background: #e1eedf; }
         .field-hint { margin: 7px 0 0; color: #829087; font-size: 11px; }
 
         .upload-label { margin-bottom: 8px; color: #34473e; font-size: 12px; font-weight: 680; }
@@ -671,6 +678,34 @@
         #export-pdf-btn:hover { background: #e1eedf; }
         #export-pdf-btn:disabled { cursor: not-allowed; opacity: .55; }
         #review-saved { margin: 8px 0 0; color: #34724d; font-size: 12px; overflow-wrap: anywhere; }
+        #add-to-account-btn { margin-top: 8px; padding: 7px 12px; border: 1px solid #d9e5da; border-radius: 9px; background: #eef5ed; color: #315d43; font-size: 12px; font-weight: 650; }
+        #add-to-account-btn:hover { background: #e1eedf; }
+
+        .header-end { display: inline-flex; align-items: center; gap: 16px; }
+        .account-area { display: inline-flex; align-items: center; gap: 10px; color: #34473e; font-size: 13px; font-weight: 600; }
+        .account-btn { padding: 8px 14px; border: 1px solid #d9e5da; border-radius: 10px; background: #eef5ed; color: #315d43; font-size: 13px; font-weight: 650; transition: background .28s var(--spring-settle); }
+        .account-btn:hover { background: #e1eedf; }
+        #account-dialog { width: min(100% - 32px, 400px); padding: 26px; border: 1px solid var(--line); border-radius: 18px; color: var(--ink); box-shadow: var(--shadow); }
+        #account-dialog::backdrop { background: rgba(23, 38, 30, .35); }
+        #account-dialog h2 { margin: 0 0 4px; font-size: 20px; font-weight: 740; letter-spacing: -.03em; }
+        #account-dialog > p { margin: 0 0 18px; color: #66766d; font-size: 13px; }
+        #account-form label { display: block; margin: 12px 0 6px; color: #34473e; font-size: 12px; font-weight: 680; }
+        #account-form input { width: 100%; height: 44px; padding: 0 13px; border: 1px solid #dce5dd; border-radius: 11px; background: #fcfdfb; color: var(--ink); font-size: 14px; outline: none; }
+        #account-form input:focus { border-color: #4c896b; background: white; box-shadow: 0 0 0 4px rgba(76, 137, 107, .12); }
+        #account-submit { width: 100%; margin-top: 18px; padding: 11px; border-radius: 11px; background: var(--green); color: white; font-weight: 650; }
+        #account-submit:disabled { opacity: .6; }
+        #account-error { margin: 12px 0 0; color: #b42318; font-size: 12px; }
+        #account-error:empty { display: none; }
+        .account-switch { margin: 14px 0 0; color: #66766d; font-size: 12px; text-align: center; }
+        .account-switch button, #account-close { padding: 0; border: 0; background: none; color: var(--green); font-weight: 650; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+        #account-close { position: absolute; top: 14px; right: 16px; text-decoration: none; font-size: 18px; color: #829087; }
+
+        #my-cases { margin-top: 24px; padding-top: 20px; border-top: 1px solid #edf0ec; }
+        #my-cases h3 { margin: 0 0 9px; color: #34473e; font-size: 12px; font-weight: 680; }
+        #my-cases-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+        #my-cases-list button { width: 100%; display: flex; justify-content: space-between; gap: 12px; padding: 11px 14px; border: 1px solid #e3e9e2; border-radius: 11px; background: #fbfcfa; color: #34473e; font-size: 13px; text-align: left; }
+        #my-cases-list button:hover { border-color: #b6c9b9; background: white; }
+        #my-cases-list .case-code { color: #829087; font-size: 12px; font-weight: 650; white-space: nowrap; }
         .legal-disclaimer { margin-top: 18px; padding: 13px 15px; border-left: 3px solid #c4aa64; border-radius: 0 10px 10px 0; background: #faf8ef; color: #736841; font-size: 11px; line-height: 1.65; }
         .copy-feedback { min-height: 18px; margin: 9px 0 0; color: #34724d; font-size: 12px; }
         .copy-feedback:empty { display: none; }
@@ -743,7 +778,7 @@
             body { background: #fff !important; color: #1f2937 !important; }
             header, #welcome-section, .journey, #product-roadmap, #steps-section,
             #input-section, #loading-section, #new-analysis-btn, #copy-btn,
-            #export-pdf-btn, #copy-review-link, #copy-feedback, #review-saved { display: none !important; }
+            #export-pdf-btn, #copy-review-link, #copy-feedback, #review-saved, #add-to-account-btn, .account-area { display: none !important; }
             main.max-w-4xl { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
             #results-section { display: block !important; animation: none !important; }
             .results-topline { margin-bottom: 20px !important; }
@@ -883,7 +918,14 @@
                 <span class="brand-mark"><i class="fa-solid fa-house"></i></span>
                 <span class="brand-name">flatmate</span>
             </a>
-            <span class="header-note"><i class="fa-solid fa-shield-halved"></i> Here for the whole tenancy</span>
+            <div class="header-end">
+                <span class="header-note"><i class="fa-solid fa-shield-halved"></i> Here for the whole tenancy</span>
+                <div class="account-area">
+                    <span id="account-name" class="hidden"></span>
+                    <button type="button" id="login-btn" class="account-btn">Log in</button>
+                    <button type="button" id="logout-btn" class="account-btn hidden">Log out</button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -980,17 +1022,17 @@
                     <button type="button" id="login-mode" aria-pressed="false">I already have an account</button>
                 </div>
                 <div class="onboarding-fields">
-                    <label id="account-name-wrap" for="account-name">Your name
-                        <input id="account-name" autocomplete="name" maxlength="100" placeholder="e.g. Jamie Patel">
+                    <label id="onboarding-name-wrap" for="onboarding-name">Your name
+                        <input id="onboarding-name" autocomplete="name" maxlength="100" placeholder="e.g. Jamie Patel">
                     </label>
-                    <label for="account-email">Email
-                        <input id="account-email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+                    <label for="onboarding-email">Email
+                        <input id="onboarding-email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
                     </label>
-                    <label for="account-password">Password
-                        <input id="account-password" type="password" autocomplete="new-password" required minlength="12" maxlength="256">
+                    <label for="onboarding-password">Password
+                        <input id="onboarding-password" type="password" autocomplete="new-password" required minlength="8" maxlength="256">
                     </label>
                 </div>
-                <p class="field-hint">Use at least 12 characters. Your password is stored as a salted hash.</p>
+                <p class="field-hint">Use at least 8 characters. Your password is stored as a salted hash.</p>
             </div>
             <div id="authenticated-summary" class="hidden onboarding-subsection">
                 <p id="account-summary" class="mb-0"></p>
@@ -1008,7 +1050,7 @@
                 <summary>Open a saved agreement review</summary>
                 <div class="onboarding-fields" style="margin-top:12px">
                     <label for="saved-review-code">Agreement review code
-                        <input id="saved-review-code" autocomplete="off" autocapitalize="characters" maxlength="15" placeholder="e.g. FLAT-AB23CDEFGH">
+                        <input id="saved-review-code" autocomplete="off" autocapitalize="characters" maxlength="15" placeholder="e.g. FLAT-7KQ2XM">
                     </label>
                     <button type="button" id="open-saved-review">Open review</button>
                 </div>
@@ -1248,6 +1290,21 @@
                 </button>
                 <p class="text-center text-xs text-gray-500">By continuing, you'll get an AI-generated review to help you know what to ask.</p>
             </form>
+
+            <!-- Reviews saved to the logged-in account -->
+            <div id="my-cases" class="hidden">
+                <h3>Your saved reviews</h3>
+                <ul id="my-cases-list"></ul>
+            </div>
+
+            <!-- Reopen a saved review -->
+            <form id="open-case-form">
+                <label for="case-code-input">Already reviewed? Enter your case code</label>
+                <div class="open-case-row">
+                    <input type="text" id="case-code-input" required placeholder="e.g. FLAT-7KQ2XM" autocomplete="off">
+                    <button type="submit" id="open-case-btn">Open</button>
+                </div>
+            </form>
         </section>
 
         <!-- LOADING STATE (Hidden by default) -->
@@ -1284,6 +1341,7 @@
                         </button>
                     </div>
                     <p id="review-saved" role="status"></p>
+                    <button type="button" id="add-to-account-btn" class="hidden">Add to my account</button>
                 </div>
             </div>
 
@@ -1564,6 +1622,26 @@
         <p id="request-error" class="hidden text-red-700 bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert" tabindex="-1"></p>
     </main>
 
+    <!-- Log in / sign up -->
+    <dialog id="account-dialog" aria-labelledby="account-title">
+        <button type="button" id="account-close" aria-label="Close">&times;</button>
+        <h2 id="account-title">Log in</h2>
+        <p id="account-intro">Keep your reviews in one place for the whole tenancy.</p>
+        <form id="account-form">
+            <div id="display-name-field" class="hidden">
+                <label for="account-display-name">Your name</label>
+                <input type="text" id="account-display-name" autocomplete="name">
+            </div>
+            <label for="account-email">Email</label>
+            <input type="email" id="account-email" required autocomplete="email">
+            <label for="account-password">Password</label>
+            <input type="password" id="account-password" required minlength="8" autocomplete="current-password">
+            <p id="account-error" role="alert"></p>
+            <button type="submit" id="account-submit">Log in</button>
+        </form>
+        <p class="account-switch"><span id="account-switch-copy">New here?</span> <button type="button" id="account-switch-btn">Create an account</button></p>
+    </dialog>
+
     <!-- UI Logic Script -->
     <script>
         // DOM Elements
@@ -1592,6 +1670,9 @@
         const submitLabel = submitBtn.querySelector('span');
         const originalSubmitLabel = submitLabel.textContent;
         let loadingNarrativeTimer = null;
+        let currentUser = null;
+        let myCaseCodes = new Set();
+        let currentCaseCode = null;
 
         // Dynamic displays
         const tenantNameInput = document.getElementById('tenant-name');
@@ -1736,7 +1817,7 @@
             onboardingSection.classList.add('hidden');
             const details = {
                 ...profile.review,
-                review_id: profile.review_id,
+                case_code: profile.review_id,
                 property_address: profile.property_address,
                 lead_tenant: profile.lead_tenant,
                 co_tenants: profile.co_tenants,
@@ -1983,23 +2064,23 @@
             }
 
             if (!signedInAccount) {
-                const email = document.getElementById('account-email');
-                const password = document.getElementById('account-password');
-                const displayName = document.getElementById('account-name');
+                const email = document.getElementById('onboarding-email');
+                const password = document.getElementById('onboarding-password');
+                const displayName = document.getElementById('onboarding-name');
                 if (!email.reportValidity() || !password.reportValidity() ||
                     (accountIntent === 'register' && !displayName.reportValidity())) return;
                 const button = document.getElementById('continue-onboarding');
                 button.disabled = true;
                 try {
                     const payload = { email: email.value, password: password.value };
-                    const endpoint = accountIntent === 'register' ? '/api/auth/register' : '/api/auth/login';
+                    const endpoint = accountIntent === 'register' ? '/api/auth/signup' : '/api/auth/login';
                     if (accountIntent === 'register') payload.display_name = displayName.value;
                     const account = await apiJson(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload),
                     });
-                    setAuthenticatedAccount(account);
+                    setUser(account);
                 } catch (error) {
                     setOnboardingMessage(error instanceof Error ? error.message : 'Could not sign in.', true);
                     button.disabled = false;
@@ -2051,25 +2132,25 @@
             accountIntent = 'register';
             document.getElementById('register-mode').setAttribute('aria-pressed', 'true');
             document.getElementById('login-mode').setAttribute('aria-pressed', 'false');
-            document.getElementById('account-name-wrap').classList.remove('hidden');
-            document.getElementById('account-name').required = true;
-            document.getElementById('account-password').autocomplete = 'new-password';
+            document.getElementById('onboarding-name-wrap').classList.remove('hidden');
+            document.getElementById('onboarding-name').required = true;
+            document.getElementById('onboarding-password').autocomplete = 'new-password';
             document.getElementById('account-heading').textContent = 'Create your account';
         });
         document.getElementById('login-mode').addEventListener('click', () => {
             accountIntent = 'login';
             document.getElementById('register-mode').setAttribute('aria-pressed', 'false');
             document.getElementById('login-mode').setAttribute('aria-pressed', 'true');
-            document.getElementById('account-name-wrap').classList.add('hidden');
-            document.getElementById('account-name').required = false;
-            document.getElementById('account-password').autocomplete = 'current-password';
+            document.getElementById('onboarding-name-wrap').classList.add('hidden');
+            document.getElementById('onboarding-name').required = false;
+            document.getElementById('onboarding-password').autocomplete = 'current-password';
             document.getElementById('account-heading').textContent = 'Sign in to FlatMate';
         });
         document.getElementById('continue-onboarding').addEventListener('click', continueOnboarding);
         document.getElementById('onboarding-signout').addEventListener('click', async () => {
             try {
                 await apiJson('/api/auth/logout', { method: 'POST' });
-                setAuthenticatedAccount(null);
+                setUser(null);
                 setOnboardingMessage('You are signed out.');
             } catch (error) {
                 setOnboardingMessage(error instanceof Error ? error.message : 'Could not sign out.', true);
@@ -2215,9 +2296,6 @@
 
         updateIntakeChoice();
         updateRoleFields();
-        apiJson('/api/auth/me')
-            .then((account) => setAuthenticatedAccount(account))
-            .catch(() => {});
 
         function setStep(activeStep) {
             [1, 2, 3].forEach((step) => {
@@ -2388,30 +2466,207 @@
             emailContent.textContent = result.email || 'No email draft was generated because no issues were flagged.';
             copyBtn.disabled = !result.email;
             copyFeedback.textContent = '';
-            const caseCode = typeof result.case_code === 'string' &&
-                /^FLAT-[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{10}$/.test(result.case_code)
-                ? result.case_code
-                : null;
-            reviewSaved.textContent = caseCode
-                ? `Saved agreement review · Code ${caseCode}. Anyone with this code can view the report.`
-                : result.review_id
-                    ? `Saved to your review database · Reference ${result.review_id}`
-                    : 'This review was not saved to the database.';
-            copyReviewLinkBtn.disabled = !caseCode;
-            copyReviewLinkBtn.dataset.reviewCode = caseCode || '';
-            exportPdfBtn.disabled = !result.review_id;
-            if (caseCode) {
-                const url = new URL(window.location.href);
-                url.search = '';
-                url.searchParams.set('review', caseCode);
-                url.hash = '';
-                window.history.replaceState(null, '', url);
+            reviewSaved.textContent = result.case_code
+                ? `Saved · Your case code is ${result.case_code}. Keep it to reopen this review, or share it with your co-tenants.`
+                : 'This review was not saved, so it will be gone when you leave this page.';
+            currentCaseCode = result.case_code || null;
+            updateAddToAccount();
+            if (result.case_code) {
+                history.replaceState(null, '', '?case=' + encodeURIComponent(result.case_code));
             }
+            copyReviewLinkBtn.disabled = !result.case_code;
+            copyReviewLinkBtn.dataset.reviewCode = result.case_code || '';
+            exportPdfBtn.disabled = false;
 
             if (result.bills_estimate) {
                 renderBills(result.bills_estimate, result.property_address, result.lead_tenant, result.co_tenants);
             }
         }
+
+        // Read a JSON API response, throwing an Error with a message to show the user.
+        async function readResult(response, fallbackError) {
+            const responseBody = await response.text();
+            let result;
+            try {
+                result = JSON.parse(responseBody);
+            } catch {
+                if (!response.ok) {
+                    throw new Error(
+                        `The server could not complete this request (HTTP ${response.status}). Check the backend terminal for details.`
+                    );
+                }
+                throw new Error('The server returned an unreadable response. Please try again.');
+            }
+            if (!response.ok) {
+                const detail = result && typeof result === 'object' && typeof result.detail === 'string'
+                    ? result.detail
+                    : fallbackError;
+                throw new Error(detail);
+            }
+            return result;
+        }
+
+        function showRequestError(error, fallbackError) {
+            requestError.textContent = error instanceof Error ? error.message : fallbackError;
+            requestError.classList.remove('hidden');
+            showStage('form');
+            requestError.focus();
+        }
+
+        async function openCase(code) {
+            requestError.textContent = '';
+            requestError.classList.add('hidden');
+            showStage('loading');
+            try {
+                const response = await fetch('/api/cases/' + encodeURIComponent(code.trim()));
+                renderResults(await readResult(response, 'Could not open that review.'));
+                showStage('results');
+                document.querySelector('.results-topline h2').focus({ preventScroll: true });
+            } catch (error) {
+                showRequestError(error, 'Could not open that review. Please try again.');
+            }
+        }
+
+        document.getElementById('open-case-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            openCase(document.getElementById('case-code-input').value);
+        });
+
+        const sharedCode = new URLSearchParams(location.search).get('case');
+        if (sharedCode) openCase(sharedCode);
+
+        // Accounts: email + password. The server keeps the login in a cookie.
+        const accountDialog = document.getElementById('account-dialog');
+        const accountForm = document.getElementById('account-form');
+        const accountError = document.getElementById('account-error');
+        const accountSubmit = document.getElementById('account-submit');
+        const accountPassword = document.getElementById('account-password');
+        const displayNameField = document.getElementById('display-name-field');
+        const displayNameInput = document.getElementById('account-display-name');
+        const addToAccountBtn = document.getElementById('add-to-account-btn');
+        let accountMode = 'login';
+
+        function setAccountMode(mode) {
+            accountMode = mode;
+            const signup = mode === 'signup';
+            document.getElementById('account-title').textContent = signup ? 'Create an account' : 'Log in';
+            accountSubmit.textContent = signup ? 'Create account' : 'Log in';
+            document.getElementById('account-switch-copy').textContent = signup ? 'Already have an account?' : 'New here?';
+            document.getElementById('account-switch-btn').textContent = signup ? 'Log in' : 'Create an account';
+            displayNameField.classList.toggle('hidden', !signup);
+            displayNameInput.required = signup;
+            accountPassword.autocomplete = signup ? 'new-password' : 'current-password';
+            accountError.textContent = '';
+        }
+
+        function updateAddToAccount() {
+            addToAccountBtn.classList.toggle(
+                'hidden', !currentUser || !currentCaseCode || myCaseCodes.has(currentCaseCode)
+            );
+        }
+
+        function renderMyCases(saved) {
+            myCaseCodes = new Set(saved.map((item) => item.case_code));
+            const list = document.getElementById('my-cases-list');
+            list.replaceChildren();
+            saved.forEach((item) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                const address = document.createElement('span');
+                address.textContent = item.property_address;
+                const code = document.createElement('span');
+                code.className = 'case-code';
+                code.textContent = item.case_code;
+                button.append(address, code);
+                button.addEventListener('click', () => openCase(item.case_code));
+                const entry = document.createElement('li');
+                entry.append(button);
+                list.append(entry);
+            });
+            document.getElementById('my-cases').classList.toggle('hidden', saved.length === 0);
+            updateAddToAccount();
+        }
+
+        async function loadMyCases() {
+            if (!currentUser) return renderMyCases([]);
+            try {
+                const response = await fetch('/api/my/cases');
+                renderMyCases((await readResult(response, 'Could not load your reviews.')).cases);
+            } catch {
+                renderMyCases([]);
+            }
+        }
+
+        function setUser(user) {
+            currentUser = user;
+            const name = document.getElementById('account-name');
+            name.textContent = user ? user.display_name : '';
+            name.classList.toggle('hidden', !user);
+            document.getElementById('login-btn').classList.toggle('hidden', !!user);
+            document.getElementById('logout-btn').classList.toggle('hidden', !user);
+            if (user && !tenantNameInput.value) tenantNameInput.value = user.display_name;
+            setAuthenticatedAccount(user);
+            loadMyCases();
+        }
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            setAccountMode('login');
+            accountDialog.showModal();
+        });
+        document.getElementById('account-close').addEventListener('click', () => accountDialog.close());
+        document.getElementById('account-switch-btn').addEventListener('click', () => {
+            setAccountMode(accountMode === 'login' ? 'signup' : 'login');
+        });
+
+        accountForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            accountError.textContent = '';
+            accountSubmit.disabled = true;
+            const payload = {
+                email: document.getElementById('account-email').value,
+                password: accountPassword.value,
+            };
+            if (accountMode === 'signup') payload.display_name = displayNameInput.value;
+            try {
+                const response = await fetch('/api/auth/' + accountMode, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                setUser(await readResult(response, 'Could not log you in.'));
+                accountForm.reset();
+                accountDialog.close();
+            } catch (error) {
+                accountError.textContent = error.message;
+            } finally {
+                accountSubmit.disabled = false;
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+            setUser(null);
+            window.location.reload();
+        });
+
+        addToAccountBtn.addEventListener('click', async () => {
+            addToAccountBtn.disabled = true;
+            try {
+                const response = await fetch('/api/cases/' + encodeURIComponent(currentCaseCode) + '/join', { method: 'POST' });
+                await readResult(response, 'Could not add this review to your account.');
+                reviewSaved.textContent = `Added to your account · Case code ${currentCaseCode}.`;
+                await loadMyCases();
+            } catch (error) {
+                reviewSaved.textContent = error.message;
+            } finally {
+                addToAccountBtn.disabled = false;
+            }
+        });
+
+        fetch('/api/me')
+            .then((response) => (response.ok ? response.json() : null))
+            .then(setUser)
+            .catch(() => setUser(null));
 
         exportPdfBtn.addEventListener('click', () => {
             if (!exportPdfBtn.disabled) window.print();
@@ -2422,7 +2677,7 @@
             if (!code) return;
             const url = new URL(window.location.href);
             url.search = '';
-            url.searchParams.set('review', code);
+            url.searchParams.set('case', code);
             url.hash = '';
             try {
                 await navigator.clipboard.writeText(url.toString());
@@ -2442,7 +2697,7 @@
             const button = document.getElementById('open-saved-review');
             button.disabled = true;
             try {
-                const result = await apiJson(`/api/reviews/${encodeURIComponent(normalizedCode)}`);
+                const result = await apiJson(`/api/cases/${encodeURIComponent(normalizedCode)}`);
                 renderResults(result);
                 showStage('results');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2512,26 +2767,11 @@
 
             try {
                 const response = await fetch('/api/analyze', { method: 'POST', body });
-                const responseBody = await response.text();
-                let result;
-                try {
-                    result = JSON.parse(responseBody);
-                } catch {
-                    if (!response.ok) {
-                        throw new Error(
-                            `The server could not analyze this agreement (HTTP ${response.status}). Check the backend terminal for details.`
-                        );
-                    }
-                    throw new Error('The server returned an unreadable response. Please try again.');
-                }
-                if (!response.ok) {
-                    const detail = result && typeof result === 'object' && typeof result.detail === 'string'
-                        ? result.detail
-                        : 'Agreement analysis failed.';
-                    throw new Error(detail);
-                }
-                renderResults(result);
+                renderResults(await readResult(response, 'Agreement analysis failed.'));
                 showStage('results');
+                loadMyCases();
+                // A tenancy profile needs a login and a saved case.
+                if (signedInAccount && result.case_code) {
                 const signed = document.getElementById('agreement-signed').value === 'yes';
                 try {
                     const profile = await apiJson('/api/tenancies', {
@@ -2548,7 +2788,7 @@
                             agreement_signed: signed,
                             signed_on: signed ? document.getElementById('signed-on').value : null,
                             tenancy_start: signed ? (document.getElementById('tenancy-start').value || null) : null,
-                            review_id: result.review_id,
+                            case_code: result.case_code,
                         }),
                     });
                     renderTenancyWorkspace(profile);
@@ -2557,14 +2797,10 @@
                     showWorkspaceError(error);
                     document.getElementById('tenancy-workspace').classList.remove('hidden');
                 }
+                }
                 document.querySelector('.results-topline h2').focus({ preventScroll: true });
             } catch (error) {
-                requestError.textContent = error instanceof Error
-                    ? error.message
-                    : 'Could not analyze the agreement. Please try again.';
-                requestError.classList.remove('hidden');
-                showStage('form');
-                requestError.focus();
+                showRequestError(error, 'Could not analyze the agreement. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitLabel.textContent = originalSubmitLabel;
@@ -2613,6 +2849,7 @@
             requestError.classList.add('hidden');
             copyFeedback.textContent = '';
             copyBtn.disabled = false;
+            history.replaceState(null, '', location.pathname);
             showStage('form');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('tenant-name').focus({ preventScroll: true });
