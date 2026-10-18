@@ -486,13 +486,17 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
                 _sql("SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"),
                 (row["id"], account["id"]),
             ).fetchone()
-            listed_names = (
-                [row["lead_tenant"]]
-                if role == "lead"
-                else json.loads(row["co_tenants"])
-            )
-            if normalized_name.casefold() not in {name.casefold() for name in listed_names}:
-                raise ValueError("That name and role do not match a tenant listed on this tenancy.")
+            # Match the name against everyone on the agreement and take the role from where it is listed,
+            # so picking the wrong role doesn't block a listed tenant.
+            listed = [(row["lead_tenant"], "lead")] + [(name, "co_tenant") for name in json.loads(row["co_tenants"])]
+            wanted = " ".join(normalized_name.split()).casefold()
+            matches = [listed_role for name, listed_role in listed if " ".join(name.split()).casefold() == wanted]
+            if not matches:
+                names = ", ".join(
+                    f"{name} ({'lead tenant' if listed_role == 'lead' else 'co-tenant'})" for name, listed_role in listed
+                )
+                raise ValueError(f"That name isn't on this agreement. It lists: {names}. Enter your name exactly as one of these.")
+            role = role if role in matches else matches[0]
             connection.execute(
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
                 (account["id"],),

@@ -540,22 +540,25 @@ class TenancyApiTests(unittest.TestCase):
         self.assertEqual(send_email.call_args.args[0], self.account["email"])
         self.assertIn("Rent", send_email.call_args.args[2])
 
-    def test_join_rejects_role_and_name_mismatch(self):
+    def test_join_takes_the_role_from_the_agreement_and_rejects_unlisted_names(self):
         profile = self.create_profile().json()
         friend = TestClient(app)
         try:
             self.register(friend, "wrong@example.test", "Friend Tenant")
-            response = friend.post(
+            unlisted = friend.post(
                 "/api/tenancies/join",
-                json={
-                    "code": profile["code"],
-                    "tenant_name": "Friend Tenant",
-                    "role": "lead",
-                },
+                json={"code": profile["code"], "tenant_name": "Someone Else", "role": "co_tenant"},
+            )
+            wrong_role = friend.post(
+                "/api/tenancies/join",
+                json={"code": profile["code"], "tenant_name": " friend  tenant ", "role": "lead"},
             )
         finally:
             friend.close()
-        self.assertEqual(response.status_code, 409)
+        self.assertEqual(unlisted.status_code, 409)
+        self.assertIn("Friend Tenant (co-tenant)", unlisted.json()["detail"])
+        self.assertEqual(wrong_role.status_code, 200, wrong_role.text)
+        self.assertEqual(wrong_role.json()["role"], "co_tenant")
 
 
 if __name__ == "__main__":
