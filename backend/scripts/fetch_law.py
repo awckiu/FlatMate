@@ -44,10 +44,13 @@ def fetch(url: str) -> bytes:
 def _render(el: ET.Element, number_paragraphs: bool, parent: str = "") -> str:
     """Plain text of a CLML element, one line per paragraph."""
     tag = el.tag.removeprefix(LEG)
-    if tag in ("Commentaries", "CommentaryRef"):
+    if tag in ("Commentaries", "CommentaryRef", "Repeal"):
+        # Repeal wraps old text kept for display next to what replaced it; keep the law as amended.
         return ""
     if tag == "Pnumber":
-        number = "".join(el.itertext()).strip()
+        number = _text(el)
+        if not number:  # the whole paragraph was repealed
+            return ""
         if parent == "P1":
             # A section's own number is already its section_ref; schedule paragraphs keep theirs.
             return f"\n{number} " if number_paragraphs else ""
@@ -67,7 +70,11 @@ def _clean(text: str) -> str:
 
 def _version_key(number: str) -> tuple[int, str]:
     match = re.fullmatch(r"(\d+)([A-Z]*)", number.strip())
-    return (int(match.group(1)), match.group(2)) if match else (-1, number)
+    if not match:
+        return (-1, number)
+    # Inserted sections run 14, 14ZA, 14ZB, 14A, 14B: a Z prefix sorts before plain letters.
+    suffix = match.group(2)
+    return (int(match.group(1)), "!" + suffix[1:] if suffix.startswith("Z") and len(suffix) > 1 else suffix)
 
 
 def _keeps(spec: str, kind: str, number: str, label: str = "s.") -> bool:
@@ -78,22 +85,46 @@ def _keeps(spec: str, kind: str, number: str, label: str = "s.") -> bool:
     return kind == "schedule" and spec.casefold() == f"sch {number}".casefold()
 
 
+def _inline(el: ET.Element) -> str:
+    out = el.text or ""
+    for child in el:
+        if child.tag.removeprefix(LEG) not in ("Commentaries", "CommentaryRef", "Repeal"):
+            out += _inline(child)
+        out += child.tail or ""
+    return out
+
+
+def _text(el: ET.Element | None) -> str:
+    """One line of text, as amended; numbers often carry markup like <CommentaryRef/>4 or <Addition>4A</Addition>."""
+    return "" if el is None else " ".join(_inline(el).split())
+
+
+def _own_p1s(el: ET.Element):
+    """The section P1s of a P1group, not those quoted inside an amendment it makes."""
+    for child in el:
+        tag = child.tag.removeprefix(LEG)
+        if tag == "P1":
+            yield child
+        elif tag not in ("BlockAmendment", "Versions"):
+            yield from _own_p1s(child)
+
+
 def _walk_units(el: ET.Element, units: list, in_schedules: bool = False):
     """Collect sections and schedules, skipping text quoted inside amendments."""
     tag = el.tag.removeprefix(LEG)
     if tag in ("BlockAmendment", "Versions"):
         return
     if tag == "P1group" and not in_schedules:
-        heading = _clean("".join(el.find(LEG + "Title").itertext())) if el.find(LEG + "Title") is not None else ""
-        for p1 in el.iter(LEG + "P1"):
-            number = (p1.findtext(LEG + "Pnumber") or "").strip()
+        heading = _text(el.find(LEG + "Title"))
+        for p1 in _own_p1s(el):
+            number = _text(p1.find(LEG + "Pnumber"))
             if number:
                 units.append(("section", number, heading, p1.get("DocumentURI", ""), p1))
         return
     if tag == "Schedule":
-        match = re.search(r"schedule\s+(\w+)", "".join(el.findtext(LEG + "Number") or ""), re.IGNORECASE)
+        match = re.search(r"schedule\s+(\w+)", _text(el.find(LEG + "Number")), re.IGNORECASE)
         title = el.find(f"{LEG}TitleBlock/{LEG}Title")
-        heading = _clean("".join(title.itertext())) if title is not None else ""
+        heading = _text(title)
         if match:
             body = el.find(LEG + "ScheduleBody")
             units.append(("schedule", match.group(1).upper(), heading, el.get("DocumentURI", ""), el if body is None else body))

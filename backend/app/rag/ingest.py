@@ -1,11 +1,15 @@
 """Parse the fetched law files into section-sized chunks and load them into the vector store."""
 
+import time
 from dataclasses import dataclass
 
 from app import llm
 from app.rag.store import Chunk, VectorStore
 
 MAX_CHARS = 4000
+# Gemini's free tier caps embedding tokens per minute, so a long Act is spread over minutes.
+RATE_LIMIT_WAIT_SECONDS = 60
+RATE_LIMIT_RETRIES = 5
 
 
 @dataclass
@@ -54,10 +58,21 @@ def _split(text: str) -> list[str]:
     return pieces + ([current] if current else [])
 
 
+def _embed_with_retry(texts: list[str]) -> list[list[float]]:
+    for attempt in range(RATE_LIMIT_RETRIES + 1):
+        try:
+            return llm.embed(texts)
+        except Exception as error:
+            if getattr(error, "code", None) != 429 or attempt == RATE_LIMIT_RETRIES:
+                raise
+            print(f"  Gemini rate limit hit; waiting {RATE_LIMIT_WAIT_SECONDS}s")
+            time.sleep(RATE_LIMIT_WAIT_SECONDS)
+
+
 def ingest(
     store: VectorStore,
     chunks: list[Chunk],
-    batch_size: int = 50,
+    batch_size: int = 20,
     last_updated: str | None = None,
     source_url: str | None = None,
 ) -> int:
@@ -67,6 +82,6 @@ def ingest(
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i : i + batch_size]
         # The heading helps matching ("Access for repairs"), so it is embedded with the text.
-        embeddings.extend(llm.embed([f"{c.heading}\n{c.text}" if c.heading else c.text for c in batch]))
+        embeddings.extend(_embed_with_retry([f"{c.heading}\n{c.text}" if c.heading else c.text for c in batch]))
     store.replace_source(chunks[0].source, chunks, embeddings, last_updated, source_url)
     return len(chunks)

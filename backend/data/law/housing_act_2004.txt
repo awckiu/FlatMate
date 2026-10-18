@@ -1,0 +1,381 @@
+source: Housing Act 2004
+url: https://www.legislation.gov.uk/ukpga/2004/34
+last_updated: 2026-06-22
+
+### s.1 | New system for assessing housing conditions and enforcing housing standards | https://www.legislation.gov.uk/ukpga/2004/34/section/1
+(1) This Part provides—
+(a) for a new system of assessing the condition of residential premises, and
+(b) for that system to be used in the enforcement of housing standards in relation to such premises.
+(2) The new system—
+(a) operates by reference to the existence of category 1 or category 2 hazards on residential premises (see section 2), and
+(b) replaces the existing system based on the test of fitness for human habitation contained in section 604 of the Housing Act 1985 (c. 68).
+(3) The kinds of enforcement action which are to involve the use of the new system are—
+(a) the new kinds of enforcement action contained in Chapter 2 (improvement notices, prohibition orders and hazard awareness notices),
+(b) the new emergency measures contained in Chapter 3 (emergency remedial action and emergency prohibition orders), and
+(c) the existing kinds of enforcement action dealt with in Chapter 4 (demolition orders and slum clearance declarations).
+(4) In this Part “residential premises” means—
+(a) a dwelling;
+(b) an HMO;
+(c) unoccupied HMO accommodation;
+(d) any common parts of a building containing one or more flats.
+(5) In this Part—
+“building containing one or more flats” does not include an HMO;
+“common parts”, in relation to a building containing one or more flats, includes—
+the structure and exterior of the building, and
+common facilities provided (whether or not in the building) for persons who include the occupiers of one or more of the flats;
+“dwelling” means a building or part of a building occupied or intended to be occupied as a separate dwelling;
+“external common parts”, in relation to a building containing one or more flats, means common parts of the building which are outside it;
+“flat” means a separate set of premises (whether or not on the same floor)—
+which forms part of a building,
+which is constructed or adapted for use for the purposes of a dwelling, and
+either the whole or a material part of which lies above or below some other part of the building;
+“HMO” means a house in multiple occupation as defined by sections 254 to 259, as they have effect for the purposes of this Part (that is, without the exclusions contained in Schedule 14);
+“unoccupied HMO accommodation” means a building or part of a building constructed or adapted for use as a house in multiple occupation but for the time being either unoccupied or only occupied by persons who form a single household.
+(6) In this Part any reference to a dwelling, an HMO or a building containing one or more flats includes (where the context permits) any yard, garden, outhouses and appurtenances belonging to, or usually enjoyed with, the dwelling, HMO or building (or any part of it).
+(7) The following indicates how this Part applies to flats—
+(a) references to a dwelling or an HMO include a dwelling or HMO which is a flat (as defined by subsection (5)); and
+(b) subsection (6) applies in relation to such a dwelling or HMO as it applies in relation to other dwellings or HMOs (but it is not to be taken as referring to any common parts of the building containing the flat).
+(8) This Part applies to unoccupied HMO accommodation as it applies to an HMO, and references to an HMO in subsections (6) and (7) and in the following provisions of this Part are to be read accordingly.
+(9) But unoccupied HMO accommodation is “qualifying residential premises” for the purposes of this Part only to the extent provided for by section 2B(1)(c).
+
+### s.2 | Meaning of “category 1 hazard” and “category 2 hazard” | https://www.legislation.gov.uk/ukpga/2004/34/section/2
+(1) In this Act—
+“category 1 hazard” means a hazard of a prescribed description which falls within a prescribed band as a result of achieving, under a prescribed method for calculating the seriousness of hazards of that description, a numerical score of or above a prescribed amount;
+“category 2 hazard” means a hazard of a prescribed description which falls within a prescribed band as a result of achieving, under a prescribed method for calculating the seriousness of hazards of that description, a numerical score below the minimum amount prescribed for a category 1 hazard of that description; and
+“hazard” means any risk of harm to the health or safety of an actual or potential occupier of a dwelling or HMO which arises from a deficiency in the dwelling or HMO or in any building or land in the vicinity (whether the deficiency arises as a result of the construction of any building, an absence of maintenance or repair, or otherwise).
+(2) In subsection (1)—
+“prescribed” means prescribed by regulations made by the appropriate national authority (see section 261(1)); and
+“prescribed band” means a band so prescribed for a category 1 hazard or a category 2 hazard, as the case may be.
+(3) Regulations under this section may, in particular, prescribe a method for calculating the seriousness of hazards which takes into account both the likelihood of the harm occurring and the severity of the harm if it were to occur.
+(4) In this section—
+“building” includes part of a building;
+“harm” includes temporary harm.
+(5) In this Act “health” includes mental health.
+
+### s.4 | Inspections by local housing authorities to see whether category 1 or 2 hazards exist | https://www.legislation.gov.uk/ukpga/2004/34/section/4
+(1) If a local housing authority consider—
+(a) as a result of any matters of which they have become aware in carrying out their duty under section 3, or
+(b) for any other reason,
+that it would be appropriate for any residential premises in their district to be inspected with a view to determining whether any category 1 or 2 hazard exists on those premises, the authority must arrange for such an inspection to be carried out.
+(2) If an official complaint about the condition of any residential premises in the district of a local housing authority is made to the proper officer of the authority, and the circumstances complained of indicate—
+(a) that any category 1 or category 2 hazard may exist on those premises, or
+(b) that an area in the district should be dealt with as a clearance area,
+the proper officer must inspect the premises or area.
+(3) In this section “an official complaint” means a complaint in writing made by—
+(a) a justice of the peace having jurisdiction in any part of the district, or
+(b) the parish or community council for a parish or community within the district.
+(4) An inspection of any premises under subsection (1) or (2)—
+(a) is to be carried out in accordance with regulations made by the appropriate national authority; and
+(b) is to extend to so much of the premises as the local housing authority or proper officer (as the case may be) consider appropriate in the circumstances having regard to any applicable provisions of the regulations.
+(5) Regulations under subsection (4) may in particular make provision about—
+(a) the manner in which, and the extent to which, premises are to be inspected under subsection (1) or (2), and
+(b) the manner in which the assessment of hazards is to be carried out.
+(6) Where an inspection under subsection (2) has been carried out and the proper officer of a local housing authority is of the opinion—
+(a) that a category 1 or 2 hazard exists on any residential premises in the authority’s district, or
+(b) that an area in their district should be dealt with as a clearance area,
+the officer must, without delay, make a report in writing to the authority which sets out his opinion together with the facts of the case.
+(7) The authority must consider any report made to them under subsection (6) as soon as possible.
+
+### s.55 | Licensing of HMOs to which this Part applies | https://www.legislation.gov.uk/ukpga/2004/34/section/55
+(1) This Part provides for HMOs to be licensed by local housing authorities where—
+(a) they are HMOs to which this Part applies (see subsection (2)), and
+(b) they are required to be licensed under this Part (see section 61(1)).
+(2) This Part applies to the following HMOs in the case of each local housing authority—
+(a) any HMO in the authority’s district which falls within any prescribed description of HMO, and
+(b) if an area is for the time being designated by the authority under section 56 as subject to additional licensing, any HMO in that area which falls within any description of HMO specified in the designation.
+(3) The appropriate national authority may by order prescribe descriptions of HMOs for the purposes of subsection (2)(a).
+(4) The power conferred by subsection (3) may be exercised in such a way that this Part applies to all HMOs in the district of a local housing authority.
+(5) Every local housing authority have the following general duties—
+(a) to make such arrangements as are necessary to secure the effective implementation in their district of the licensing regime provided for by this Part;
+(b) to ensure that all applications for licences and other issues falling to be determined by them under this Part are determined within a reasonable time; and
+(c) to satisfy themselves, as soon as is reasonably practicable, that there are no Part 1 functions that ought to be exercised by them in relation to the premises in respect of which such applications are made.
+(6) For the purposes of subsection (5)(c)—
+(a) “Part 1 function” means any duty under section 5 to take any course of action to which that section applies or any power to take any course of action to which section 7 applies; and
+(b) the authority may take such steps as they consider appropriate (whether or not involving an inspection) to comply with their duty under subsection (5)(c) in relation to each of the premises in question, but they must in any event comply with it within the period of 5 years beginning with the date of the application for a licence.
+
+### s.61 | Requirement for HMOs to be licensed | https://www.legislation.gov.uk/ukpga/2004/34/section/61
+(1) Every HMO to which this Part applies must be licensed under this Part unless—
+(a) a temporary exemption notice is in force in relation to it under section 62, or
+(b) an interim or final management order is in force in relation to it under Chapter 1 of Part 4.
+(2) A licence under this Part is a licence authorising occupation of the house concerned by not more than a maximum number of households or persons specified in the licence.
+(3) Sections63 to 67 deal with applications for licences, the granting or refusal of licences and the imposition of licence conditions.
+(4) The local housing authority must take all reasonable steps to secure that applications for licences are made to them in respect of HMOs in their area which are required to be licensed under this Part but are not.
+(5) The appropriate national authority may by regulations provide for—
+(a) any provision of this Part, or
+(b) section 263 (in its operation for the purposes of any such provision),
+to have effect in relation to a section 257 HMO with such modifications as are prescribed by the regulations.
+A “section 257 HMO” is an HMO which is a converted block of flats to which section 257 applies.
+(6) In this Part (unless the context otherwise requires)—
+(a) references to a licence are to a licence under this Part,
+(b) references to a licence holder are to be read accordingly, and
+(c) references to an HMO being (or not being) licensed under this Part are to its being (or not being) an HMO in respect of which a licence is in force under this Part.
+
+### s.72 | Offences in relation to licensing of HMOs | https://www.legislation.gov.uk/ukpga/2004/34/section/72
+(1) If an HMO is required to be licensed under this Part (see section 61(1)) but is not so licensed, an offence is committed by—
+(a) any person within subsection (1A), and
+(b) any person who as landlord under a tenancy or licensor under a licence to occupy has an estate or interest in, or a right in relation to, the HMO that is superior (whether directly or indirectly) to the estate, interest or right of any person within subsection (1A).
+(1A) The following are within this subsection—
+(a) any person having control of or managing the HMO, and
+(b) any person who is the landlord or licensor in relation to a person occupying the HMO under a tenancy or licence.
+(2) A person commits an offence if—
+(a) he is a person having control of or managing an HMO which is licensed under this Part,
+(b) he knowingly permits another person to occupy the house, and
+(c) the other person’s occupation results in the house being occupied by more households or persons than is authorised by the licence.
+(3) A person commits an offence if—
+(a) he is a licence holder or a person on whom restrictions or obligations under a licence are imposed in accordance with section 67(5), and
+(b) he fails to comply with any condition of the licence.
+(4) In proceedings against a person for an offence under subsection (1) it is a defence that, at the material time—
+(a) a notification had been duly given in respect of the house under section 62(1), or
+(b) an application for a licence had been duly made in respect of the house under section 63,
+and that notification or application was still effective (see subsection (8)).
+(4A) In proceedings against a person for an offence under subsection (1)(a) it is a defence for them to prove that they had a reasonable excuse—
+(a) for having control of or managing the HMO, or
+(b) for being the landlord or licensor in relation to a person occupying the HMO under a tenancy or licence,
+in circumstances in which the HMO was required to be licensed under this Part but was not so licensed.
+(4B) In proceedings against a person for an offence under subsection (1)(b) it is a defence for them to prove that they—
+(a) did not know, and had a reasonable excuse for not knowing, that the building or part of the building concerned was an HMO,
+(b) took all reasonably practicable steps to ensure that the HMO was licensed under this Part, or
+(c) had some other reasonable excuse for failing to ensure that the HMO was so licensed.
+(4C) For the purposes of subsection (4B), a term in the tenancy agreement or licence to occupy relating to the occupation of the building or part of the building that is an HMO does not on its own constitute a defence under any of paragraphs (a) to (c) of that subsection.
+(5) In proceedings against a person for an offence under subsection (2) or (3) it is a defence that he had a reasonable excuse—
+(a) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(b) for permitting the person to occupy the house, or
+(c) for failing to comply with the condition,
+as the case may be.
+(6) A person who commits an offence under subsection (1) or (2) is liable on summary conviction to a fine.
+(7) A person who commits an offence under subsection (3) is liable on summary conviction to a fine not exceeding level 5 on the standard scale.
+(7A) See also section 249A (financial penalties as alternative to prosecution for certain housing offences in England).
+(7B) If a local housing authority has imposed a financial penalty on a person under section 249A in respect of conduct amounting to an offence under this section the person may not be convicted of an offence under this section in respect of the conduct.
+(8) For the purposes of subsection (4) a notification or application is “effective” at a particular time if at that time it has not been withdrawn, and either—
+(a) the authority have not decided whether to serve a temporary exemption notice, or (as the case may be) grant a licence, in pursuance of the notification or application, or
+(b) if they have decided not to do so, one of the conditions set out in subsection (9) is met.
+(9) The conditions are—
+(a) that the period for appealing against the decision of the authority not to serve or grant such a notice or licence (or against any relevant decision of the appropriate tribunal) has not expired, or
+(b) that an appeal has been brought against the authority’s decision (or against any relevant decision of such a tribunal) and the appeal has not been determined or withdrawn.
+(10) In subsection (9)
+“relevant decision” means a decision which is given on an appeal to the tribunal and confirms the authority’s decision (with or without variation).
+
+### s.73 | Other consequences of operating unlicensed HMOs: rent repayment orders | https://www.legislation.gov.uk/ukpga/2004/34/section/73
+(1) For the purposes of this section an HMO is an “unlicensed HMO” if—
+(a) it is required to be licensed under this Part but is not so licensed, and
+(b) neither of the conditions in subsection (2) is satisfied.
+(2) The conditions are—
+(a) that a notification has been duly given in respect of the HMO under section 62(1) and that notification is still effective (as defined by section 72(8));
+(b) that an application for a licence has been duly made in respect of the HMO under section 63 and that application is still effective (as so defined).
+(3) No rule of law relating to the validity or enforceability of contracts in circumstances involving illegality is to affect the validity or enforceability of—
+(a) any provision requiring the payment of rent or the making of any other periodical payment in connection with any tenancy or licence of a part of an unlicensed HMO, or
+(b) any other provision of such a tenancy or licence.
+(4) But amounts paid in respect of rent or other periodical payments payable in connection with such a tenancy or licence may be recovered in accordance with subsection (5) and section 74 (in the case of an HMO in Wales) or in accordance with Chapter 4 of Part 2 of the Housing and Planning Act 2016 (in the case of an HMO in England) .
+(5) If—
+(a) an application in respect of an HMO is made to the appropriate tribunal by the local housing authority or an occupier of a part of the HMO in Wales , and
+(b) the tribunal is satisfied as to the matters mentioned in subsection (6) or (8),
+the tribunal may make an order (a “rent repayment order”) requiring the appropriate person to pay to the applicant such amount in respect of the relevant award or awards of universal credit or the housing benefit paid as mentioned in subsection (6)(b), or (as the case may be) the periodical payments paid as mentioned in subsection (8)(b), as is specified in the order (see section 74(2) to (8)).
+(6) If the application is made by the local housing authority, the tribunal must be satisfied as to the following matters—
+(a) that, at any time within the period of 12 months ending with the date of the notice of intended proceedings required by subsection (7), the appropriate person has committed an offence under section 72(1) in relation to the HMO (whether or not he has been charged or convicted),
+(b) that—
+(i) one or more relevant awards of universal credit have been paid (to any person); or
+(ii)
+housing benefit has been paid (to any person) in respect of periodical payments payable in connection with the occupation of a part or parts of the
+HMO
+,
+during any period during which it appears to the tribunal that such an offence was being committed,
+(c) that the requirements of subsection (7) have been complied with in relation to the application.
+(6A)
+In subsection (6)(b)(i), “relevant award of universal credit” means an award of universal credit the calculation of which included an amount under section 11 of the Welfare Reform Act 2012, calculated in accordance with Schedule 4 to the Universal Credit Regulations 2013 (housing costs element for renters) (
+S.I. 2013/376
+) or any corresponding provision replacing that Schedule, in respect of periodical payments payable in connection with the occupation of a part or parts of the HMO.
+(7) Those requirements are as follows—
+(a) the authority must have served on the appropriate person a notice (a “notice of intended proceedings”)—
+(i) informing him that the authority are proposing to make an application under subsection (5),
+(ii) setting out the reasons why they propose to do so,
+(iii) stating the amount that they will seek to recover under that subsection and how that amount is calculated, and
+(iv) inviting him to make representations to them within a period specified in the notice of not less than 28 days;
+(b) that period must have expired; and
+(c) the authority must have considered any representations made to them within that period by the appropriate person.
+(8) If the application is made by an occupier of a part of the HMO, the tribunal must be satisfied as to the following matters—
+(a) that the appropriate person has been convicted of an offence under section 72(1) in relation to the HMO, or has been required by a rent repayment order to make a payment in respect of
+(i)
+
+### s.212 | Tenancy deposit schemes | https://www.legislation.gov.uk/ukpga/2004/34/section/212
+(1) The Secretary of State must make arrangements for securing that one or more tenancy deposit schemes are available for the purpose of safeguarding tenancy deposits paid in connection with assured tenancies.
+(2) For the purposes of this Chapter a “tenancy deposit scheme” is a scheme which—
+(a) is made for the purpose of safeguarding tenancy deposits paid in connection with assured tenancies and facilitating the resolution of disputes arising in connection with such deposits, and
+(b) complies with the requirements of Schedule 10.
+(3) Arrangements under subsection (1) must be arrangements made with any body or person under which the body or person (“the scheme administrator”) undertakes to establish and maintain a tenancy deposit scheme of a description specified in the arrangements.
+(4) The Secretary of State may—
+(a) give financial assistance to the scheme administrator;
+(b) make payments to the scheme administrator (otherwise than as financial assistance) in pursuance of arrangements under subsection (1).
+(5) The Secretary of State may, in such manner and on such terms as it thinks fit, guarantee the discharge of any financial obligation incurred by the scheme administrator in connection with arrangements under subsection (1).
+(6) Arrangements under subsection (1) must require the scheme administrator to give the Secretary of State, in such manner and at such times as it may specify, such information and facilities for obtaining information as it may specify.
+(6A) For further provision about what must be included in the arrangements, see section 212A.
+(7) The Secretary of State may make regulations conferring or imposing—
+(a) on scheme administrators, or
+(b) on scheme administrators of any description specified in the regulations,
+such powers or duties in connection with arrangements under subsection (1) as are so specified.
+(8) In this Chapter—
+“assured tenancy” means an assured tenancy within the meaning of Chapter 1 of Part 1 of the Housing Act 1988 (for transitional provision see Schedule 6 to the Renters’ Rights Act 2025);
+“authorised”, in relation to a tenancy deposit scheme, means that the scheme is in force in accordance with arrangements under subsection (1);
+“custodial scheme” and “insurance scheme” have the meaning given by paragraph 1(2) and (3) of Schedule 10);
+“money” means money in the form of cash or otherwise;
+“tenancy deposit”, in relation to an assured tenancy, means any money intended to be held (by the landlord or otherwise) as security for—
+the performance of any obligations of the tenant, or
+the discharge of any liability of his,
+arising under or in connection with the tenancy.
+(9) In this Chapter—
+(a) references to a landlord or landlords in relation to any assured tenancy or tenancies include references to a person or persons acting on his or their behalf in relation to the tenancy or tenancies, and
+(b) references to a tenancy deposit being held in accordance with a scheme include, in the case of a custodial scheme, references to an amount representing the deposit being held in accordance with the scheme.
+
+### s.212A | Provision of information to local authorities | https://www.legislation.gov.uk/ukpga/2004/34/section/212A
+(1) Arrangements under section 212(1) made by the Secretary of State must require the scheme administrator—
+(a) to give a local housing authority in England any specified information that they request, or
+(b) to provide facilities for the sharing of specified information with a local housing authority in England.
+(2) In subsection (1) “specified information” means information, of a description specified in the arrangements, that relates to a tenancy of premises in the local housing authority's area.
+(3) Arrangements made by virtue of this section may make the requirement to provide information or facilities to a local housing authority conditional on the payment of a fee.
+(4) Arrangements made by virtue of this section may include supplementary provision, for example about—
+(a) the form or manner in which any information is to be provided,
+(b) the time or times at which it is to be provided, and
+(c) the notification of anyone to whom the information relates.
+(5) Information obtained by a local housing authority by virtue of this section may be used only—
+(a) for a purpose connected with the exercise of the authority's functions under any of Parts 1 to 4 in relation to any premises,
+(aa) for a purpose connected with the exercise of the authority’s functions under or by virtue of Part 7 in relation to any qualifying residential premises within the meaning given by section 2B,
+(ab) for a purpose connected with the authority’s functions under or by virtue of the following in relation to any premises—
+sections 1 and 1A of the Protection from Eviction Act 1977,
+Chapter 1 of Part 1 of the Housing Act 1988,
+section 83(1) or 84(1) of the Enterprise and Regulatory Reform Act 2013,
+sections 21 to 23, 41 and 133 to 135 of the Housing and Planning Act 2016,
+Chapter 3 of Part 1 and Part 2 of the Renters’ Rights Act 2025,
+or
+(b) for the purpose of investigating whether an offence has been committed under any provision mentioned in paragraphs (a) to (ab) in relation to premises or qualifying residential premises (as the case may be).
+(6) Information obtained by a local housing authority by virtue of this section may be supplied to a person providing services to the authority for a purpose listed in subsection (5).
+(7) The Secretary of State may by regulations amend the list of purposes in subsection (5).
+
+### s.213 | Requirements relating to tenancy deposits | https://www.legislation.gov.uk/ukpga/2004/34/section/213
+(1) Any tenancy deposit paid to a person in connection with an assured tenancy must, as from the time when it is received, be dealt with in accordance with an authorised scheme.
+(2) No person may require the payment of a tenancy deposit in connection with an assured tenancy which is not to be subject to the requirement in subsection (1).
+(3) Where a landlord receives a tenancy deposit in connection with an assured tenancy, the initial requirements of an authorised scheme must be complied with by the landlord in relation to the deposit within the period of 30
+days beginning with the date on which it is received.
+(4) For the purposes of this section “the initial requirements” of an authorised scheme are such requirements imposed by the scheme as fall to be complied with by a landlord on receiving such a tenancy deposit.
+(5) A landlord who has received such a tenancy deposit must give the tenant and any relevant person such information relating to—
+(a) the authorised scheme applying to the deposit,
+(b) compliance by the landlord with the initial requirements of the scheme in relation to the deposit, and
+(c) the operation of provisions of this Chapter in relation to the deposit,
+as may be prescribed.
+(6) The information required by subsection (5) must be given to the tenant and any relevant person—
+(a) in the prescribed form or in a form substantially to the same effect, and
+(b) within the period of 30 days beginning with the date on which the deposit is received by the landlord.
+(7) No person may, in connection with an assured tenancy, require a deposit which consists of property other than money.
+(8) In subsection (7)
+“deposit” means a transfer of property intended to be held (by the landlord or otherwise) as security for—
+(a) the performance of any obligations of the tenant, or
+(b) the discharge of any liability of his,
+arising under or in connection with the tenancy.
+(9) The provisions of this section apply despite any agreement to the contrary.
+(10) In this section—
+“prescribed” means prescribed by an order made by the Secretary of State;
+“property” means moveable property;
+“relevant person” means any person who, in accordance with arrangements made with the tenant, paid the deposit on behalf of the tenant.
+
+### s.214 | Proceedings relating to tenancy deposits | https://www.legislation.gov.uk/ukpga/2004/34/section/214
+(1) Where a tenancy deposit has been paid in connection with an assured tenancy , the tenant or any relevant person (as defined by section 213(10)) may make an application to the county court on the grounds—
+(a) that section 213(3) or (6) has not been complied with in relation to the deposit, or
+(b) that he has been notified by the landlord that a particular authorised scheme applies to the deposit but has been unable to obtain confirmation from the scheme administrator that the deposit is being held in accordance with the scheme.
+(1ZA) In relation to a tenancy that, immediately before the commencement date, was an assured shorthold tenancy, subsection (1) applies as if after “assured tenancy”, in the first place it occurs, there were inserted “on or after 6 April 2007”.
+(1ZB) In subsection (1ZA)—
+“assured shorthold tenancy” means an assured shorthold tenancy within the meaning of Chapter 2 of Part 1 of the Housing Act 1988 as it had effect before the amendments made by the Renters’ Rights Act 2025;
+“the commencement date” has the meaning given by section 146(3) of the Renters’ Rights Act 2025.
+(1A) Subsection (1) also applies in a case where the tenancy has ended, and in such a case the reference in subsection (1) to the tenant is to a person who was a tenant under the tenancy.
+(2) Subsections (3) and (4) apply in the case of an application under subsection (1) if the tenancy has not ended and the court—
+(a) is satisfied that section 213(3) or (6) has not been complied with in relation to the deposit, or
+(b) is not satisfied that the deposit is being held in accordance with an authorised scheme,
+as the case may be.
+(2A) Subsections (3A) and (4) apply in the case of an application under subsection (1) if the tenancy has ended (whether before or after the making of the application) and the court—
+(a) is satisfied that section 213(3) or (6) has not been complied with in relation to the deposit, or
+(b) is not satisfied that the deposit is being held in accordance with an authorised scheme,
+as the case may be.
+(3) The court must, as it thinks fit, either—
+(a) order the person who appears to the court to be holding the deposit to repay it to the applicant, or
+(b) order that person to pay the deposit into the designated account held by the scheme administrator under an authorised custodial scheme,
+within the period of 14 days beginning with the date of the making of the order.
+(3A) The court may order the person who appears to the court to be holding the deposit to repay all or part of it to the applicant within the period of 14 days beginning with the date of the making of the order.
+(4) The court must ... order the landlord to pay to the applicant a sum of money not less than the amount of the deposit and not more than
+three times the amount of the deposit within the period of 14 days beginning with the date of the making of the order.
+(5) Where any deposit given in connection with an assured tenancy could not be lawfully required as a result of section 213(7), the property in question is recoverable from the person holding it by the person by whom it was given as a deposit.
+(6) In subsection (5)
+“deposit” has the meaning given by section 213(8).
+
+### s.215 | Sanctions for non-compliance | https://www.legislation.gov.uk/ukpga/2004/34/section/215
+(1) Where a tenancy deposit has been paid in connection with an assured tenancy, the court may make an order for possession of the dwelling-house let on the assured tenancy only if the tenancy deposit is being held in accordance with an authorised scheme.
+(2) Where a tenancy deposit has been paid in connection with an assured tenancy, the court may make an order for possession of the dwelling-house let on the assured tenancy only if such requirements of the scheme as fell to be complied with by the landlord on receiving the tenancy deposit have been complied with (whether or not within the period mentioned by section 213(3)) in relation to the tenancy deposit.
+(3) Where a tenancy deposit has been paid in connection with an assured tenancy, the court may make an order for possession of the dwelling-house let on the assured tenancy only if the requirements of section 213(5) and (6)(a) have been complied with.
+(4) Subsections (1) to (3) do not apply in relation to an order for possession made on Ground 7A or 14 in Schedule 2 to the Housing Act 1988 (whether or not any other grounds for possession are met).
+(5) Subsections (1) to (3) do not apply where—
+(a) the tenancy deposit has been returned to the tenant in full or with such deductions as are agreed between the landlord and tenant, or
+(b) an application to the county court has been made under section 214(1) and has been determined by that court, withdrawn or settled by agreement between the parties.
+(6) If any deposit given in connection with an assured tenancy could not be lawfully required as a result of section 213(7), the court may not make an order for possession of the dwelling-house let on the assured tenancy until the property in question is returned to the person by whom it was given as a deposit.
+(7) In subsection (6) “deposit” has the meaning given by section 213(8).
+(8) In relation to an assured tenancy that was entered into before the commencement date, subsection (2) is to be read as if the words “on or after 6 April 2007” were inserted after “assured tenancy” in the first place it occurs.
+(9) See also paragraph 11 of Schedule 6 to the Renters’ Rights Act 2025 (disapplication of amendments to this Chapter in relation to a tenancy that immediately before the commencement date was an assured tenancy other than an assured shorthold tenancy).
+(10) In this section—
+“assured shorthold tenancy” means an assured shorthold tenancy within the meaning of Chapter 2 of Part 1 of the Housing Act 1988 as it had effect before the amendments made by the Renters’ Rights Act 2025;
+“the commencement date” has the meaning given by section 146(3) of the Renters’ Rights Act 2025;
+“the court” means a court having jurisdiction to make an order for possession of a dwelling-house let on an assured tenancy (see section 40 of the Housing Act 1988);
+“dwelling-house” has the same meaning as in Part 1 of the Housing Act 1988 (see section 45 of that Act).
+
+### s.215B | Assured tenancies: deposit received on or after 6 April 2007 | https://www.legislation.gov.uk/ukpga/2004/34/section/215B
+(1) This section applies where—
+(a) on or after 6 April 2007, a tenancy deposit has been received by a landlord in connection with an assured tenancy (“the original tenancy”),
+(b) the initial requirements of an authorised scheme have been complied with by the landlord in relation to the deposit (ignoring any requirement to take particular steps within any specified period),
+(c) the requirements of section 213(5) and (6)(a) have been complied with by the landlord in relation to the deposit when it is held in connection with the original tenancy (ignoring any deemed compliance under section 215A(4)),
+(d) a new assured tenancy comes into being on the coming to an end of the original tenancy or a tenancy that replaces the original tenancy (directly or indirectly),
+(e) the new tenancy replaces the original tenancy (directly or indirectly), and
+(f) when the new tenancy comes into being, the deposit continues to be held in connection with the new tenancy, in accordance with the same authorised scheme as when the requirements of section 213(5) and (6)(a) were last complied with by the landlord in relation to the deposit.
+(2) In their application to the new tenancy, the requirements of section 213(3), (5) and (6) are treated as if they had been complied with by the landlord in relation to the deposit.
+(3) The condition in subsection (1)(a) may be met in respect of a tenancy even if the tenancy deposit was first received in connection with an earlier tenancy (including where it was first received before 6 April 2007).
+(4) For the purposes of this section, a tenancy replaces an earlier tenancy if—
+(a) the landlord and tenant immediately before the coming to an end of the earlier tenancy are the same as the landlord and tenant at the start of the new tenancy, and
+(b) the premises let under both tenancies are the same or substantially the same.
+
+### s.254 | Meaning of “house in multiple occupation” | https://www.legislation.gov.uk/ukpga/2004/34/section/254
+(1) For the purposes of this Act a building or a part of a building is a “house in multiple occupation” if—
+(a) it meets the conditions in subsection (2)
+(“the standard test”);
+(b) it meets the conditions in subsection (3)
+(“the self-contained flat test”);
+(c) it meets the conditions in subsection (4)
+(“the converted building test”);
+(d) an HMO declaration is in force in respect of it under section 255; or
+(e) it is a converted block of flats to which section 257 applies.
+(2) A building or a part of a building meets the standard test if—
+(a) it consists of one or more units of living accommodation not consisting of a self-contained flat or flats;
+(b) the living accommodation is occupied by persons who do not form a single household (see section 258);
+(c) the living accommodation is occupied by those persons as their only or main residence or they are to be treated as so occupying it (see section 259);
+(d) their occupation of the living accommodation constitutes the only use of that accommodation;
+(e) rents are payable or other consideration is to be provided in respect of at least one of those persons' occupation of the living accommodation; and
+(f) two or more of the households who occupy the living accommodation share one or more basic amenities or the living accommodation is lacking in one or more basic amenities.
+(3) A part of a building meets the self-contained flat test if—
+(a) it consists of a self-contained flat; and
+(b) paragraphs (b) to (f) of subsection (2) apply (reading references to the living accommodation concerned as references to the flat).
+(4) A building or a part of a building meets the converted building test if—
+(a) it is a converted building;
+(b) it contains one or more units of living accommodation that do not consist of a self-contained flat or flats (whether or not it also contains any such flat or flats);
+(c) the living accommodation is occupied by persons who do not form a single household (see section 258);
+(d) the living accommodation is occupied by those persons as their only or main residence or they are to be treated as so occupying it (see section 259);
+(e) their occupation of the living accommodation constitutes the only use of that accommodation; and
+(f) rents are payable or other consideration is to be provided in respect of at least one of those persons' occupation of the living accommodation.
+(5) But for any purposes of this Act (other than those of Part 1) a building or part of a building within subsection (1) is not a house in multiple occupation if it is listed in Schedule 14.
+(6) The appropriate national authority may by regulations—
+(a) make such amendments of this section and sections 255 to 259 as the authority considers appropriate with a view to securing that any building or part of a building of a description specified in the regulations is or is not to be a house in multiple occupation for any specified purposes of this Act;
+(b) provide for such amendments to have effect also for the purposes of definitions in other enactments that operate by reference to this Act;
+(c) make such consequential amendments of any provision of this Act, or any other enactment, as the authority considers appropriate.
+(7) Regulations under subsection (6) may frame any description by reference to any matters or circumstances whatever.
+(8) In this section—
+“basic amenities” means—
+a toilet,
+personal washing facilities, or
+cooking facilities;
+“converted building” means a building or part of a building consisting of living accommodation in which one or more units of such accommodation have been created since the building or part was constructed;
+“enactment” includes an enactment comprised in subordinate legislation (within the meaning of the Interpretation Act 1978 (c. 30);
+“self-contained flat” means a separate set of premises (whether or not on the same floor)—
+which forms part of a building;
+either the whole or a material part of which lies above or below some other part of the building; and
+in which all three basic amenities are available for the exclusive use of its occupants.

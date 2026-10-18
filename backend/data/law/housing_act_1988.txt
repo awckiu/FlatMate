@@ -1,0 +1,1250 @@
+source: Housing Act 1988
+url: https://www.legislation.gov.uk/ukpga/1988/50
+last_updated: 2026-06-30
+
+### s.1 | Assured tenancies. | https://www.legislation.gov.uk/ukpga/1988/50/section/1
+(1) A tenancy under which a dwelling-house in England is let as a separate dwelling is for the purposes of this Act an assured tenancy if and so long as—
+(a) the tenant or, as the case may be, each of the joint tenants is an individual; and
+(b) the tenant or, as the case may be, at least one of the joint tenants occupies the dwelling-house as his only or principal home; and
+(c) the tenancy is not one which, by virtue of subsection (2) or subsection (6) below, cannot be an assured tenancy.
+(1A) Subsection (1) has effect subject to section 15A (loss of assured tenancy status).
+(2) Subject to subsection (3) below, if and so long as a tenancy falls within any paragraph in Part I of Schedule 1 to this Act, it cannot be an assured tenancy; and in that Schedule—
+(a)
+“tenancy” means a tenancy under which a dwelling-house is let as a separate dwelling;
+(b) Part II has effect for determining the rateable value of a dwelling-house for the purposes of Part I; and
+(c) Part III has effect for supplementing paragraph 10 in Part I.
+(2A) The Secretary of State may by order replace any amount referred to in paragraphs 2 and 3A of Schedule 1 to this Act by such amount as is specified in the order; and such an order shall be made by statutory instrument which shall be subject to annulment in pursuance of a resolution of either House of Parliament.
+(3) Except as provided in Chapter V below, at the commencement of this Act, a tenancy—
+(a) under which a dwelling-house was then let as a separate dwelling, and
+(b) which immediately before that commencement was an assured tenancy for the purposes of sections 56 to 58 of the Housing Act 1980 (tenancies granted by approved bodies),
+shall become an assured tenancy for the purposes of this Act.
+(4) In relation to an assured tenancy falling within subsection (3) above—
+(a) Part I of Schedule 1 to this Act shall have effect, subject to subsection (5) below, as if it consisted only of paragraphs 11 and 12; and
+(b) sections 56 to 58 of the Housing Act 1980 (and Schedule 5 to that Act) shall not apply after the commencement of this Act.
+(5) In any case where—
+(a) immediately before the commencement of this Act the landlord under a tenancy is a fully mutual housing association, and
+(b) at the commencement of this Act the tenancy becomes an assured tenancy by virtue of subsection (3) above,
+then, so long as that association remains the landlord under that tenancy , paragraph 12 of Schedule 1 to this Act shall have effect in relation to that tenancy with the omission of sub-paragraph (1)(h).
+(6) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(7) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+### s.4A | Assured tenancies to be periodic with rent period not exceeding a month | https://www.legislation.gov.uk/ukpga/1988/50/section/4A
+(1) Terms of an assured tenancy are of no effect so far as they provide—
+(a) for a tenancy to be a fixed term tenancy, or
+(b) for periods of the tenancy to be different from the periods for which rent is payable (“rent periods”).
+(2) Where terms of an assured tenancy are of no effect by virtue of subsection (1)(a) or (b), the tenancy has effect as a periodic tenancy under which the periods of the tenancy are the same as the rent periods.
+(3) Terms of an assured tenancy which provide for the rent periods are of no effect unless each rent period is—
+(a) a period of 28 days or shorter, or
+(b) a monthly rent period.
+(4) Those terms may provide for different rent periods at different times during the assured tenancy (but each rent period must be permitted by subsection (3)).
+(5) Where terms of an assured tenancy are of no effect by virtue of subsection (3), the tenancy has effect as if it provided—
+(a) for successive rent periods of one month beginning with the first day of the tenancy, and
+(b) for the rent for each such rent period—
+(i) to be the amount calculated in accordance with the formula in subsection (6), and
+(ii) to be due on the first day of the period.
+(6) The formula is—
+RD×30.42where—
+R is the rent that would have been due for the first rent period of the tenancy under the terms that are of no effect by virtue of subsection (3);
+D is the number of whole days in that period.
+(7) Except as provided by subsections (1) and (3), nothing in this section limits any right of the landlord and the tenant to vary a term of a tenancy by agreement.
+(8) For the purposes of this section, terms of an assured tenancy provide for “monthly” rent periods if they provide for rent to be payable for successive periods of one month, disregarding any provision for the first period to be a different period not exceeding 30 days.
+
+### s.4B | Assured tenancy: prohibition of rent in advance (except initial rent) | https://www.legislation.gov.uk/ukpga/1988/50/section/4B
+(1) Terms of an assured tenancy which provide for when rent is due are of no effect so far as they provide for rent to be due in advance.
+(2) But subsection (1) does not apply—
+(a) to a tenancy entered into before the commencement date (which has the same meaning as in section 146(3) of the Renters’ Rights Act 2025),
+(b) to an excepted tenancy, or
+(c) to terms of any other assured tenancy so far as they provide for initial rent to be due during the permitted pre-tenancy period.
+(3) Where terms of an assured tenancy providing for when the rent for a rent period is due are of no effect by virtue of this section, the tenancy has effect as if it provided for the rent for that rent period to be due on the substitute rent day for that rent period.
+(4) In a case where the terms of the tenancy (after taking account of section 4A) are such that—
+(a) one or more of the periods of the tenancy will be compliant rent periods, and
+(b) the compliant rent periods have a regular pattern,
+the regular rent day which falls during a rent period is the “substitute rent day” for the rent period.
+(5) In any other case, the first day of a rent period is the “substitute rent day” for the rent period.
+(6) The compliant rent periods of a tenancy “have a regular pattern” if those periods meet the following two conditions—
+(a) all of the compliant rent periods will be the same length (and, for this purpose, all periods of one month are the same length);
+(b) the rent for all of the compliant periods will be due—
+(i) on the same day during each of the periods (such as the same day of the week in a weekly period or the same date in the month in a monthly period), or
+(ii) on the same description of day during each of the periods (such as the last day, or first weekday, of a period);
+and that day, or day of that description, is the “regular rent day”.
+(7) The condition in subsection (6)(a) is met even if the first period of the tenancy is of a different length from all the other compliant periods; and, in such a case, the condition in subsection (6)(b) is met even if the rent for the first period of the tenancy is due on a different day, or description of day, from all the other compliant periods.
+(8) For provision enabling a holding deposit to be used to pay initial rent due during the permitted pre-tenancy period, see Schedule 2 to the Tenant Fees Act 2019.
+(9) The Secretary of State may, by regulations, amend this section for the purpose of making provision about the descriptions of rent due in advance to which subsection (1) does not apply.
+(10) Regulations under subsection (9)—
+(a) may make different provision for different purposes;
+(b) are to be made by statutory instrument.
+(11) A statutory instrument containing regulations under subsection (9) may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.
+(12) In this paragraph—
+“compliant rent period”: a rent period is a compliant rent period if the rent for the period is due during the period — and, in determining this, the effect of this section on when rent is due must be disregarded;
+“due in advance”, in relation to rent, means due before the rent period for which it is payable;
+“excepted tenancy” means—
+an assured tenancy of social housing (within the meaning of Part 2 of the Housing and Regeneration Act 2008) if the landlord is a private registered provider of social housing;
+an assured tenancy granted pursuant to Part 7 of the Housing Act 1996 (homelessness);
+“initial rent” means rent that is payable for—
+the first rent period, or
+any later rent period which ends during the initial 28 day period;
+and here “initial 28 day period” means the period of 28 days beginning with the first day of the first rent period;
+“permitted pre-tenancy period” means the period that—
+begins when the tenancy is entered into, and
+ends with the day before the first day of the tenancy;
+“regular rent day” has the meaning given in subsection (6)(b);
+“rent period” means a period for which rent is payable under the assured tenancy;
+“substitute rent day” means the day determined in accordance with subsection (4) or (5).
+
+### s.5 | Security of tenure. | https://www.legislation.gov.uk/ukpga/1988/50/section/5
+(1) An assured tenancy cannot be brought to an end by the landlord except by—
+(a) obtaining—
+(i) an order of the court for possession of the dwelling-house under section 7 and
+(ii) the execution of the order,
+, or
+(d) in the case of an assured tenancy—
+(i) which is a residential tenancy agreement within the meaning of Chapter 1 of Part 3 of the Immigration Act 2014, and
+(ii) in relation to which the condition in section 33D(2) of that Act is met,
+giving a notice in accordance with that section,
+and, accordingly, the service by the landlord of a notice to quit is of no effect in relation to an assured tenancy.
+(1A) Where an order of the court for possession of the dwelling-house is obtained, the tenancy ends when the order is executed.
+
+### s.7 | Orders for possession. | https://www.legislation.gov.uk/ukpga/1988/50/section/7
+(1) The court shall not make an order for possession of a dwelling-house let on an assured tenancy except on one or more of the grounds set out in Schedule 2 to this Act; but nothing in this Part of this Act relates to proceedings for possession of such a dwelling-house which are brought by a mortgagee, within the meaning of the Law of Property Act 1925, who has lent money on the security of the assured tenancy.
+(2) The following provisions of this section have effect, subject to section 8 below, in relation to proceedings for the recovery of possession of a dwelling-house let on an assured tenancy.
+(3) If the court is satisfied that any of the grounds in Part I of Schedule 2 to this Act is established then , subject to the following provisions of this section and section 10A
+below (and to any available defence based on the tenant's Convention rights, within the meaning of the Human Rights Act 1998), the court shall make an order for possession.
+(4) If the court is satisfied that any of the grounds in Part II of Schedule 2 to this Act is established, then, the court may make an order for possession if it considers it reasonable to do so.
+(5) Part III of Schedule 2 to this Act shall have effect for supplementing Ground 9 in that Schedule .
+(5ZA) The court may not make an order for possession of a dwelling-house on any of Grounds 1 to 5H or Ground 6A where—
+(a) a smallholding was previously let to the tenant under a tenancy to which the Agricultural Holdings Act 1986 applies (“the agricultural tenancy”),
+(b) the agricultural tenancy came to an end as a result of the operation of a notice to quit given in case A in Part 1 of Schedule 3 to that Act (“case A”),
+(c) the assured tenancy was granted immediately after the agricultural tenancy came to an end, and
+(d) the dwelling-house is let under the assured tenancy—
+(i) by the person who was the landlord under the agricultural tenancy (“the former agricultural landlord”), or
+(ii) by another person pursuant to a contract or other agreement entered into with the former agricultural landlord under which—
+(A) the dwelling-house is to be let as suitable alternative accommodation for the purposes of paragraph (b) of case A, and
+(B) this subsection is to apply.
+(5ZB) The court may not make an order for possession of a dwelling-house let on an assured tenancy on any of Grounds 1 to 5H or Ground 6A where, on the basis of the proposed let of the dwelling-house on that tenancy, the dwelling-house was deemed to be suitable alternative accommodation under paragraph 1(c) of Part 4 of Schedule 2 to the Housing Act 1985 for the purposes of section 84(2)(b) and (c) of that Act.
+(5A) The court shall not make an order for possession of a dwellinghouse let on an assured periodic tenancy arising under Schedule 10 to the Local Government and Housing Act 1989 on any of the following grounds, that is to say,—
+(a) Grounds 1 to 5H, 6A, 6B , 7A and 7B in Part I of Schedule 2 to this Act;
+and
+(c) if the assured periodic tenancy arose on the termination of a former 1954 Act tenancy, within the meaning of the said Schedule 10, Ground 6 in Part I of Schedule 2 to this Act.
+(5B) The court may not make an order for possession of a dwelling-house let on an assured tenancy granted in accordance with section 554(3)(c) (before its repeal) or (ca) of the Housing Act 1985 on any of Grounds 1 to 5H or Ground 6A.
+(5C) In relation to the making of an order for possession of a dwelling-house let on an assured periodic tenancy arising under Schedule 10 to the Local Government and Housing Act 1989, Ground 6 is to apply as if—
+(a) in paragraph (b), the words “, but only in a case where section 7(5ZA) applies in relation to the tenancy” were omitted;
+(b) in the general redevelopment conditions, paragraph (f) was omitted;
+(c) in the landlord’s acquisition condition, in paragraph (a), the reference to the grant of the tenancy is a reference to the grant of the long residential tenancy which existed immediately before the assured periodic tenancy arose.
+(5D) If the only grounds for possession which the court is satisfied are established are either or both of Grounds 7A and 14 in Schedule 2, the court may not make an order for possession to take effect within—
+(a) the period of 14 days beginning with the date of service of the notice under section 8; or
+(b) where the court has exercised the power conferred by section 8(1)(b), the period of 14 days beginning—
+(i) if a purported notice of possession (within the meaning given by section 16M) was served on the tenant and the court considers it just and equitable, with the date on which the notice was served;
+(ii) otherwise, with the date on which the proceedings for possession began.
+(5E) In subsection (5C), a reference to a “long residential tenancy” is a reference to a tenancy to which Schedule 10 to the Local Government and Housing Act 1989 applies.
+
+### s.8 | Notice of proceedings for possession. | https://www.legislation.gov.uk/ukpga/1988/50/section/8
+(1) The court shall not entertain proceedings for possession of a dwelling-house let on an assured tenancy unless—
+(a) the landlord or, in the case of joint landlords, at least one of them has served on the tenant a notice in accordance with this section and the proceedings are begun within the time limits stated in the notice in accordance with (3) to (4AA) below; or
+(b) the court considers it just and equitable to dispense with the requirement of such a notice.
+(2) The court shall not make an order for possession on any of the grounds in Schedule 2 to this Act unless that ground and particulars of it are specified in the notice under this section; but the grounds specified in such a notice may be altered or added to with the leave of the court.
+(3) A notice under this section is one in the prescribed form informing the tenant that—
+(a) the landlord intends to begin proceedings for possession of the dwelling-house on one or more of the grounds specified in the notice; and
+(b) those proceedings will not begin earlier than a date specified in the notice in accordance with (4) to (4AA) below; and
+(c) those proceedings will not begin later than twelve months from the date of service of the notice.
+(4) If a notice under this section specifies in accordance with subsection (3)(a) above either or both of Grounds 7A and 14 in Schedule 2 to this Act (whether with or without other grounds ), the date specified in the notice as mentioned in subsection (3)(b) above shall not be earlier than the date of the service of the notice.
+(4AA) If a notice under this section does not specify Ground 7A or 14 in Schedule 2, the date specified in the notice as mentioned in subsection (3)(b) must not be before the end of the longest period shown in the following table for any ground specified in the notice.
+Ground specified in noticePeriod1, 1A, 1B, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6A, 6Bfour months beginning with the date of service of the notice5, 5A, 5B, 5C, 5D, 5H, 7, 9two months beginning with the date of service of the notice5E, 5F, 5G, 8, 10, 11, 18four weeks beginning with the date of service of the notice4, 7B, 12, 13, 14ZA, 14A, 15, 17two weeks beginning with the date of service of the notice
+(4C) A notice under this section that specifies in accordance with subsection (3)(a) Ground 7A in Schedule 2 to this Act (whether with or without other grounds) must be served on the tenant within the time period specified in subsection (4D), (4E) or (4F).
+(4D) Where the landlord proposes to rely on condition 1, 3 or 5 in Ground 7A, the notice must be served on the tenant within—
+(a) the period of 12 months beginning with the day of the conviction, or
+(b) if there is an appeal against the conviction, the period of 12 months beginning with the day on which the appeal is finally determined or abandoned.
+(4E) Where the landlord proposes to rely on condition 2 in Ground 7A, the notice must be served on the tenant within—
+(a) the period of 12 months beginning with the day on which the court has made the finding, or
+(b) if there is an appeal against the finding, the period of 12 months beginning with the day on which the appeal is finally determined, abandoned or withdrawn.
+(4F) Where the landlord proposes to rely on condition 4 in Ground 7A, the notice must be served on the tenant within—
+(a) the period of 3 months beginning with the day on which the closure order was made, or
+(b) if there is an appeal against the making of the order, the period of 3 months beginning with the day on which the appeal is finally determined, abandoned or withdrawn.
+(5) The court may not exercise the power conferred by subsection (1)(b) above if the landlord seeks to recover possession on Ground 7A , 7B or 8 in Schedule 2 to this Act.
+(5A) A notice given by an intermediate landlord under Ground 2ZA is to be treated, when the superior tenancy ends, as a notice given by the person who became the landlord by virtue of section 18 under Ground 2ZC.
+(5B) A notice given by an intermediate landlord under Ground 2ZB is to be treated, when the superior tenancy ends, as a notice given by the person who became the landlord by virtue of section 18 under Ground 2ZD.
+(7) Regulations made under section 45(1) by virtue of subsection (3) may—
+(a) provide for the form to be published by the Secretary of State;
+(b) provide that the form to be used is the version that has effect at the time the requirement applies.
+
+### s.13 | Increases of rent under assured tenancies other than relevant low-cost tenancies. | https://www.legislation.gov.uk/ukpga/1988/50/section/13
+(1) This section applies to any assured tenancy other than a relevant low-cost tenancy.
+(2) For the purpose of securing an increase in the rent under a tenancy to which this section applies, the landlord may serve on the tenant a notice in the prescribed form proposing a new rent to take effect at the beginning of a new period of the tenancy specified in the notice, being a period beginning not earlier than—
+(a) two months after the date of the service of the notice; and
+(b) either
+(i) in the case of an assured agricultural occupancy, the first anniversary of the date on which the first period of the tenancy began; or
+(ii) in any other case, on the date that falls 52 weeks after the date on which the first period of the tenancy began; and
+(c) if the rent under the tenancy has previously been increased by virtue of a notice under this subsection or a determination under section 14 below , either —
+(i) in the case of an assured agricultural occupancy, the first anniversary of the date on which the increased rent took effect; or
+(ii) in any other case, the appropriate date
+(3A) The appropriate date referred to in subsection (2)(c)(ii) above is—
+(a) in a case to which subsection (3B) below applies, the date that falls 53 weeks after the date on which the increased rent took effect;
+(b) in any other case, the date that falls 52 weeks after the date on which the increased rent took effect.
+(3B) This subsection applies where—
+(a) the rent under the tenancy has been increased by virtue of a notice under this section or a determination under section 14 below on at least one occasion after the coming into force of the Regulatory Reform (Assured Periodic Tenancies)(Rent Increases) Order 2003; and
+(b) the fifty-third week after the date on which the last such increase took effect begins more than six days before the anniversary of the date on which the first such increase took effect.
+(4) Where a notice is served under subsection (2) above, a new rent specified in the notice shall take effect as mentioned in the notice unless, before the beginning of the new period specified in the notice,—
+(a) the tenant applies to the appropriate tribunal under section 14(A3); or
+(b) the landlord and the tenant agree on a new rent which is lower than that proposed in the notice or agree that the rent should not be varied.
+(4A) The rent for a period of an assured tenancy to which this section applies may not be greater than the rent for the previous period except by virtue of—
+(a) a notice under this section or an agreement under subsection (4)(b) following such a notice,
+(b) a determination under section 14, or
+(c) an agreement in writing between the landlord and the tenant varying the rent, following a determination by the appropriate tribunal under section 14, where the agreed rent is lower than the rent that would be payable under section 14ZA or 14ZB as a result of the determination;
+and any provision relating to an assured tenancy to which this section applies is of no effect so far as it provides that the rent for a particular period of the tenancy must or may be greater than the rent for the previous period otherwise than by virtue of a notice, determination or agreement mentioned in this subsection.
+(4B) Except as provided by subsection (4A), nothing in this section (or in sections 14 to 14ZB) limits any right of the landlord and the tenant under an assured tenancy to which this section applies to vary any term of the tenancy by agreement.
+(4C) In this section “relevant low-cost tenancy” means—
+(a) an assured tenancy of social housing, within the meaning of Part 2 of the Housing and Regeneration Act 2008, where the landlord is a private registered provider of social housing, and
+(b) any other assured tenancy of a description specified in regulations made by the Secretary of State.
+(4D) Regulations under subsection (4C)(b)—
+(a) may make different provision for different purposes;
+(b) are to be made by statutory instrument.
+(4E) A statutory instrument containing regulations under subsection (4C)(b) is subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.13A | Increases of rent under relevant low-cost tenancies | https://www.legislation.gov.uk/ukpga/1988/50/section/13A
+(1) This section applies to a relevant low-cost tenancy within the meaning given by section 13(4C).
+(2) For the purpose of securing an increase in the rent under a tenancy to which this section applies, the landlord may serve on the tenant a notice in the prescribed form proposing a new rent to take effect at the beginning of a new period of the tenancy specified in the notice, being a period beginning not earlier than—
+(a) one month after the date of the service of the notice, and
+(b) in the case of an assured agricultural occupancy, the first anniversary of the date on which the first period of the tenancy began, and
+(c) if the rent under the tenancy has previously been increased by virtue of a notice under this subsection or a determination under section 14, either—
+(i) in the case of an assured agricultural occupancy, the first anniversary of the date on which the increased rent took effect, or
+(ii) in any other case, the appropriate date.
+(3) The appropriate date is—
+(a) in a case to which subsection (4) applies, the date that falls 53 weeks after the date on which the increased rent took effect;
+(b) in any other case, the date that falls 52 weeks after the date on which the increased rent took effect.
+(4) This subsection applies where—
+(a) the rent under the tenancy has been increased by virtue of a notice under this section or a determination under section 14 on at least one occasion after the coming into force of the Regulatory Reform (Assured Periodic Tenancies) (Rent Increases) Order 2003, and
+(b) the fifty-third week after the date on which the last such increase took effect begins more than six days before the anniversary of the date on which the first such increase took effect.
+(5) Where a notice is served under subsection (2), a new rent specified in the notice takes effect as mentioned in the notice unless, before the beginning of the new period specified in the notice—
+(a) the tenant applies to the tribunal under section 14(A3), or
+(b) the landlord and the tenant agree on a variation of the rent which is different from that proposed in the notice or agree that the rent should not be varied.
+(6) Nothing in this section (or in section 14) affects the right of the landlord and the tenant under a relevant low-cost tenancy within the meaning given by section 13(4C) to vary by agreement any term of the tenancy (including a term relating to rent).
+
+### s.13B | Challenge to validity of notice to increase rent | https://www.legislation.gov.uk/ukpga/1988/50/section/13B
+Where a tenant under an assured tenancy makes an application to the appropriate tribunal, the tribunal may determine whether a notice served on the tenant under section 13(2) or 13A(2) is valid.
+
+### s.14 | Determination of open-market rent by tribunal. | https://www.legislation.gov.uk/ukpga/1988/50/section/14
+(A1) A tenant under an assured tenancy other than a relevant low-cost tenancy may make an application to the appropriate tribunal for the purpose of challenging the rent payable under the tenancy.
+(A2) No application may be made under subsection (A1) if—
+(a) the rent payable under the tenancy is pursuant to a previous determination under this section, or
+(b) more than six months have elapsed since the beginning of the tenancy.
+(A3) A tenant under any assured tenancy may make an application to the appropriate tribunal for the purpose of challenging a new rent proposed in a notice under section 13(2) or 13A(2).
+(1) Where an application is made under subsection (A1) or (A3), the appropriate tribunal shall determine the rent at which, subject to subsections (2) and (4) below, the appropriate tribunal consider that the dwelling-house concerned might reasonably be expected to be let in the open market by a willing landlord under an assured tenancy—
+(a) which has the same periods as those of the tenancy to which the application relates;
+(b) which begins—
+(i) in the case of an application under subsection (A1), on the date of the application;
+(ii) in the case of an application under subsection (A3), at the beginning of the new period specified in the notice; and
+(c) the terms of which (other than relating to the amount of the rent) are the same as those of the tenancy to which the application relates;
+(2) In making a determination under this section, there shall be disregarded—
+(a) any effect on the rent attributable to the granting of a tenancy to a sitting tenant;
+(b) any increase in the value of the dwelling-house attributable to a relevant improvement carried out by a person who at the time it was carried out was the tenant, if the improvement—
+(i) was carried out otherwise than in pursuance of an obligation to his immediate landlord, or
+(ii) was carried out pursuant to an obligation to his immediate landlord being an obligation which did not relate to the specific improvement concerned but arose by reference to consent given to the carrying out of that improvement; and
+(c) any reduction in the value of the dwelling-house attributable to a failure by the tenant to comply with any terms of the tenancy.
+(3) For the purposes of subsection (2)(b) above, an improvement is a relevant improvement if either it was carried out during the tenancy to which the application relates or the following conditions are satisfied, namely—
+(a) that it was carried out not more than twenty-one years before the date of the application; and
+(b) that, at all times during the period beginning when the improvement was carried out and ending on the date of the application, the dwelling-house has been let under an assured tenancy; and
+(c) that, on the coming to an end of an assured tenancy at any time during that period, the tenant (or, in the case of joint tenants, at least one of them) did not quit.
+(3A) In making a determination under this section in any case where under Part I of the Local Government Finance Act 1992 the landlord or a superior landlord is liable to pay council tax in respect of a hereditament ( “the relevant hereditament”) of which the dwelling-house forms part, the appropriate tribunal shall have regard to the amount of council tax which, as at the date of the application was set by the billing authority—
+(a) for the financial year in which the application was made, and
+(b) for the category of dwellings within which the relevant hereditament fell on that date,
+but any discount or other reduction affecting the amount of council tax payable shall be disregarded.
+(3B) In subsection (3A) above—
+(a) “hereditament” means a dwelling within the meaning of Part I of the Local Government Finance Act 1992,
+(b) “billing authority” has the same meaning as in that Part of that Act, and
+(c) “category of dwellings” has the same meaning as in section 30(1) and (2) of that Act.
+(4) In this section “rent” does not include any service charge, within the meaning of section 18 of the Landlord and Tenant Act 1985, but, subject to that, includes any sums payable by the tenant to the landlord on account of the use of furniture , in respect of council tax or for any of the matters referred to in subsection (1)(a) of that section, whether or not those sums are separate from the sums payable for the occupation of the dwelling-house concerned or are payable under separate agreements.
+(5) Where any rates in respect of the dwelling-house concerned are borne by the landlord or a superior landlord, the appropriate tribunal shall make their determination under this section as if the rates were not so borne.
+(8) Nothing in this section requires the appropriate tribunal to continue with their determination if the landlord and tenant give notice in writing that they no longer require such a determination or if the tenancy has come to an end.
+
+### s.14ZA | Effect of determination: rent payable | https://www.legislation.gov.uk/ukpga/1988/50/section/14ZA
+(1) This section applies where the appropriate tribunal makes a determination on an application under section 14(A1) in relation to a tenancy.
+(2) The rent payable under the tenancy following the determination is—
+(a) the new rent amount, and
+(b) the appropriate amount (if any) in respect of rates.
+(3) The rent payable under the tenancy following the determination takes effect from the date that the appropriate tribunal directs.
+(4) The new rent amount is—
+(a) the open-market rent, if lower than the tenancy rent, and
+(b) otherwise, the tenancy rent.
+(5) The date must not be earlier than the date of the application.
+(6) In this section—
+“the appropriate amount in respect of rates” means the amount of rent attributable to any rates borne as mentioned in section 14(5);
+“the open-market rent” means the amount of rent determined by the appropriate tribunal on the application, in accordance with section 14(1);
+“the tenancy rent” means the rent payable under the tenancy immediately before the determination is made, excluding the appropriate amount in respect of rates (if any).
+
+### s.14ZB | Effect of determination: proposed new rent | https://www.legislation.gov.uk/ukpga/1988/50/section/14ZB
+(1) This section applies where the appropriate tribunal makes a determination on an application under section 14(A3) in relation to a tenancy.
+(2) The rent payable under the tenancy following the determination is—
+(a) the new rent amount, and
+(b) the appropriate amount (if any) in respect of rates.
+(3) The rent payable under the tenancy following the determination takes effect from—
+(a) the beginning of the new period specified in the notice under section 13(2) or 13A(2), if that date is on or after the date of the determination,
+(b) the beginning of the first new period of the tenancy which begins on or after the date of the determination, if the beginning of the new period specified in the notice under section 13(2) or 13A(2) is before the date of the determination, or
+(c) if it appears to the tribunal that applying paragraph (a) or (b) would cause undue hardship to the tenant, a date that the appropriate tribunal directs.
+(4) A date specified under subsection (3)(c) must fall before the end of the period of two months beginning with the date of the determination.
+(5) The new rent amount is—
+(a) the open-market rent, if lower than the proposed rent, and
+(b) otherwise, the proposed rent.
+(6) The Secretary of State may by regulations make provision so as to substitute, in relation to relevant tenancies, a different date as the effective date.
+(7) The effective date may not be earlier than the beginning of the new period specified in the notice served on the tenant under section 13(2) or 13A(2).
+(8) Regulations under subsection (6)—
+(a) may amend this section;
+(b) may make different provision for different purposes;
+(c) may make supplemental, consequential, incidental, transitional, transitory or saving provision;
+(d) are to be made by statutory instrument.
+(9) A statutory instrument containing regulations under subsection (6) may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.
+(10) In this section—
+“the appropriate amount in respect of rates” has the meaning given by section 14ZA(6);
+“the effective date” means a date for the time being specified in subsection (3)(b) as the date from which the rent payable takes effect;
+“the open-market rent” has the meaning given by section 14ZA(6);
+“the proposed rent” means the amount of rent specified in the notice under section 13(2) or 13A(2), excluding the appropriate amount in respect of rates (if any);
+“relevant tenancies” means tenancies in relation to which an application under section 14(A3) is made on or after the date on which the regulations under subsection (6) come into force.
+
+### s.14ZC | Repayment of rent paid for days after end of tenancy | https://www.legislation.gov.uk/ukpga/1988/50/section/14ZC
+(1) A person who paid rent as a tenant under an assured tenancy is entitled to be repaid any part of that rent that relates to days falling after the end of the tenancy.
+(2) Subsection (1) does not affect any other entitlement to payment arising at the end of an assured tenancy.
+
+### s.15 | Limited prohibition on assignment etc. without consent. | https://www.legislation.gov.uk/ukpga/1988/50/section/15
+(1) Subject to subsection (3) below, it shall be an implied term of every assured tenancy which is a periodic tenancy that, except with the consent of the landlord, the tenant shall not—
+(a) assign the tenancy (in whole or in part); or
+(b) sub-let or part with possession of the whole or any part of the dwelling-house let on the tenancy.
+(2) Section 19 of the Landlord and Tenant Act 1927 (consents to assign not to be unreasonably withheld etc.) shall not apply to a term which is implied into an assured tenancy by subsection (1) above.
+(3) In the case of a periodic tenancy which is not an assured periodic tenancy arising under Schedule 10 to the Local Government and Housing Act 1989 subsection (1) above does not apply if—
+(a) there is a provision (whether contained in the tenancy or not) under which the tenant is prohibited (whether absolutely or conditionally) from assigning or sub-letting or parting with possession or is permitted (whether absolutely or conditionally) to assign, sub-let or part with possession; or
+(b) a premium is required to be paid on the grant or renewal of the tenancy.
+(4) In subsection (3)(b) above “premium” includes—
+(a) any fine or other like sum;
+(b) any other pecuniary consideration in addition to rent; and
+(c) any sum paid by way of deposit, other than one which does not exceed one-sixth of the annual rent payable under the tenancy immediately after the grant or renewal in question.
+
+### s.16 | Access for repairs. | https://www.legislation.gov.uk/ukpga/1988/50/section/16
+It shall be an implied term of every assured tenancy that the tenant shall afford to the landlord access to the dwelling-house let on the tenancy and all reasonable facilities for executing therein any repairs which the landlord is entitled to execute.
+
+### s.16A | Requesting consent to keep a pet | https://www.legislation.gov.uk/ukpga/1988/50/section/16A
+(1) It is an implied term of every assured tenancy to which this section applies that—
+(a) a tenant may keep a pet at the dwelling-house if the tenant asks to do so in accordance with this section and the landlord consents;
+(b) such consent is not to be unreasonably refused by the landlord;
+(c) the landlord is to give or refuse consent in writing on or before the 28th day after the date of the request, except as provided by subsections (2) to (5).
+(2) Where the landlord reasonably requests further information from the tenant about the pet on or before the 28th day after the date of the tenant’s request—
+(a) if the tenant provides that information, the landlord may delay giving or refusing consent until the 7th day after the date on which the tenant provides any further information that the landlord requests;
+(b) if the tenant does not provide that information, the landlord is not required to give or refuse consent.
+(3) Where—
+(a) the keeping of the pet at the dwelling-house would require the landlord to obtain the consent of a superior landlord under the terms of a superior tenancy, and
+(b) the landlord seeks the consent of the superior landlord on or before the 28th day after the date of the tenant’s request,
+the landlord may delay giving or refusing consent until the 7th day after the date on which the landlord receives consent or refusal from the superior landlord.
+(4) Where the landlord and the tenant agree that the landlord may delay giving or refusing consent, the landlord may delay until whatever date is agreed between the landlord and the tenant.
+(5) Where more than one of subsections (2) to (4) apply, the landlord may delay until the latest date to which the landlord may delay giving or refusing consent under any of the subsections.
+(6) This section applies to every assured tenancy other than a tenancy of social housing, within the meaning of Part 2 of the Housing and Regeneration Act 2008.
+
+### s.16B | Requests for consent to keep a pet: further provision | https://www.legislation.gov.uk/ukpga/1988/50/section/16B
+(1) For the purposes of section 16A, a tenant keeps a pet at a dwelling-house if the tenant permits the pet to live at the dwelling-house (whether or not the tenant is the owner of the pet).
+(2) Section 16A does not limit the terms that may be agreed in relation to the presence at the dwelling-house of pets which do not live there.
+(3) The tenant’s request under section 16A must—
+(a) be in writing;
+(b) include a description of the pet for which consent is sought.
+(4) The circumstances in which it is reasonable for a landlord to refuse consent include those in which—
+(a) the pet being kept at the dwelling-house would cause the landlord to be in breach of an agreement with a superior landlord;
+(b) an agreement between the landlord and a superior landlord prohibits the keeping of a pet at the dwelling-house without consent of the superior landlord, and the landlord has taken reasonable steps to obtain that consent but the superior landlord has not given it.
+(5) In proceedings in which a tenant alleges that the landlord has breached the implied term created by section 16A, the court may order specific performance of the obligation.
+
+### s.16D | Duty of landlord and contractor to give statement of terms etc | https://www.legislation.gov.uk/ukpga/1988/50/section/16D
+(1) This section applies to an assured tenancy other than a tenancy granted by implication, after an implied surrender of a previous assured tenancy between the same parties, where the implied surrender and grant result from an agreement to vary the terms of the previous tenancy.
+(2) The landlord under a tenancy to which this section applies must give the tenant a written statement of—
+(a) such terms of the tenancy as are specified in regulations made by the Secretary of State, whether in the form of an agreement in writing between the landlord and tenant or a record of terms otherwise agreed, and
+(b) any other information in writing about any of the following which is required to be given by regulations made by the Secretary of State—
+(i) the tenancy;
+(ii) the dwelling-house let on the tenancy;
+(iii) the tenant;
+(iv) the landlord;
+(v) the rights of the landlord or the tenant in relation to the tenancy or the dwelling-house let on it.
+(3) The landlord may include in a statement under subsection (2) a statement of the landlord’s wish to be able to recover possession on one or more of Grounds 1B, 2ZA to 2ZD, 4, 5 to 5H, 6A or 18 in Schedule 2 (for the consequences of specifying a ground mentioned in this subsection in a notice under section 8 where no statement under this subsection is so included, see section 16E(1)(f) and section 16I(1)(a)).
+(4) Subject to subsections (5) to (7), the statement under subsection (2) must be given before the tenancy is entered into.
+(5) Where a tenancy to which this section applies—
+(a) arises by succession as mentioned in section 39(5), or
+(b) is an assured agricultural occupancy in respect of which the agricultural worker condition is fulfilled by virtue of paragraph 3 of Schedule 3,
+the statement under subsection (2) must be given within the period of 28 days beginning with the date on which the landlord acknowledges the tenant’s right to a tenancy.
+(6) Where a tenancy becomes a tenancy to which this section applies by virtue of section 143C(3) of the Housing Act 1996 (demoted tenancies: change of landlord), the statement under subsection (2) must be given within the period of 28 days beginning with the date on which the new landlord becomes the landlord under the tenancy.
+(7) In any other case where a tenancy becomes a tenancy to which this section applies, the statement under subsection (2) must be given within the period of 28 days beginning with the date on which the tenancy becomes an assured tenancy.
+(8) Where a landlord has entered into a contract with a person which requires that person to ensure compliance with this section (whether or not this section is referred to individually), subsection (2) also applies to that person, as it applies to the landlord.
+(9) Regulations under this section—
+(a) may make different provision for different purposes;
+(b) are to be made by statutory instrument.
+(10) A statutory instrument containing regulations under this section is subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.16E | Other duties | https://www.legislation.gov.uk/ukpga/1988/50/section/16E
+(1) A relevant person must not, in relation to an assured tenancy—
+(a) purport to let a dwelling-house on the tenancy for a fixed term (see section 4A),
+(b) purport to bring the tenancy to an end by service of a notice to quit (see section 5(1)),
+(c) purport to bring the tenancy to an end, or require that it is brought to an end, orally,
+(d) serve on the tenant a purported notice of possession,
+(e) rely on a ground in Schedule 2 where the person does not reasonably believe that the landlord is, will or may be able to obtain an order for possession on that ground, or
+(f) where the tenancy is one to which section 16D applies, rely on one or more of Grounds 1B, 2ZA to 2ZD, 4, 5 to 5H, 6A or 18 in Schedule 2 if no statement was given to the tenant under section 16D(3) in respect of them.
+(2) Subject to section 16F, where a relevant person relies on Ground 1 or 1A in Schedule 2 in relation to an assured tenancy, the landlord must not, within the restricted period—
+(a) let the dwelling-house on a tenancy for a term of 21 years or less, or
+(b) permit a person to occupy the dwelling-house—
+(i) under a licence to occupy, and
+(ii) for monetary consideration.
+(3) Subject to section 16F, where a relevant person relies on Ground 1 or 1A in Schedule 2 in relation to an assured tenancy, a relevant person in relation to that tenancy must not—
+(a) within the restricted period, market the dwelling-house to let on a tenancy for a term of 21 years or less,
+(b) within the restricted period, market the dwelling-house to be occupied—
+(i) under a licence to occupy, and
+(ii) for monetary consideration,
+(c) authorise another person to market the dwelling-house to let on a tenancy for a term of 21 years or less, so far as the authorisation would allow that other person to market it within the restricted period, or
+(d) authorise another person to market the dwelling-house to be occupied—
+(i) under a licence to occupy, and
+(ii) for monetary consideration,
+so far as the authorisation would allow that other person to market it within the restricted period.
+(4) Where a prohibition in subsection (2) or (3) applies to a person, it continues to apply to that person until the end of the restricted period, whether or not the tenancy continues during that period.
+(5) A breach of subsection (1)(f) does not prevent a court from making an order for possession of the dwelling-house on the ground in question (but see section 16I(1)(a)).
+
+### s.16F | Exceptions from letting and marketing prohibitions | https://www.legislation.gov.uk/ukpga/1988/50/section/16F
+(1) Section 16E(2) (prohibition on letting and licensing within restricted period) does not apply where—
+(a) the relevant person relies on Ground 1 and—
+(i) the tenant or licensee is a person mentioned in paragraphs (a) to (d) of that ground, or
+(ii) a person mentioned in paragraphs (a) to (d) of Ground 1 also occupies the dwelling-house and does so as their only or principal home;
+(b) the relevant person relies on Ground 1A and—
+(i) the licensee has agreed to purchase the landlord’s interest in the dwelling-house and the licence to occupy is granted in anticipation of that purchase, or
+(ii) the licensee has agreed to the landlord granting the licensee a lease of the dwelling-house for a term certain of more than 21 years which is not terminable before the end of that term by notice given by or to the landlord, and the licence to occupy is granted in anticipation of the grant of that lease, or
+(2) Section 16E(3) (prohibition on marketing within restricted period) does not apply where the marketing is in connection with letting, or occupation under a licence, which is permitted as a result of subsection (1).
+(3) Subsection (4) applies where the relevant person relies on Ground 1A and—
+(a) before the assured tenancy was entered into, a relevant person had given the tenant under the assured tenancy (“T”) a written statement that the landlord under that tenancy (“L”) is a shared owner of the dwelling-house and that section 16E(2) or (3) might not apply to a subsequent letting, or grant of a licence, of the dwelling-house (because of this subsection and subsection (4)),
+(b) when the assured tenancy was entered into, L was a shared owner of the dwelling-house, and
+(c) before the date specified in the notice as mentioned in section 8(3)(b), a relevant person had given the landlord under the shared ownership lease of the dwelling-house a written statement that L intends to assign L’s interest under that shared ownership lease.
+(4) Section 16E(2) or (3) does not prohibit a relevant person from carrying out a controlled activity if—
+(a) before the relevant person carries out that activity—
+(i) the dwelling-house has been valued by a member of the Royal Institution of Chartered Surveyors in connection with the assignment of L’s interest under the shared ownership lease, or
+(ii) L has advertised, or made an arrangement under which another person has advertised, that the dwelling-house is or may be available for acquisition by way of the assignment of L’s interest under the shared ownership lease, and
+(b) when the relevant person carries out that activity, L is a shared owner of the dwelling-house.
+(5) In subsections (3) and (4)—
+“controlled activity” means an activity that would (if subsection (4) did not apply) be prohibited by section 16E(2) or (3);
+“shared owner”, in relation to a dwelling-house, means a person—
+who is the tenant of the dwelling-house under a shared ownership lease, and
+whose share in the premises demised by the lease is less than 100%;
+and for this purpose, the tenant’s share in the premises demised is the tenant’s initial share in those premises, plus any additional share or shares in those premises which the tenant has acquired;
+“shared ownership lease” means a lease—
+granted on payment of a premium calculated by reference to a percentage of the value of the premises demised by the lease or of the cost of providing them, or
+under which the tenant (or the tenant’s personal representatives) will or may be entitled to a sum calculated by reference, directly or indirectly, to the value of those premises.
+
+### s.16G | Interpretation of terms related to marketing in section 16E | https://www.legislation.gov.uk/ukpga/1988/50/section/16G
+(1) For the purposes of section 16E a person markets a dwelling-house to let on a tenancy when—
+(a) the person advertises that the dwelling-house is or may be available to let on a tenancy, or
+(b) in the course of lettings agency work, the person informs any other person that the dwelling is or may be so available.
+(2) For the purposes of section 16E a person markets a dwelling-house to be occupied under a licence when—
+(a) the person advertises that the dwelling-house is or may be available to be occupied under a licence, or
+(b) in the course of lettings agency work, the person informs any other person that the dwelling is or may be so available.
+(3) But subsections (1)(a) and (2)(a) do not apply in relation to a person who publishes an advertisement in the course of a business that does not involve lettings agency work if the advertisement has been provided by another person.
+(4) For the purposes of this section, “lettings agency work” means things done by a person in the course of a business in response to instructions received from—
+(a) a person (“a prospective landlord”) seeking to find another person to occupy a dwelling-house, or
+(b) a person (“a prospective occupier”) seeking to find a dwelling-house to occupy.
+(5) However, “lettings agency work” does not include any of the following things when done by a person who does nothing else within subsection (4)—
+(a) publishing advertisements or disseminating information;
+(b) providing a means by which a prospective landlord or a prospective occupier can, in response to an advertisement or dissemination of information, make direct contact with a prospective occupier or prospective landlord;
+(c) providing a means by which a prospective landlord and a prospective occupier can communicate directly with each other.
+(6) “Lettings agency work” also does not include things of a description, or things done by a person of a description, specified for the purposes of this section in regulations made by the Secretary of State.
+(7) Regulations under this section—
+(a) may make different provision for different purposes;
+(b) are to be made by statutory instrument.
+(8) A statutory instrument containing regulations under this section is subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.16H | Landlords acting through others | https://www.legislation.gov.uk/ukpga/1988/50/section/16H
+Nothing in section 16D or 16E prevents a landlord from fulfilling or contravening an obligation through another person acting on their behalf.
+
+### s.16I | Financial penalties | https://www.legislation.gov.uk/ukpga/1988/50/section/16I
+(1) A local housing authority may impose a financial penalty on a person if satisfied beyond reasonable doubt—
+(a) that the person contravened section 16D or any paragraph of section 16E(1) other than paragraph (e), or
+(b) that—
+(i) the person contravened paragraph (e) of section 16E(1), and
+(ii) the tenant surrendered the tenancy within the period of four months beginning with the date of the contravention, without an order for possession of the dwelling-house being made.
+(2) Where a landlord fulfils the requirement in section 16D, a local housing authority may not impose a financial penalty on a person who contravenes section 16D only by virtue of subsection (8) of that section.
+(3) More than one penalty may be imposed on the same person in relation to a contravention of section 16D only if—
+(a) the contravention continues after the end of 28 days beginning with the day after that on which the previous penalty for the contravention was imposed, unless the person appeals against the decision to impose the penalty within that period, or
+(b) if the person appeals against that decision within that period, the contravention continues after the end of 28 days beginning with the day after that on which the appeal is finally determined, withdrawn or abandoned.
+(4) Subsection (3) does not enable a penalty to be imposed after the final notice in respect of the previous penalty has been withdrawn or quashed on appeal.
+(5) Where a local housing authority has imposed a financial penalty on a person in relation to a contravention of paragraph (b) or (d) of section 16E(1), the local housing authority may not impose a financial penalty in relation to a contravention of the other of those two paragraphs arising from the same conduct.
+(6) The amount of a financial penalty imposed under this section is to be determined by the authority imposing it, but must not be more than £7,000.
+(7) Where—
+(a) a local housing authority is satisfied as mentioned in subsection (1) in relation to two or more persons, and
+(b) the contraventions in relation to which the local housing authority is so satisfied arise from the same conduct by one or more of the persons acting on behalf of the others,
+the local housing authority may impose a financial penalty under this section on the persons (or some of them) jointly, and if the local housing authority does so, the persons on whom the penalty is imposed are jointly and severally liable to pay it.
+(8) No financial penalty may be imposed under this section in respect of any conduct if—
+(a) the person has been convicted of an offence under section 16J in respect of the conduct,
+(b) criminal proceedings under that section have been instituted against the person in respect of the conduct and the proceedings have not been concluded,
+(c) criminal proceedings under that section in respect of the conduct have been concluded and the person has not been convicted of the offence, or
+(d) a financial penalty has been imposed under section 16K in respect of that conduct.
+(9) The Secretary of State may give guidance to local housing authorities about the exercise of their functions under this section.
+(10) Local housing authorities must have regard to any guidance issued under subsection (9).
+(11) For the purposes of this section and section 16J—
+(a) a financial penalty is imposed under this section or section 16K on the date specified in the final notice as the date on which the notice is given, and
+(b) “final notice” has the meaning given by paragraph 6 of Schedule 2ZA.
+
+### s.16J | Offences | https://www.legislation.gov.uk/ukpga/1988/50/section/16J
+(1) A relevant person is guilty of an offence if, in relation to an assured tenancy—
+(a) the person relies on a ground in Schedule 2, knowing that the landlord would not be able to obtain an order for possession on that ground, or being reckless as to whether the landlord would be able to do so, and
+(b) the tenant surrenders the tenancy within the period of four months beginning with the date the ground was relied on, without an order for possession of the dwelling-house being made.
+(2) A person is guilty of an offence if the person contravenes section 16E(2) or (3) but it is a defence for a person who contravenes section 16E(3) otherwise than as a landlord to show that they took all reasonable steps to avoid contravening it.
+(3) A person is guilty of an offence if—
+(a) a relevant penalty has been imposed on the person and the final notice imposing the penalty has not been withdrawn, and
+(b) the conduct in respect of which the penalty was imposed continues after the end of the period of 28 days beginning with—
+(i) the day after that on which the penalty was imposed on the person, or
+(ii) if the person appeals against the final notice in respect of the penalty within that period, the day after that on which the appeal is finally determined, withdrawn or abandoned.
+(4) A person is guilty of an offence if—
+(a) the person conducts themselves in a manner giving rise to liability to a financial penalty under section 16I, and
+(b) within the period of five years ending with the day on which the conduct occurs—
+(i) a relevant penalty has been imposed on the person for different conduct and the final notice imposing the penalty has not been withdrawn, or
+(ii) the person has been convicted of an offence under this section for different conduct.
+(5) In subsections (3) and (4) “relevant penalty” means a financial penalty which is imposed under section 16I or 16K where—
+(a) the period for bringing an appeal against the penalty under paragraph 10(2) of Schedule 2ZA has expired without an appeal being brought,
+(b) an appeal against the financial penalty under that paragraph has been withdrawn or abandoned, or
+(c) the final notice imposing the penalty has been confirmed or varied on appeal.
+(6) A person may not be convicted of an offence under subsection (1), (2) or (4) in respect of any conduct if a financial penalty has been imposed under section 16I or 16K in respect of that conduct.
+(7) Where an offence under this section committed by a body corporate is proved to have been committed with the consent or connivance of an officer of a body corporate, the officer as well as the body corporate commits the offence and is liable to be proceeded against and punished accordingly.
+(8) Where an offence under subsection (2) committed by a body corporate is proved to be attributable to any neglect on the part of an officer of a body corporate, the officer as well as the body corporate commits the offence and is liable to be proceeded against and punished accordingly.
+(9) Where the affairs of a body corporate are managed by its members, subsections (7) and (8) apply in relation to the acts and defaults of a member in connection with the member’s functions of management as if the member were an officer of the body corporate.
+(10) A person guilty of an offence under this section is liable on summary conviction to a fine.
+
+### s.16K | Financial penalties as an alternative to prosecution under section 16J | https://www.legislation.gov.uk/ukpga/1988/50/section/16K
+(1) A local housing authority may impose a financial penalty on a person if satisfied beyond reasonable doubt that the person is guilty of an offence under section 16J.
+(2) No financial penalty may be imposed under this section in respect of any conduct if—
+(a) the person has been convicted of an offence under section 16J in respect of the conduct,
+(b) criminal proceedings under that section in respect of the conduct have been instituted against the person and the proceedings have not been concluded, or
+(c) criminal proceedings under that section in respect of the conduct have been concluded and the person has not been convicted of the offence.
+(3) The amount of a financial penalty imposed under this section is to be determined by the authority imposing it, but must not be more than £40,000.
+(4) Where—
+(a) a local housing authority is satisfied as mentioned in subsection (1) in relation to two or more persons, and
+(b) the offences in relation to which the local housing authority is so satisfied arise from the same conduct by one or more of the persons acting on behalf of the others,
+the local housing authority may impose a financial penalty under this section on the persons (or some of them) jointly, and if the local housing authority does so, the persons on whom the penalty is imposed are jointly and severally liable to pay it.
+(5) The Secretary of State may give guidance to local housing authorities about the exercise of their functions under this section.
+(6) Local housing authorities must have regard to any guidance issued under subsection (5).
+
+### s.16L | Financial penalties: supplementary and interpretation | https://www.legislation.gov.uk/ukpga/1988/50/section/16L
+(1) The Secretary of State may give financial assistance (by way of grant, loan guarantee or in any other form) or make other payments to a local housing authority in respect of the local housing authority’s functions under or by virtue of sections 16I to 16K.
+(2) The Secretary of State may by regulations amend the amount specified in section 16I(6) or 16K(3) to reflect changes in the value of money.
+(3) Regulations under this section are to be made by statutory instrument.
+(4) A statutory instrument containing regulations under this section is subject to annulment in pursuance of a resolution of either House of Parliament.
+(5) Schedule 2ZA makes provision about—
+(a) the procedure for imposing financial penalties under sections 16I and 16K,
+(b) appeals against financial penalties under sections 16I and 16K,
+(c) enforcement of financial penalties under sections 16I and 16K, and
+(d) how local housing authorities are to deal with the proceeds of financial penalties under sections 16I and 16K.
+
+### s.16M | Duties of landlords etc, penalties and offences: interpretation | https://www.legislation.gov.uk/ukpga/1988/50/section/16M
+(1) In sections 16D to 16L, Schedule 2ZA and this section—
+“legal representative” means a person carrying on a legal activity, within the meaning of the Legal Services Act 2007, in the course of a business, where the person—
+is an authorised person in relation to a reserved legal activity for the purposes of that Act, or
+is of a description specified for the purposes of this section in regulations made by the Secretary of State;
+“local housing authority” means a district council, a county council in England for an area for which there is no district council, a London borough council, the Common Council of the City of London (in its capacity as a local authority) or the Council of the Isles of Scilly;
+“purported notice of possession” means any written document which is not in accordance with section 8 but which (however expressed)—
+purports to be a notice under section 8, or
+purports to bring an assured tenancy to an end or to require that it is brought to an end (by reference to a ground in Schedule 2 or otherwise),
+and is not a claim form or a document produced pursuant to proceedings in the court for possession of the dwelling-house;
+“relevant person”, in relation to a tenancy, means—
+the landlord,
+a person acting on behalf of the landlord otherwise than as a legal representative, or
+a person purporting to act on behalf of the landlord.
+(2) For the purposes of 16D to 16L a person relies on a ground in Schedule 2 in relation to a tenancy where the person—
+(a) serves on the tenant a notice under section 8, or a purported notice of possession, asserting that the landlord is, will or may be able to obtain an order for possession on that ground, or
+(b) having not done anything within paragraph (a) in relation to the ground, files a claim form or particulars of claim with the court, for the purpose of beginning proceedings for possession on that ground.
+(3) In section 16E “the restricted period” is to be read in accordance with subsections (4) to (7).
+(4) Subject to subsections (5) to (7) “the restricted period” means—
+(a) in relation to a relevant person relying on Ground 1 or 1A in a notice under section 8 or a purported notice of possession (see subsection (2)(a)), the period—
+(i) beginning with the date on which the notice or purported notice is served, and
+(ii) ending with the last day of the period of twelve months beginning with the date specified in the notice or purported notice as the earliest date on which proceedings for possession will begin;
+(b) in relation to a relevant person relying on Ground 1 or 1A in a claim form or particulars of claim (see subsection (2)(b)), the period of twelve months beginning with the date on which the claim form or particulars of claim are filed with the court for the purpose of bringing proceedings for possession.
+(5) Where subsection (6) applies, the reference in subsection (4)(a)(ii) to the date specified in the notice or purported notice as the earliest date on which proceedings for possession will begin is to be read as a reference to the earliest date that could have been validly so specified in a notice under section 8, served on the same date, specifying Ground 1 or 1A alone.
+(6) This subsection applies—
+(a) where (because it also specifies Ground 7A or 14) a notice under section 8 specifies, as the earliest date on which proceedings for possession will begin, an earlier date than the earliest date that could have been validly so specified in a notice under section 8 specifying Ground 1 or 1A alone;
+(b) where a purported notice of possession—
+(i) does not specify a date as the earliest date on which proceedings will begin, or
+(ii) specifies as the earliest date on which proceedings will begin a date that could not have been specified in a valid notice under section 8 served on the same date, specifying Ground 1 or 1A alone.
+(7) Where, before the end of the restricted period, the court makes an order for possession of the dwelling-house on a ground other than Ground 1 or 1A, the restricted period ends with the day on which the order is made.
+(8) Regulations under this section—
+(a) may make different provision for different purposes;
+(b) are to be made by statutory instrument.
+(9) A statutory instrument containing regulations under this section is subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.16N | Guarantor not liable for rent payable after tenant’s death | https://www.legislation.gov.uk/ukpga/1988/50/section/16N
+(1) This section applies where—
+(a) an individual (the “guarantor”) is a party to an arrangement (the “guarantee”) under which the individual guarantees payment by the tenant of rent under an assured tenancy (“guaranteed rent”), and
+(b) the guarantor became a party to the guarantee on or after the commencement date.
+(2) If—
+(a) only one person is the tenant under the assured tenancy, and
+(b) that person dies,
+the guarantee is of no effect if, or to the extent that, it guarantees payment of guaranteed rent for the period beginning with the death of that person.
+(3) If—
+(a) two or more persons are the tenant under the assured tenancy, and
+(b) all of those persons die,
+the guarantee is of no effect if, or to the extent that, it guarantees payment of guaranteed rent for the period beginning with the deaths of those persons (if they all die on the same day) or beginning with the death of the last of those persons to die (if they do not all die on the same day).
+(4) If—
+(a) two or more persons are the tenant under the assured tenancy,
+(b) the guarantor is a family member of only one of those persons, and
+(c) that family member of the guarantor dies,
+the guarantee is of no effect if, or to the extent that, it guarantees payment of guaranteed rent for the period beginning with the death of that family member.
+(5) If—
+(a) two or more persons are the tenant under the assured tenancy,
+(b) the guarantor is a family member of more than one of those persons, and
+(c) all of those family members of the guarantor die,
+the guarantee is of no effect if, or to the extent that, it guarantees payment of guaranteed rent for the period beginning with the deaths of those family members (if they all die on the same day) or beginning with the death of the last of those family members to die (if they do not all die on the same day).
+(6) For the purposes of this section, the guaranteed rent for the period beginning with the death of a person, or with the deaths of two or more persons, is—
+(a) guaranteed rent which—
+(i) is for the rent period during which the person dies or persons die (the “relevant rent period”), and
+(ii) is attributable to the time after the death of the person or persons, and
+(b) guaranteed rent for every rent period after the relevant rent period.
+(7) For that purpose, the guaranteed rent for the relevant rent period which is attributable to the time after the death of the person or persons is the amount calculated in accordance with this formula—
+DT×Rwhere—
+D is the total number of days in the relevant rent period which fall on and after the day of the death of the person or persons;
+T is the total number of days in the relevant rent period;
+R is the guaranteed rent for the relevant rent period.
+
+### s.16P | Section 16N: application and interpretation | https://www.legislation.gov.uk/ukpga/1988/50/section/16P
+(1) Section 16N applies to a guarantee—
+(a) whether or not it is in writing;
+(b) if it is in writing, whether or not it is in the lease;
+(c) whether or not it also guarantees the payment of any sum other than the rent.
+(2) In section 16N and this section—
+“commencement date” has the meaning given by section 146(3) of the Renters’ Rights Act 2025;
+“family member” is to be read in accordance with subsections (3) and (4);
+“rent period” means a period for which rent is payable.
+(3) For the purposes of section 16N, the guarantor is a family member of the following persons—
+(a) the spouse, civil partner or co-habitee of the guarantor;
+(b) a person who is—
+(i) a child,
+(ii) a grandchild,
+(iii) a parent,
+(iv) a grandparent,
+(v) a sibling,
+(vi) a niece or nephew,
+(vii) an aunt or uncle, or
+(viii) a cousin,
+of the guarantor or of the spouse, civil partner or co-habitee of the guarantor;
+(c) a person who is the spouse, civil partner or co-habitee of a person falling within paragraph (b).
+(4) If, in accordance with subsection (3), a person (F)—
+(a) is a family member of the guarantor when the guarantee is entered into, or
+(b) becomes a family member of the guarantor after the guarantee is entered into,
+F is to be regarded as being a family member of the guarantor at all times afterwards (regardless of whether F continues to be so in accordance with subsection (3)).
+(5) For the purposes of this section—
+(a) one person (C) is the “co-habitee” of another person (P) if P lives with C as if they were married or in a civil partnership;
+(b) a “niece or nephew” of a person (P) is a child—
+(i) of a sibling of P, or
+(ii) of a person who is the spouse, civil partner or co-habitee of a sibling of P;
+(c) an “aunt or uncle” of a person (P) is a sibling of a parent of P;
+(d) a “cousin” of a person (P) is a child—
+(i) of an aunt or uncle of P, or
+(ii) of a person who is the spouse, civil partner or co-habitee of an aunt or uncle of P;
+(e) “sibling” includes a sibling of the half-blood and a step-sibling.
+
+### Sch 2 | Grounds for Possession of Dwelling-houses let on Assured Tenancies | https://www.legislation.gov.uk/ukpga/1988/50/schedule/2
+Part I Grounds on which Court must order possession
+Ground 1
+The current tenancy began at least 1 year before the relevant date and the landlord who is seeking possession requires the dwelling-house as the only or principal home of any of the following—
+the landlord;
+the landlord’s spouse or civil partner or a person with whom the landlord lives as if they were married or in a civil partnership;
+the landlord’s—
+parent;
+grandparent;
+sibling;
+child;
+grandchild;
+a child or grandchild of a person mentioned in paragraph (b).
+In the case of joint landlords seeking possession, references to “the landlord” in this ground are to be read as references to at least one of those joint landlords.
+When calculating whether the current tenancy began at least 1 year before the relevant date, both—
+the day when the current tenancy began, and
+the relevant date,
+must be included in the calculation.
+Ground 1A
+The following conditions are met—
+the landlord who is seeking possession intends to sell a freehold or leasehold interest in the dwelling-house or to grant a lease of the dwelling-house for a term certain of more than 21 years which is not terminable before the end of that term by notice given by or to the landlord;
+the assured tenancy on which the dwelling-house is let did not come into being by virtue of any provision of Schedule 1 to the Rent Act 1977 or section 4 of the Rent (Agriculture) Act 1976;
+either—
+the current tenancy began at least 1 year before the relevant date, or
+at the relevant date, notice of a compulsory acquisition in relation to the dwelling-house has been given, the landlord intends to sell their interest in the dwelling-house to the acquiring authority and the acquiring authority intends to acquire it;
+the landlord seeking possession is not—
+a non-profit registered provider of social housing,
+a body registered as a social landlord in the register maintained under section 1 of the Housing Act 1996,
+a body registered as a social landlord in the register kept under section 20(1) of the Housing (Scotland) Act 2010,
+a housing trust, within the meaning of the Housing Associations Act 1985, which is a charity, or
+where the dwelling-house is social housing within the meaning of Part 2 of the Housing and Regeneration Act 2008, a profit-making registered provider of social housing.
+In paragraph (c)(ii), “sell” includes transfer.
+When calculating whether the current tenancy began at least 1 year before the relevant date, both—
+the day when the current tenancy began, and
+the relevant date,
+must be included in the calculation.
+Ground 1B
+The following conditions are met—
+the landlord who is seeking possession intends—
+to sell a freehold or leasehold interest in the dwelling-house,
+to grant a lease of the dwelling-house for a term certain of more than 21 years which is not terminable before the end of that term by notice given by or to the landlord, or
+to grant an assured tenancy to another person;
+the assured tenancy on which the dwelling-house is let did not come into being by virtue of any provision of Schedule 1 to the Rent Act 1977 or section 4 of the Rent (Agriculture) Act 1976;
+the landlord who is seeking possession is a private registered provider of social housing;
+the assured tenancy was entered into pursuant to a rent-to-buy agreement;
+the period stated in that agreement has expired;
+the landlord who is seeking possession has complied with—
+any provision of the rent-to-buy agreement requiring the landlord to offer the dwelling-house for sale to the tenant, and
+any requirements in the agreement about such an offer.
+In this ground—
+“rent-to-buy agreement” means an agreement in writing which—
+provides for the tenant to pay rent that is no higher than 80% of market rent (and here “rent” and “market rent” include any amount payable by way of service charge), and
+gives notice that the landlord intends after a period stated in the agreement which is not less than 5 years or, for dwelling-houses in Greater London, 10 years from the beginning of the tenancy to offer the dwelling-house for sale to the tenant.
+Ground 2
+The dwelling-house is subject to a mortgage and—
+(a) the mortgagee is entitled to exercise a power of sale conferred on him by the mortgage or by section 101 of the Law of Property Act 1925; and
+(b) the mortgagee requires possession of the dwelling-house for the purpose of disposing of it with vacant possession in exercise of that power;
+and for the purposes of this ground “mortgage” includes a charge and “mortgagee” shall be construed accordingly.
+Ground 2ZA
+The landlord who is seeking possession—
+holds the interest in the dwelling-house under a superior tenancy where—
+the superior landlord has given a valid notice to terminate that tenancy as a result of which the superior tenancy will end within the period of 12 months beginning with the relevant date, or
+the superior tenancy is a fixed term tenancy of a term certain which will expire (if the tenancy does not come to an end earlier) within the period of 12 months beginning with the relevant date, and
+is, or, in the case of joint landlords seeking possession, at least one of them is—
+a private registered provider of social housing,
+a tenant of the superior landlord under a tenancy of an agricultural holding within the meaning of the Agricultural Holdings Act 1986 which is a tenancy to which that Act applies, or a farm business tenancy within the meaning of the Agricultural Tenancies Act 1995,
+a person who held the dwelling-house for the purpose of making it available for occupation as supported accommodation, or
+a company of which a local authority owns at least 50% of the issued share capital.
+Ground 2ZB
+The landlord who is seeking possession holds the interest in the dwelling-house under a superior tenancy which is a fixed term tenancy of a term certain of more than 21 years and—
+the fixed term will expire (if the tenancy does not come to an end earlier) within the period of 12 months beginning with the relevant date, or
+if the superior tenancy has continued following the expiry of the fixed term, any party to the superior tenancy has served a valid notice to terminate that tenancy as a result of which the superior tenancy will end within the period of 12 months beginning with the relevant date.
+Ground 2ZC
+The landlord who is seeking possession became the landlord by virtue of section 18 no more than 6 months before the date on which the possession proceedings were commenced, and the previous landlord under the assured tenancy was, or, in the case of previous joint landlords, at least one them was—
+a private registered provider of social housing,
+a tenant of the superior landlord under a tenancy of an agricultural holding within the meaning of the Agricultural Holdings Act 1986 which is a tenancy to which that Act applies, or a farm business tenancy within the meaning of the Agricultural Tenancies Act 1995,
+a person who held the dwelling-house for the purpose of making it available for occupation as supported accommodation, or
+a company of which a local authority owns at least 50% of the issued share capital.
+Ground 2ZD
+The landlord who is seeking possession became the landlord by virtue of section 18, no more than 6 months before the date on which the possession proceedings were commenced, as a result of a superior tenancy which was a fixed term tenancy of a term certain of more than 21 years coming to an end—
+on the expiry of the fixed term,
+within the period of 12 months ending with the date on which the fixed term would have expired if the tenancy had not come to an end, or
+after the expiry of the fixed term, as a result of a valid notice to terminate the tenancy.
+Ground 4
+at some time within the period of twelve months ending with the beginning of the tenancy, the dwelling-house was let on a tenancy falling within paragraph 8 of Schedule 1 to this Act and—
+(c) if the tenancy arose by succession as mentioned in section 39(5), notice was given to the previous tenant under Case 14 of Schedule 15 to the Rent Act 1977, and
+(d) the tenancy is not an assured agricultural occupancy in respect of which the agricultural worker condition is fulfilled by virtue of paragraph 3 of Schedule 3.
+Ground 4A
+The following conditions are met—
+the dwelling-house is in an HMO or is an HMO,
+the tenant meets the student test when the tenancy is entered into,
+the landlord or, in the case of joint landlords, at least one of them, gives the tenant, before the tenancy is entered into, a written statement of the landlord’s wish to be able to recover possession on the basis that—
+the tenant meets the student test when the tenancy is entered into, and
+the landlord intends, on the next occasion on which the dwelling-house is let, to let it to a tenant who meets the student test when that new tenancy is entered into,
+the period—
+beginning with the day on which the tenancy was entered into, and
+ending with the day on which the tenant was entitled to possession of the dwelling-house,
+is six months or less,
+the relevant date falls within the period beginning with 1 June and ending with 30 September in any year, and
+the landlord seeking possession intends, on the next occasion on which the dwelling-house is let, to let it to a tenant who meets the student test when that new tenancy is entered into.
+For the purposes of the conditions in paragraphs (b), (c) and (f), a tenant meets the student test when a tenancy is entered into if—
+the tenant is a full-time student at that time, or
+at that time, the landlord reasonably believes that the tenant would become a full-time student during the tenancy.
+But, in a case where two or more persons are or would be the tenant, the tenant does not meet the student test unless all of those persons meet that test.
+In this ground, “full-time student” means a person receiving education provided by means of a full-time course—
+of any description mentioned in Schedule 6 to the Education Reform Act 1988 provided by an institution in England or Wales;
+of any description mentioned in section 38(2) of the Further and Higher Education (Scotland) Act 1992 provided by an institution in Scotland;
+of any description mentioned in Schedule 1 to the Further Education (Northern Ireland) Order 1997 (S.I. 1997/1772 (N.I. 15)) provided by an institution in Northern Ireland.
+In a case where, because of paragraph 8(7) of Schedule 1 to the 1988 Act, a tenancy becomes an assured tenancy, the condition in paragraph (c) of the first paragraph of this ground is met if the written statement referred to there is given within the period of 28 days beginning with the date on which the tenancy becomes an assured tenancy.
+Ground 5
+The dwelling-house is held for the purpose of being available for occupation by a minister of religion as a residence from which to perform the duties of his office and—
+(b) the court is satisfied that the dwelling-house is required for occupation by a minister of religion as such a residence.
+(c) if the tenancy arose by succession as mentioned in section 39(5), notice was given to the previous tenant under Case 15 of Schedule 15 to the Rent Act 1977, and
+(d) the tenancy is not an assured agricultural occupancy in respect of which the agricultural worker condition is fulfilled by virtue of paragraph 3 of Schedule 3.
+Ground 5A
+The landlord seeking possession requires the dwelling-house for the purpose of housing a qualifying agricultural worker.
+For the purpose of this ground a person is a “qualifying agricultural worker” in case A or B.
+Case A is where—
+the person will be employed in agriculture as a seasonal or permanent employee under a contract of employment, and
+the employer under that contract is—
+the landlord, or
+in the case of joint landlords seeking possession, at least one of those landlords.
+Case B is where—
+the person will be—
+employed in agriculture under a contract of employment, but the employer under that contract is not the landlord or, in the case of joint landlords, any of those landlords, or
+working in agriculture under a contract that is not a contract of employment, whether the contract is express or implied and (if express) whether oral or in writing,
+the person will be employed or working in agriculture under that contract wholly or mainly for—
+the landlord, or
+in the case of joint landlords seeking possession, at least one of the landlords, and
+the relevant landlord intends that employment or work to continue for at least six months after the relevant date;
+and here “relevant landlord” means the landlord, or whichever of the joint landlords, the person will be wholly or mainly working for.
+In this ground—
+“agriculture” has the same meaning as in the Rent (Agriculture) Act 1976 (see section 1 of that Act);
+“contract of employment” has the meaning given by section 230(2) of the Employment Rights Act 1996.
+Ground 5B
+The landlord seeking possession—
+is a private registered provider of social housing,
+holds the dwelling-house for the purpose of accommodating persons who meet requirements connected with their employment, and
+requires the dwelling-house to let it under a new tenancy to a person who meets those requirements,
+and the tenant in possession does not fulfil those requirements.
+Ground 5C
+The dwelling-house was let to the tenant in consequence of the tenant’s employment—
+by the landlord seeking possession,
+in the case of joint landlords seeking possession, by at least one of them,
+by a previous landlord under the tenancy, or
+pursuant to an agreement between any of those landlords and the employer,
+and either—
+the tenant has ceased to be in that employment, or
+the tenancy was granted for the purpose of providing the tenant with accommodation during the early period of their employment, that purpose has been fulfilled and the landlord seeking possession intends to let the dwelling-house to another current or future employee of the employer.
+For the purposes of this ground, at a time when the landlord is or was the Secretary of State, employment by a health service body, as defined in section 60(7) of the National Health Service and Community Care Act 1990, or by a Local Health Board, shall be regarded as employment by the Secretary of State.
+This ground also applies to the letting of a dwelling-house to a tenant in consequence of the tenant’s service in the office of constable, but with the following modifications.
+“Employment” means service in the office of constable.
+In the first paragraph of this ground, in paragraph (d), “the employer” means any of the following persons—
+the chief officer of a police force;
+a policing body;
+in relation to a constable’s service under the direction and control of a person who is not a constable (the “senior person”)—
+the senior person, or
+a person or body with the function of maintaining or securing the maintenance of the body of which the senior person is a member.
+The first paragraph of this ground has effect as if the following were substituted for the second paragraph (b)—
+the tenancy was granted for a particular purpose relating to the tenant’s service as a constable and—
+that purpose has been fulfilled, or
+the tenancy is no longer required for that purpose.
+In those modifications—
+“service in the office of a constable” includes a constable’s service under the direction and control of a person who is not a constable;
+“chief officer of a police force” means—
+a chief officer of police (which has the same meaning as in the Police Act 1996 — see section 101(1) of that Act),
+the chief constable of the Ministry of Defence Police,
+the chief constable of the British Transport Police,
+the chief constable of the Civil Nuclear Constabulary,
+the chief constable of the Police Service of Scotland, or
+the chief constable of the Police Service of Northern Ireland;
+“policing body” means—
+a local policing body (which has the same meaning as in the Police Act 1996 — see section 101(1) of that Act),
+the Secretary of State in relation to the Ministry of Defence Police,
+the British Transport Police Authority,
+the Civil Nuclear Police Authority,
+the Scottish Police Authority, or
+the Northern Ireland Policing Board.
+Ground 5D
+The landlord seeking possession is a private registered provider of social housing, the tenancy agreement includes a requirement connected with the tenant’s employment and the tenant no longer fulfils that requirement.
+Ground 5E
+The landlord seeking possession requires possession of the dwelling-house to let it as supported accommodation where—
+the landlord holds the dwelling-house for the purpose of making it available for occupation as supported accommodation, and
+the tenant did not enter the assured tenancy for the purpose of receiving care, support or supervision.
+Ground 5F
+The dwelling-house was supported accommodation when the tenancy was granted and any of the following applies—
+the tenancy was granted for the purpose of providing the tenant with support services for a limited time in order to enable the tenant to be able to live in other accommodation in the future and the period for which those support services were to be provided has ended;
+a person other than the landlord provides or provided support services to the tenant, but—
+the support services have come to an end or the person is not fulfilling their obligations under the arrangements for the provision of those services, and
+where the dwelling-house is not managed accommodation, the landlord has used reasonable endeavours to find another person to provide support services to the tenant but has not been able to do so;
+where the accommodation or support services were funded wholly or partly by someone other than the landlord or the tenant—
+that funding is no longer being provided,
+where the dwelling-house is not managed accommodation, the landlord used reasonable endeavours to identify alternative funding before the relevant date but was not able to do so, and
+it would not be reasonable for the landlord to continue to provide accommodation or for the person who provided support services to continue that provision in the circumstances;
+the financial viability of the landlord or of supported accommodation or support services the landlord provides to others would, in the landlord’s reasonable opinion, be threatened if the landlord were to continue to provide or fund a supported accommodation project of which the tenant’s dwelling-house forms part and the landlord used reasonable endeavours to identify alternative funding for the project before the relevant date but was not able to do so;
+the tenant does not need the level of support services that are provided;
+the tenant does not need any support services;
+the support services that are provided do not meet the tenant’s needs;
+the dwelling-house has physical features intended to enable persons with needs for particular support services to live more independently than they could do so without those features and those physical features are not needed by the tenant;
+the dwelling-house is physically unsuitable for a person with the tenant’s needs for support services to live in.
+In paragraph (d), “supported accommodation project” means—
+supported accommodation consisting of two or more dwelling-houses in the same building as, or otherwise nearby, each other,
+supported accommodation consisting of two or more dwelling-houses occupied by tenants who receive support services of a similar kind, or
+support services of a similar kind provided to tenants of two or more dwelling-houses that are supported accommodation.
+In this ground, references to the “landlord” are to the landlord who is seeking possession.
+Ground 5G
+The tenant’s occupation of the dwelling-house was (at any time during the period of occupation) in pursuance of a local housing authority’s duty to the tenant under section 193 of the Housing Act 1996 and—
+the local housing authority has notified the landlord that the tenancy is not required for the purposes of that duty, and
+the relevant date is no more than 12 months after the date on which the local housing authority notified the landlord as mentioned in paragraph (a).
+In this ground “local housing authority” means a district council, a county council in England for an area for which there is no district council, a London borough council, the Common Council of the City of London or the Council of the Isles of Scilly.
+Ground 5H
+The landlord seeking possession is a registered provider of social housing or a charity and—
+the tenancy was granted because the tenant met one or more eligibility conditions,
+a written tenancy agreement set out the eligibility condition (the “specified condition”) or the eligibility conditions (the “specified conditions”) that the tenant met,
+either—
+the tenant no longer meets the specified condition or specified conditions, or
+the tenancy was granted in order to provide accommodation for a limited period to help the tenant transition to living independently and that period has come to an end,
+the rent is no higher than 80% of market rent (and here “rent” and “market rent” include any amount payable by way of service charge), and
+the tenancy was not granted—
+pursuant to a nomination as mentioned in section 159(2)(c) of the Housing Act 1996,
+as a tenancy of supported accommodation, or
+in pursuance of a local housing authority’s duty under section 193 of the Housing Act 1996.
+Each of the following is an “eligibility condition” for the purposes of this ground—
+the tenant is in work, or work of a description specified in the condition, for which the tenant is paid;
+the tenant is actively seeking work, or work of a description specified in the condition, for which the tenant would be paid;
+the tenant is—
+of a particular age, or
+within a particular range of ages,
+specified in the condition.
+For the purposes of paragraph (a) or (b) of the definition of “eligibility condition”, a description of work may (in particular) be expressed by reference to—
+work for a particular employer or description of employer or work at a particular place of work or description of place of work;
+the amount which the tenant is paid for the work;
+the duration or expected duration of the contract or other arrangement under which the work is done.
+In this ground a reference—
+to work includes self-employment;
+to seeking work includes seeking to become self-employed.
+The question of whether the tenant no longer meets the specified condition or specified conditions is to be determined for the purposes of this ground in accordance with the terms of the tenancy agreement.
+But if—
+the terms of the tenancy agreement do not make any provision about that question,
+there are two or more specified conditions, and
+the tenant no longer meets one or more of those conditions,
+the tenant no longer meets the specified conditions for the purposes of this ground.
+The Secretary of State may by regulations (“eligibility condition regulations”) make provision (including provision amending this ground)—
+to add, vary or remove any eligibility condition;
+about the meaning of any eligibility condition.
+Eligibility condition regulations may make different provision for different purposes.
+A statutory instrument containing eligibility condition regulations may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.
+Ground 6
+These conditions are met—
+the general redevelopment conditions (in every case);
+the landlord’s acquisition condition, but only in a case where section 7(5ZA) applies in relation to the tenancy;
+the additional RSL condition, but only in a case where the landlord seeking possession is—
+a relevant social landlord, and
+the person who intends to carry out the work mentioned in this ground.
+The “general redevelopment conditions” are met if—
+the landlord seeking possession is mentioned in the first column in a row of the table in this ground;
+the tenancy is mentioned in the second column of that row;
+a person mentioned in the third column of that row intends to—
+demolish or reconstruct the whole or a substantial part of the dwelling-house, or
+carry out substantial works on the dwelling-house or any part of it, or any building of which it forms part;
+the intended work cannot reasonably be carried out without the tenant giving up possession of the dwelling-house because—
+the tenant is not willing to agree to such a variation of the terms of the tenancy as would give such access and other facilities as would permit the intended work to be carried out,
+the nature of the intended work is such that no such variation is practicable,
+the tenant is not willing to accept an assured tenancy of such part only of the dwelling-house (in this sub-paragraph referred to as “the reduced part”) as would leave in the possession of the landlord so much of the dwelling-house as would be reasonable to enable the intended work to be carried out and, where appropriate, as would give such access and other facilities over the reduced part as would permit the intended work to be carried out, or
+the nature of the intended work is such that such a tenancy is not practicable;
+either —
+the assured tenancy began at least 6 months before the relevant date, or
+notice of a compulsory acquisition was given in respect of the dwelling-house where—
+the acquiring authority was the person who became the landlord who is seeking possession, and
+the dwelling-house was transferred to that landlord within the period of 12 months ending with the relevant date;
+the assured tenancy on which the dwelling-house is let did not come into being by virtue of any provision of Schedule 1 to the Rent Act 1977, as amended by Part 1 of Schedule 4 to this Act or, as the case may be, section 4 of the Rent (Agriculture) Act 1976, as amended by Part 2 of that Schedule.
+The “landlord’s acquisition condition” is met if—
+the landlord seeking possession acquired their interest in the dwelling-house before the grant of the tenancy, or
+that interest was in existence at the time of that grant and neither that landlord (or, in the case of joint landlords, any of them) nor any other person who, alone or jointly with others, has acquired that interest since that time acquired it for money or money’s worth.
+The “additional RSL condition” is met in case A, case B or case C.
+Case A: a case where alternative accommodation that meets the following conditions is available for the tenant or will be available for the tenant when the order for possession takes effect—
+it is let as a separate dwelling with adequate security of tenure;
+it is affordable;
+it is in an appropriate location;
+it is not overcrowded.
+Case B: a case where alternative accommodation that meets the following conditions is available for the tenant or will be available for the tenant when the order for possession takes effect—
+it is being provided temporarily until other alternative accommodation becomes available which will meet the conditions in case A;
+it is affordable;
+it is in an appropriate location;
+it is not overcrowded.
+Case C: a case where—
+the tenancy of the dwelling-house was not granted pursuant to a nomination as mentioned in section 159(2)(c) of the Housing Act 1996,
+when the tenancy was granted, the landlord intended to—
+demolish or reconstruct the whole or a substantial part of the dwelling-house, or
+carry out substantial works on the dwelling-house or any part of it, or any building of which it forms part,
+within a specific period, and
+the relevant social landlord gave the tenant, before the tenancy was entered into, a written statement of the landlord’s wish to be able to recover possession on the basis of that intention to carry out that work within that period (and that period must be included in the statement).
+For the purpose of the additional RSL condition, accommodation—
+is let “with adequate security of tenure” if it is let—
+on an assured tenancy, or
+on terms which will, in the opinion of the court, afford to the tenant security of tenure reasonably equivalent to the security afforded by an assured tenancy;
+is “affordable” if it is—
+no more expensive than the dwelling-house of which possession is being sought, or
+reasonably suitable to the means of the tenant;
+is “in an appropriate location” if it is—
+reasonably close to the dwelling-house of which possession is being sought, or
+reasonably suitable to the needs of the tenant and the tenant’s family as regards proximity to place of work;
+is “overcrowded” if the result of the occupation of the accommodation by the tenant and the tenant’s family would be that it would be an overcrowded dwelling for the purposes of Part 10 of the Housing Act 1985.
+Table
+Landlord seeking possessionTenancyLandlord intending to redevelopa relevant social landlordany tenancythe landlord who is seeking possession
+a superior landlord
+the unit-holder of a commonhold unit in relation to which a commonhold association exercises functionsa tenancy of a dwelling-house which is contained in or comprises the commonhold unitthe landlord who is seeking possession
+the commonhold association
+any landlord other than a relevant social landlord or a unit-holder of a commonhold unit in relation to which a commonhold association exercises functionsany tenancythe landlord who is seeking possessionIn this ground—
+“commonhold association”, “commonhold unit” and “unit-holder” have the meanings given by Part 1 of the Commonhold and Leasehold Reform Act 2002 (see sections 11 to 13 and 34 of that Act);
+“relevant social landlord” means—
+a non-profit registered provider of social housing,
+a body registered as a social landlord in the register maintained under section 1 of the Housing Act 1996,
+a body registered as a social landlord in the register kept under section 20(1) of the Housing (Scotland) Act 2010,
+a housing trust, within the meaning of the Housing Associations Act 1985, which is a charity, or
+where the dwelling-house is social housing within the meaning of Part 2 of the Housing and Regeneration Act 2008, a profit-making registered provider of social housing.
+Ground 6A
+These conditions are met—
+the landlord seeking possession (the “current landlord”) is a relevant social landlord;
+the dwelling-house (the “current home”) was made available for occupation by the tenant, or a predecessor in title of the tenant, to enable redevelopment of another dwelling-house (the “previous home”) which—
+was the only or principal home of the tenant or predecessor in title, and
+was occupied by the tenant or predecessor in title under a tenancy (the “previous tenancy”) of which the landlord was—
+a relevant social landlord, or
+a registered provider of social housing other than a private registered provider of social housing;
+alternative accommodation that—
+consists of the previous home and is affordable, or
+consists of other premises and is affordable, in an appropriate location and not overcrowded,
+is available for the tenant or will be available for the tenant when the order for possession takes effect;
+that alternative accommodation is to be let as a separate dwelling with adequate security of tenure.
+For the purpose of this ground, accommodation—
+is let “with adequate security of tenure” if it is let—
+on an assured tenancy, or
+on terms which will, in the opinion of the court, afford to the tenant security of tenure reasonably equivalent to the security afforded by an assured tenancy;
+is “affordable” if it—
+is no more expensive than the previous home, making these assumptions—
+that the redevelopment of the previous home has not taken place, and
+that the tenant, or predecessor in title, has continued to be the tenant of the previous home under the previous tenancy, or
+is reasonably suitable to the means of the tenant;
+is “in an appropriate location” if it is—
+reasonably close to the previous home, or
+reasonably suitable to the needs of the tenant and the tenant’s family as regards proximity to place of work;
+is “overcrowded” if the result of the occupation of the accommodation by the tenant and the tenant’s family would be that it would be an overcrowded dwelling for the purposes of Part 10 of the Housing Act 1985.
+In this Ground—
+“redevelopment”, in relation to the dwelling-house that is the previous home, means—
+demolishing or reconstructing the whole or a substantial part of the dwelling-house, or
+carrying out substantial works on the dwelling-house or any part of it, or any building of which it forms part;
+“relevant social landlord” has the same meaning as in Ground 6.
+Ground 6B
+Any of the following applies—
+letting the dwelling-house causes the landlord to breach a banning order under section 16 of the Housing and Planning Act 2016, or would do so if the landlord were to continue to let the dwelling-house;
+an improvement notice under section 11 or 12 of the Housing Act 2004—
+specifies the dwelling-house or premises in which the dwelling-house is contained as requiring remedial action, and
+specifies overcrowding as the deficiency giving rise to the hazard in respect of which that remedial action is to be taken;
+a prohibition order under section 20 or 21 of the Housing Act 2004 prohibits use of—
+the dwelling-house,
+the common parts, or
+any part of the dwelling-house or of the common parts,
+either for all purposes or for any purpose that is incompatible with continued occupation by the tenant;
+the dwelling-house is or is in an HMO which is required to be licensed under section 61 of the Housing Act 2004, and—
+the landlord applied for a licence under section 63 of the Housing Act 2004 and the local housing authority refused to grant a licence, or
+the landlord held a licence but the licence has been revoked;
+the dwelling-house is or is in a house which is required to be licensed under section 85 of the Housing Act 2004, and—
+the landlord applied for a licence under section 87 of the Housing Act 2004 and the local housing authority refused to grant a licence, or
+the landlord held a licence but the licence has been revoked;
+the dwelling-house is or is in an HMO which is licensed under Part 2 of the Housing Act 2004 or a house which is licensed under Part 3 of that Act and that HMO or house is occupied by more than the maximum number of households or persons specified in the licence;
+compliance with a planning enforcement notice or injunction would be, or is, incompatible with continued occupation of the dwelling-house by the tenant.
+In this ground—
+“common parts” has the same meaning as in Ground 13;
+“house” has the same meaning as in Part 3 of the Housing Act 2004 (see section 99 of that Act);
+references to the “landlord” are to the landlord who is seeking possession or, in the case of joint landlords seeking possession, to at least one of them;
+“planning enforcement notice or injunction” means—
+an enforcement notice issued under section 172 or 182 of the TCPA 1990 that has taken effect,
+a breach of condition notice served under section 187A of the TCPA 1990,
+an injunction granted under section 187B of the TCPA 1990,
+a listed building enforcement notice issued under section 38, 45 or 46 of the P(LBCA)A 1990 that has taken effect, or
+an injunction granted under section 44A of the P(LBCA)A 1990;
+“P(LBCA)A 1990” means the Planning (Listed Building and Conservation Areas) Act 1990;
+“TCPA 1990” means the Town and Country Planning Act 1990;
+“the local housing authority” has the meaning given in section 261 of the Housing Act 2004.
+Ground 7
+The tenancy has devolved on a person (the “new tenant”) under the will or intestacy of the former tenant and the proceedings for the recovery of possession are begun not later than twelve months after the death of the former tenant or, if the court so directs, after the date on which, in the opinion of the court, the landlord or, in the case of joint landlords, any one of them became aware of the former tenant’s death.
+But, if the new tenant is occupying the dwelling-house as the new tenant’s only or principal home immediately before the death of the former tenant, an order for possession on this Ground may not be made unless—
+the tenancy has previously devolved on the former tenant under a will or intestacy (whenever that devolution occurred), or
+the tenancy is a special tenancy immediately before the death of the former tenant.
+In this Ground “special tenancy” means—
+a tenancy of social housing (within the meaning given by Part 2 of the Housing and Regeneration Act 2008) where the landlord is a private registered provider of social housing;
+a tenancy entered into pursuant to a rent-to-buy agreement (which has the same meaning as in Ground 1B) where the landlord is a private registered provider of social housing;
+a tenancy of supported accommodation, within the meaning given by paragraph 12 of Schedule 2;
+a tenancy where the former tenant’s occupation of the dwelling-house is in pursuance of a local housing authority’s duty to the tenant under section 193 of the Housing Act 1996 (and here “local housing authority” has the same meaning as in Ground 5G);
+a tenancy which meets the conditions in paragraphs (a), (b), (d) and (e) in the first paragraph of Ground 5H.
+For the purposes of this ground, the acceptance by the landlord of rent from a new tenant after the death of the former tenant shall not be regarded as creating a new ... tenancy, unless the landlord agrees in writing to a change (as compared with the tenancy before the death) in the amount of the rent, the period or length of termof the tenancy, the premises which are let or any other term of the tenancy.
+Ground 7A
+Any of the following conditions is met.
+Condition 1 is that—
+(a) the tenant, or a person residing in or visiting the dwelling-house, has been convicted of a serious offence, and
+(b) the serious offence—
+(i) was committed (wholly or partly) in, or in the locality of, the dwelling-house,
+(ii) was committed elsewhere against a person with a right (of whatever description) to reside in, or occupy housing accommodation in the locality of, the dwelling-house, or
+(iii) was committed elsewhere against the landlord of the dwelling-house, or a person employed (whether or not by the landlord) in connection with the exercise of the landlord's housing management functions, and directly or indirectly related to or affected those functions.
+Condition 2 is that a court has found in relevant proceedings that the tenant, or a person residing in or visiting the dwelling-house, has breached a provision of an injunction under section 1 of the Anti-social Behaviour, Crime and Policing Act 2014, other than a provision requiring a person to participate in a particular activity, and—
+(a) the breach occurred in, or in the locality of, the dwelling-house, or
+(b) the breach occurred elsewhere and the provision breached was a provision intended to prevent—
+(i) conduct that is capable of causing nuisance or annoyance to a person with a right (of whatever description) to reside in, or occupy housing accommodation in the locality of, the dwelling-house, or
+(ii) conduct that is capable of causing nuisance or annoyance to the landlord of the dwelling-house, or a person employed (whether or not by the landlord) in connection with the exercise of the landlord's housing management functions, and that is directly or indirectly related to or affects those functions.
+Condition 3 is that the tenant, or a person residing in or visiting the dwelling-house, has been convicted of an offence under section 30 of the Anti-social Behaviour, Crime and Policing Act 2014 or section 339 of the Sentencing Code consisting of a breach of a provision of a criminal behaviour order prohibiting a person from doing anything described in the order, and the offence involved—
+(a) a breach that occurred in, or in the locality of, the dwelling-house, or
+(b) a breach that occurred elsewhere of a provision intended to prevent—
+(i) behaviour that causes or is likely to cause harassment, alarm or distress to a person with a right (of whatever description) to reside in, or occupy housing accommodation in the locality of, the dwelling-house, or
+(ii) behaviour that causes or is likely to cause harassment, alarm or distress to the landlord of the dwelling-house, or a person employed (whether or not by the landlord) in connection with the exercise of the landlord's housing management functions, and that is directly or indirectly related to or affects those functions.
+Condition 4 is that—
+(a) the dwelling-house is or has been subject to a closure order under section 80 of the Anti-social Behaviour, Crime and Policing Act 2014, and
+(b) access to the dwelling-house has been prohibited (under the closure order or under a closure notice issued under section 76 of that Act) for a continuous period of more than 48 hours.
+Condition 5 is that—
+(a) the tenant, or a person residing in or visiting the dwelling-house, has been convicted of an offence under—
+(i) section 80(4) of the Environmental Protection Act 1990 (breach of abatement notice in relation to statutory nuisance), or
+(ii) section 82(8) of that Act (breach of court order to abate statutory nuisance etc.), and
+(b) the nuisance concerned was noise emitted from the dwelling-house which was a statutory nuisance for the purposes of Part 3 of that Act by virtue of section 79(1)(g) of that Act (noise emitted from premises so as to be prejudicial to health or a nuisance).
+Condition 1, 2, 3, 4 or 5 is not met if—
+(a) there is an appeal against the conviction, finding or order concerned which has not been finally determined, abandoned or withdrawn, or
+(b) the final determination of the appeal results in the conviction, finding or order being overturned.
+In this ground—
+“relevant proceedings” means proceedings for contempt of court or proceedings under Schedule 2 to the Anti-social Behaviour, Crime and Policing Act 2014;
+“serious offence” means an offence which—
+was committed on or after the day on which this ground comes into force,
+is specified, or falls within a description specified, in Schedule 2A to the Housing Act 1985 at the time the offence was committed and at the time the court is considering the matter, and
+is not an offence that is triable only summarily by virtue of section 22 of the Magistrates' Courts Act 1980 (either-way offences where value involved is small).
+Ground 7B
+Both of the following conditions are met in relation to a dwelling-house in England.
+Condition 1 is that the Secretary of State has given a notice in writing to the landlord or, in the case of joint landlords, one or more of them which identifies—
+(a) the tenant or, in the case of joint tenants, one or more of them, or
+(b) one or more other persons aged 18 or over who are occupying the dwelling-house,
+as a person or persons disqualified as a result of their immigration status from occupying the dwelling-house under the tenancy.
+Condition 2 is that the person or persons named in the notice—
+(a) fall within paragraph (a) or (b) of condition 1, and
+(b) are disqualified as a result of their immigration status from occupying the dwelling-house under the tenancy.
+For the purposes of this ground a person (“P”) is disqualified as a result of their immigration status from occupying the dwelling-house under the tenancy if—
+(a) P is not a relevant national, and
+(b) P does not have a right to rent in relation to the dwelling-house.
+P does not have a right to rent in relation to the dwelling-house if—
+(a) P requires leave to enter or remain in the United Kingdom but does not have it, or
+(b) P's leave to enter or remain in the United Kingdom is subject to a condition preventing P from occupying the dwelling-house.
+But P is to be treated as having a right to rent in relation to a dwelling-house if the Secretary of State has granted P permission for the purposes of this ground to occupy a dwelling-house under an assured tenancy.
+In this ground “relevant national” means—
+(a) a British citizen,
+(aa) an Irish citizen, or
+(ab) a person who is not an Irish citizen and who has leave to enter or remain in the United Kingdom which was granted by virtue of residence scheme immigration rules within the meaning given by section 17 of the European Union (Withdrawal Agreement) Act 2020.
+(b) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(c) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+Ground 8
+Both at the date of the service of the notice under section 8 of this Act relating to the proceedings for possession and at the date of the hearing—
+(a) if rent is payable weekly or fortnightly, at least thirteen weeks’ rent is unpaid;
+(b) if rent is payable monthly, at least three months’ rent is unpaid;
+and for the purpose of this ground “rent” means rent lawfully due from the tenant.
+When calculating how much rent is unpaid for the purpose of this ground, if the tenant is entitled to receive an amount for housing as part of an award of universal credit under Part 1 of the Welfare Reform Act 2012, any amount that was unpaid only because the tenant had not yet received the payment of that award is to be ignored.
+Part II Grounds on which Court may Order Possession
+Ground 9
+Suitable alternative accommodation is available for the tenant or will be available for him when the order for possession takes effect.
+Ground 10
+Some rent lawfully due from the tenant—
+(a) is unpaid on the date on which the proceedings for possession are begun; and
+(b) except where subsection (1)(b) of section 8 of this Act applies, was in arrears at the date of the service of the notice under that section relating to those proceedings.
+Ground 11
+Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.
+Ground 12
+Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.
+Ground 13
+The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house and, in the case of an act of waste by, or the neglect or default of, a person lodging with the tenant or a sub-tenant of his, the tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
+For the purposes of this ground, “common parts” means any part of a building comprising the dwelling-house and any other premises which the tenant is entitled under the terms of the tenancy to use in common with the occupiers of other dwelling-houses in which the landlord has an estate or interest.
+Ground 14
+The tenant or a person residing in or visiting the dwelling-house—
+(a) has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality,
+(aa) has been guilty of conduct causing or likely to cause a nuisance or annoyance to the landlord of the dwelling-house, or a person employed (whether or not by the landlord) in connection with the exercise of the landlord's housing management functions, and that is directly or indirectly related to or affects those functions, or
+(b) has been convicted of—
+(i) using the dwelling-house or allowing it to be used for immoral or illegal purposes, or
+(ii) an indictable offence committed in, or in the locality of, the dwelling-house.
+Ground 14ZA
+The tenant or an adult residing in the dwelling-house has been convicted of an indictable offence which took place during, and at the scene of, a riot in the United Kingdom.
+In this Ground—
+“adult” means a person aged 18 or over;
+“indictable offence” does not include an offence that is triable only summarily by virtue of section 22 of the Magistrates' Courts Act 1980 (either way offences where value involved is small);
+“riot” is to be construed in accordance with section 1 of the Public Order Act 1986.
+This Ground applies only in relation to dwelling-houses in England.
+Ground 14A
+The dwelling-house was occupied (whether alone or with others) by
+a married couple, a couple who are civil partners of each other...
+or a couple living together as if they were a married couple or civil partners
+and—
+(a) one or both of the partners is a tenant of the dwelling-house,
+(b) the landlord who is seeking possession is a non-profit registered provider of social housing, a registered social landlord or a charitable housing trust or, where the dwelling-house is social housing within the meaning of Part 2 of the Housing and Regeneration Act 2008, a profit-making registered provider of social housing,
+(c) one partner has left the dwelling-house because of violence or threats of violence by the other towards—
+(i) that partner, or
+(ii) a member of the family of that partner who was residing with that partner immediately before the partner left, and
+(d) the court is satisfied that the partner who has left is unlikely to return.
+For the purposes of this ground
+“registered social landlord” and
+“member of the family” have the same meaning as in Part I of the
+Housing Act 1996 and
+“
+charitable housing trust
+” means a housing trust, within the meaning of the
+Housing Associations Act 1985, which is a charity ....
+Ground 15
+The condition of any furniture provided for use under the tenancy has, in the opinion of the court, deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house and, in the case of ill-treatment by a person lodging with the tenant or by a sub-tenant of his, the tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
+Ground 5C
+The dwelling-house was let to the tenant in consequence of the tenant’s employment—
+by the landlord seeking possession,
+in the case of joint landlords seeking possession, by at least one of them,
+by a previous landlord under the tenancy, or
+pursuant to an agreement between any of those landlords and the employer,
+and either—
+the tenant has ceased to be in that employment, or
+the tenancy was granted for the purpose of providing the tenant with accommodation during the early period of their employment, that purpose has been fulfilled and the landlord seeking possession intends to let the dwelling-house to another current or future employee of the employer.
+For the purposes of this ground, at a time when the landlord is or was the Secretary of State, employment by a health service body, as defined in section 60(7) of the National Health Service and Community Care Act 1990, or by a Local Health Board, shall be regarded as employment by the Secretary of State.
+This ground also applies to the letting of a dwelling-house to a tenant in consequence of the tenant’s service in the office of constable, but with the following modifications.
+“Employment” means service in the office of constable.
+In the first paragraph of this ground, in paragraph (d), “the employer” means any of the following persons—
+the chief officer of a police force;
+a policing body;
+in relation to a constable’s service under the direction and control of a person who is not a constable (the “senior person”)—
+the senior person, or
+a person or body with the function of maintaining or securing the maintenance of the body of which the senior person is a member.
+The first paragraph of this ground has effect as if the following were substituted for the second paragraph (b)—
+the tenancy was granted for a particular purpose relating to the tenant’s service as a constable and—
+that purpose has been fulfilled, or
+the tenancy is no longer required for that purpose.
+In those modifications—
+“service in the office of a constable” includes a constable’s service under the direction and control of a person who is not a constable;
+“chief officer of a police force” means—
+a chief officer of police (which has the same meaning as in the Police Act 1996 — see section 101(1) of that Act),
+the chief constable of the Ministry of Defence Police,
+the chief constable of the British Transport Police,
+the chief constable of the Civil Nuclear Constabulary,
+the chief constable of the Police Service of Scotland, or
+the chief constable of the Police Service of Northern Ireland;
+“policing body” means—
+a local policing body (which has the same meaning as in the Police Act 1996 — see section 101(1) of that Act),
+the Secretary of State in relation to the Ministry of Defence Police,
+the British Transport Police Authority,
+the Civil Nuclear Police Authority,
+the Scottish Police Authority, or
+the Northern Ireland Policing Board.
+Ground 17
+The tenant is the person, or one of the persons, to whom the tenancy was granted and the landlord was induced to grant the tenancy by a false statement made knowingly or recklessly by—
+the tenant, or
+a person acting at the tenant’s instigation.
+Ground 18
+The tenancy is of supported accommodation and the tenant has unreasonably refused to co-operate with the person providing support services with regard to those services.
+Part III Suitable Alternative Accommodation
+1 For the purposes of Ground 9 above, a certificate of the local housing authority for the district in which the dwelling-house in question is situated, certifying that the authority will provide suitable alternative accommodation for the tenant by a date specified in the certificate, shall be conclusive evidence that suitable alternative accommodation will be available for him by that date.
+2 Where no such certificate as is mentioned in paragraph I above is produced to the court, accommodation shall be deemed to be suitable for the purposes of Ground 9 above if it consists of either—
+(a) premises which are to be let as a separate dwelling such that they will then be let on an assured tenancy,
+or
+(b) premises to be let as a separate dwelling on terms which will, in the opinion of the court, afford to the tenant security of tenure reasonably equivalent to the security afforded by Chapter I of Part I of this Act in the case of an assured tenancy of a kind mentioned in sub-paragraph (a) above,
+and, in the opinion of the court, the accommodation fulfils the relevant conditions as defined in paragraph 3 below.
+3
+(1) For the purposes of paragraph 2 above, the relevant conditions are that the accommodation is reasonably suitable to the needs of the tenant and his family as regards proximity to place of work, and either—
+(a) similar as regards rental and extent to the accommodation afforded by dwelling-houses provided in the neighbourhood by any local housing authority for persons whose needs as regards extent are, in the opinion of the court, similar to those of the tenant and of his family; or
+(b) reasonably suitable to the means of the tenant and to the needs of the tenant and his family as regards extent and character; and
+that if any furniture was provided for use under the assured tenancy in question, furniture is provided for use in the accommodation which is either similar to that so provided or is reasonably suitable to the needs of the tenant and his family.
+(2) For the purposes of sub-paragraph (1)(a) above, a certificate of a local housing authority stating—
+(a) the extent of the accommodation afforded by dwelling-houses provided by the authority to meet the needs of tenants with families of such number as may be specified in the certificate, and
+(b) the amount of the rent charged by the authority for dwelling-houses affording accommodation of that extent,
+shall be conclusive evidence of the facts so stated.
+4 Accommodation shall not be deemed to be suitable to the needs of the tenant and his family if the result of their occupation of the accommodation would be that it would be an overcrowded dwelling-house for the purposes of Part X of the Housing Act 1985.
+5 Any document purporting to be a certificate of a local housing authority named therein issued for the purposes of this Part of this Schedule and to be signed by the proper officer of that authority shall be received in evidence and, unless the contrary is shown, shall be deemed to be such a certificate without further proof.
+6 In this Part of this Schedule “local housing authority” and “district”, in relation to such an authority, have the same meaning as in the Housing Act 1985.
+Part 5Interpretation
+12
+(1) In this Schedule—
+“acquiring authority” means, where notice of a compulsory acquisition has been given, the person who would be authorised to make the compulsory acquisition if the order or legislation to which the notice relates were to become operative;
+“HMO” has the same meaning as in Part 2 of the Housing Act 2004 (see section 77 of that Act);
+“housing association” has the meaning given by section 1 of the Housing Associations Act 1985;
+“managed accommodation” means supported accommodation into which a tenant has been admitted in order to meet a need for care, support or supervision, in a case in which that care, support or supervision is provided otherwise than by the landlord or a person acting on behalf of the landlord;
+“relevant date”—
+in Grounds 2ZA, 2ZB and 5F, means the date of service of the notice under section 8;
+otherwise, means the date specified in the notice under section 8
+but see sub-paragraph (2) where the court exercises the power conferred by section 8(1)(b);;
+“support services” in relation to a tenant in supported accommodation, means care, support or supervision—
+which is provided by the landlord or a person acting on behalf of the landlord, or
+which the tenant was admitted into the accommodation for the purpose of receiving;
+“supported accommodation” means a dwelling-house let—
+by—
+a housing association,
+a private registered provider of social housing,
+a registered charity, or
+a voluntary organisation, and
+to a tenant who receives care, support or supervision provided either—
+by the landlord or a person acting on behalf of the landlord, or
+by someone else, if the tenant has been admitted into the accommodation in order to meet a need for care, support or supervision.
+(2) Where the court exercises the power conferred by section 8(1)(b) (power to dispense with notice under section 8) references in this Schedule to the relevant date are to be read as references to the date on which proceedings for possession began.
+(3) For the purposes of this Schedule, each of the following constitutes giving notice of a compulsory acquisition—
+(a) in the case of a compulsory acquisition which is to be authorised by a compulsory purchase order—
+(i) publication of the notice required by section 11 of, or (as the case may be) paragraph 2 of Schedule 1 to, the Acquisition of Land Act 1981, in accordance with that Act, or
+(ii) service of the notice required by section 12 of, or (as the case may be) paragraph 3 of Schedule 1 to, that Act, in accordance with that Act;
+(b) in the case of a compulsory acquisition which is to be authorised by any other order, publication or service of any notice that any provision of or made under any Act requires to be published or served in connection with that acquisition, in accordance with that Act;
+(c) in the case of a compulsory acquisition which is to be authorised by a special enactment, publication or service of a notice that, in connection with that acquisition, is published or served in accordance with any Standing Order of either House of Parliament relating to private business.
+(4) In sub-paragraph (3)—
+“compulsory purchase order” means a compulsory purchase order within the meaning given by the Acquisition of Land Act 1981 (see section 2 of that Act);
+“special enactment” means—
+a local or private Act which authorises the compulsory acquisition of land specifically identified in that Act, or
+a provision which—
+is contained in an Act other than a local or private Act, and
+authorises the compulsory acquisition of land specifically identified in that Act.
+Part 6Powers to amend certain grounds and definitions
+13
+(1) The Secretary of State may by regulations amend this Schedule so as to—
+(a) amend Ground 2ZA to change the descriptions of the landlord who may use the ground;
+(b) amend Ground 2ZC to change the descriptions of previous landlord mentioned in it;
+(c) provide for Ground 5C to apply only where the landlord seeking possession or the employer is of a particular description;
+(d) amend Ground 5H to change the descriptions of landlord who may use the ground;
+(e) add other situations to the list in the first paragraph of Ground 6B in which that ground may be relied on or remove any situations added by virtue of this sub-paragraph;
+(f) amend the definition of “special tenancy” in Ground 7;
+(g) amend the definition of “supported accommodation” or “managed accommodation” in paragraph 12.
+(2) Regulations under this paragraph may—
+(a) make consequential, supplementary, incidental, transitional or saving provision;
+(b) make different provision for different purposes.
+(3) Regulations under this paragraph are to be made by statutory instrument.
+(4) A statutory instrument containing regulations under this paragraph may not be made unless a draft of the instrument has been laid before and approved by a resolution of each House of Parliament.

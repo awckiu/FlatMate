@@ -58,7 +58,8 @@ TRUSTED_SOURCES = [
         "Landlord and Tenant Act 1985",
         "https://www.legislation.gov.uk/ukpga/1985/70",
         "legislation",
-        ("s.1-3", "s.8-14"),
+        # s.8 is Wales-only, s.9 covers agricultural workers and s.10A-10B social housing.
+        ("s.1-3", "s.9A-9C", "s.10", "s.11-14"),
     ),
     TrustedSource(
         "protection_from_eviction_act_1977",

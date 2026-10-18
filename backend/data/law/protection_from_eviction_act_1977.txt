@@ -1,0 +1,154 @@
+source: Protection from Eviction Act 1977
+url: https://www.legislation.gov.uk/ukpga/1977/43
+last_updated: 2026-05-05
+
+### s.1 | Unlawful eviction and harassment of occupier. | https://www.legislation.gov.uk/ukpga/1977/43/section/1
+(1) In this section “residential occupier”, in relation to any premises, means a person occupying the premises as a residence, whether under a contract or by virtue of any enactment or rule of law giving him the right to remain in occupation or restricting the right of any other person to recover possession of the premises.
+(2) If any person unlawfully deprives the residential occupier of any premises of his occupation of the premises or any part thereof, or attempts to do so, he shall be guilty of an offence unless he proves that he believed, and had reasonable cause to believe, that the residential occupier had ceased to reside in the premises.
+(3) If any person with intent to cause the residential occupier of any premises—
+(a) to give up the occupation of the premises or any part thereof; or
+(b) to refrain from exercising any right or pursuing any remedy in respect of the premises or part thereof;
+does acts likely to interfere with the peace or comfort of the residential occupier or members of his household, or persistently withdraws or withholds services reasonably required for the occupation of the premises as a residence, he shall be guilty of an offence.
+(3A) Subject to subsection (3B) below, the landlord of a residential occupier or an agent of the landlord shall be guilty of an offence if—
+(a) he does acts likely to interfere with the peace or comfort of the residential occupier or members of his household, or
+(b) he persistently withdraws or withholds services reasonably required for the occupation of the premises in question as a residence,
+and (in either case) he knows, or has reasonable cause to believe, that that conduct is likely to cause the residential occupier to give up the occupation of the whole or part of the premises or to refrain from exercising any right or pursuing any remedy in respect of the whole or part of the premises.
+(3B) A person shall not be guilty of an offence under subsection (3A) above if he proves that he had reasonable grounds for doing the acts or withdrawing or withholding the services in question.
+(3C) In subsection (3A) above “landlord”, in relation to a residential occupier of any premises, means the person who, but for—
+(a) the residential occupier’s right to remain in occupation of the premises, or
+(b) a restriction on the person’s right to recover possession of the premises,
+would be entitled to occupation of the premises and any superior landlord under whom that person derives title.
+(4) A person guilty of an offence under this section shall be liable—
+(a) on summary conviction, to a fine not exceeding the prescribed sum or to imprisonment for a term not exceeding 6 months or to both;
+(b) on conviction on indictment, to a fine or to imprisonment for a term not exceeding 2 years or to both.
+(5) Nothing in this section shall be taken to prejudice any liability or remedy to which a person guilty of an offence thereunder may be subject in civil proceedings.
+(6) Where an offence under this section committed by a body corporate is proved to have been committed with the consent or connivance of, or to be attributable to any neglect on the part of, any director, manager or secretary or other similar officer of the body corporate or any person who was purporting to act in any such capacity, he as well as the body corporate shall be guilty of that offence and shall be liable to be proceeded against and punished accordingly.
+(7) A person may not be convicted of an offence under this section in respect of any conduct if a financial penalty has been imposed under section 1A in respect of that conduct.
+
+### s.1A | Financial penalty for offence under section 1 | https://www.legislation.gov.uk/ukpga/1977/43/section/1A
+(1) A local housing authority may impose a financial penalty on a person if satisfied beyond reasonable doubt that the person has committed an offence under section 1 in relation to premises in England.
+(2) No financial penalty may be imposed in respect of any conduct amounting to an offence under section 1 if—
+(a) the person has been convicted of an offence under that section in respect of the conduct,
+(b) criminal proceedings for an offence under that section in respect of the conduct have been instituted against the person and the proceedings have not been concluded, or
+(c) criminal proceedings for an offence under that section in respect of the conduct have been concluded and the person has not been convicted of the offence.
+(3) The amount of a financial penalty imposed under this section is to be determined by the authority imposing it, but must not be more than £40,000.
+(4) The Secretary of State may give guidance to local housing authorities about the exercise of their functions under this section.
+(5) Local housing authorities must have regard to any guidance issued under subsection (4).
+(6) Schedule A1 makes provision about—
+(a) the procedure for imposing financial penalties,
+(b) appeals against financial penalties,
+(c) enforcement of financial penalties, and
+(d) how local housing authorities are to deal with the proceeds of financial penalties.
+(7) The Secretary of State may by regulations amend the amount specified in subsection (3) to reflect changes in the value of money.
+(8) Regulations under this section are to be made by statutory instrument.
+(9) A statutory instrument containing regulations under this section is subject to annulment in pursuance of a resolution of either House of Parliament.
+(10) In this section and Schedule A1, “local housing authority” means a district council, a county council in England for an area for which there is no district council, a London borough council, the Common Council of the City of London or the Council of the Isles of Scilly.
+
+### s.2 | Restriction on re-entry without due process of law. | https://www.legislation.gov.uk/ukpga/1977/43/section/2
+Where any premises are let as a dwelling on a lease which is subject to a right of re-entry or forfeiture it shall not be lawful to enforce that right otherwise than by proceedings in the court while any person is lawfully residing in the premises or part of them.
+
+### s.3 | Prohibition of eviction without due process of law. | https://www.legislation.gov.uk/ukpga/1977/43/section/3
+(1) Where any premises have been let as a dwelling under a tenancy which is neither a statutorily protected tenancy nor an excluded tenancy and—
+(a) the tenancy (in this section referred to as the former tenancy) has come to an end, but
+(b) the occupier continues to reside in the premises or part of them,
+it shall not be lawful for the owner to enforce against the occupier, otherwise than by proceedings in the court, his right to recover possession of the premises.
+(2) In this section “the occupier”, in relation to any premises, means any person lawfully residing in the premises or part of them at the termination of the former tenancy.
+(2A) Subsections (1) and (2) above apply in relation to any restricted contract (within the meaning of the Rent Act 1977) which—
+(a) creates a licence; and
+(b) is entered into after the commencement of section 69 of the Housing Act 1980;
+as they apply in relation to a restricted contract which creates a tenancy.
+(2B) Subsections (1) and (2) above apply in relation to any premises occupied as a dwelling under a licence, other than an excluded licence, as they apply in relation to premises let as a dwelling under a tenancy, and in those subsections the expressions “let” and “tenancy” shall be construed accordingly.
+(2C) References in the preceding provisions of this section and section 4(2A) below to an excluded tenancy do not apply to—
+(a) a tenancy entered into before the date on which the Housing Act 1988 came into force, or
+(b) a tenancy entered into on or after that date but pursuant to a contract made before that date,
+but, subject to that, “excluded tenancy” and “excluded licence” shall be construed in accordance with section 3A below.
+(3) This section shall, with the necessary modifications, apply where the owner’s right to recover possession arises on the death of the tenant under a statutory tenancy within the meaning of the Rent Act 1977 or the Rent (Agriculture) Act 1976.
+
+### s.3A | Excluded tenancies and licences. | https://www.legislation.gov.uk/ukpga/1977/43/section/3A
+(1) Any reference in this Act to an excluded tenancy or an excluded licence is a reference to a tenancy or licence which is excluded by virtue of any of the following provisions of this section.
+(2) A tenancy or licence is excluded if—
+(a) under its terms the occupier shares any accommodation with the landlord or licensor; and
+(b) immediately before the tenancy or licence was granted and also at the time it comes to an end, the landlord or licensor occupied as his only or principal home premises of which the whole or part of the shared accommodation formed part.
+(3) A tenancy or licence is also excluded if—
+(a) under its terms the occupier shares any accommodation with a member of the family of the landlord or licensor;
+(b) immediately before the tenancy or licence was granted and also at the time it comes to an end, the member of the family of the landlord or licensor occupied as his only or principal home premises of which the whole or part of the shared accommodation formed part; and
+(c) immediately before the tenancy or licence was granted and also at the time it comes to an end, the landlord or licensor occupied as his only or principal home premises in the same building as the shared accommodation and that building is not a purpose-built block of flats.
+(4) For the purposes of subsections (2) and (3) above, an occupier shares accommodation with another person if he has the use of it in common with that person (whether or not also in common with others) and any reference in those subsections to shared accommodation shall be construed accordingly, and if, in relation to any tenancy or licence, there is at any time more than one person who is the landlord or licensor, any reference in those subsections to the landlord or licensor shall be construed as a reference to any one of those persons.
+(5) In subsections (2) to (4) above—
+(a)
+“accommodation” includes neither an area used for storage nor a staircase, passage, corridor or other means of access;
+(b)
+“occupier” means, in relation to a tenancy, the tenant and, in relation to a licence, the licensee; and
+(c)
+“purpose-built block of flats” has the same meaning as in Part III of Schedule 1 to the Housing Act 1988;
+and section 113 of the Housing Act
+1985 shall apply to determine whether a person who is for the purposes of subsection (3) above a member of another’s family as it applies for the purposes of Part IV of that Act.
+(6) A tenancy or licence is excluded if it was granted as a temporary expedient to a person who entered the premises in question or any other premises as a trespasser (whether or not, before the beginning of that tenancy or licence, another tenancy or licence to occupy the premises or any other premises had been granted to him).
+(7) A tenancy or licence is excluded if—
+(a) it confers on the tenant or licensee the right to occupy the premises for a holiday only; or
+(b) it is granted otherwise than for money or money’s worth.
+(7A) A tenancy or licence is excluded if it is granted in order to provide accommodation under section 4 or Part VI of the Immigration and Asylum Act 1999.
+(7C) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(7D) A tenancy or licence is excluded if—
+(a) it is a residential tenancy agreement within the meaning of Chapter 1 of Part 3 of the Immigration Act 2014, and
+(b) the condition in section 33D(2) of that Act is met in relation to that agreement.
+(8) A licence is excluded if it confers rights of occupation in a hostel, within the meaning of the Housing Act
+1985, which is provided by—
+(a)
+the council of a county,
+county borough,
+district or London Borough, the Common Council of the City of London, the Council of the Isles of Scilly, the Inner London Education Authority,
+a fire and rescue authority created by an order under section 4A of the Fire and Rescue Services Act 2004,
+the London Fire Commissioner,
+a joint authority within the meaning of the Local Government Act
+1985 or a residuary body within the meaning of that Act;
+(aa) an economic prosperity board established under section 88 of the Local Democracy, Economic Development and Construction Act 2009;
+(ab) a combined authority established under section 103 of that Act;
+(ac) a combined county authority established under section 9(1) of the Levelling-up and Regeneration Act 2023;
+(b)
+a development corporation within the meaning of the New Towns Act 1981;
+(c) the new towns residuary body;
+(d)
+an urban development corporation established by an order under section 135 of the Local Government, Planning and Land Act 1980;
+(da) a Mayoral development corporation;
+(e)
+a housing action trust established under Part III of the Housing Act
+1988;
+(f) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(g)
+the
+Regulator of Social Housing
+. . .;
+(ga)
+the Secretary of State under section 89 of the
+Housing Associations Act 1985;
+(h) a housing trust (within the meaning of the Housing Associations Act 1985) which is a charity , a private registered provider of social housing or a registered social landlord (within the meaning of the Housing Act 1985); or.
+(i) any other person who is, or who belongs to a class of person which is, specified in an order made by the Secretary of State.
+(8A)
+In subsection (8)(c) above “new towns residuary body” means—
+(a) in relation to England, the Homes and Communities Agency so far as exercising functions in relation to anything transferred (or to be transferred) to it as mentioned in section 52(1)(a) to (d) of the Housing and Regeneration Act 2008 or the Greater London Authority so far as exercising its new towns and urban development functions; and
+(b) in relation to Wales, means the Welsh Ministers so far as exercising functions in relation to anything transferred (or to be transferred) to them as mentioned in section 36(1)(a)(i) to (iii) of the New Towns Act 1981.
+(9) The power to make an order under subsection (8)(i) above shall be exercisable by statutory instrument which shall be subject to annulment in pursuance of a resolution of either House of Parliament.
+
+### s.5 | Validity of notices to quit. | https://www.legislation.gov.uk/ukpga/1977/43/section/5
+(1) Subject to subsection (1B) below no notice by a landlord or a tenant to quit any premises let (whether before or after the commencement of this Act) as a dwelling shall be valid unless—
+(a) it is in writing and contains such information as may be prescribed, and
+(b) it satisfies subsection (1ZA).
+(1ZA) A notice to quit satisfies this subsection—
+(a) where it is given by a tenant in relation to premises let under an assured tenancy, if it is given—
+(i) not less than any length of time before the date on which the notice is to take effect, not exceeding two months, that the landlord has agreed to in writing, or
+(ii) in the absence of agreement under sub-paragraph (i), not less than two months before the date on which the notice is to take effect;
+(b) otherwise, if it is given not less than four weeks before the date on which it is to take effect.
+But in relation to landlords under assured tenancies see section 5(1) of the Housing Act 1988 (notice to quit by landlord is of no effect).
+(1ZB) In the case of a joint assured tenancy, an agreement under subsection (1ZA)(a)(i) is not valid unless it is made between the landlord and all of the tenants.
+(1ZC) That does not affect the validity of any notice to quit premises let under a joint assured tenancy that is given by only one or some of the tenants.
+(1ZD) In this section “joint assured tenancy” means an assured tenancy where two or more persons are tenants under the tenancy.
+(1A) Subject to subsections (1B) and (1C) below, no notice by a licensor or a licensee to determine a periodic licence to occupy premises as a dwelling (whether the licence was granted before or after the passing of this Act) shall be valid unless—
+(a) it is in writing and contains such information as may be prescribed, and
+(b) it is given not less than 4 weeks before the date on which it is to take effect.
+(1B) Nothing in subsection (1) or subsection (1A) above applies to—
+(a) premises let on an excluded tenancy which is entered into on or after the date on which the Housing Act 1988 came into force unless it is entered into pursuant to a contract made before that date; or
+(b) premises occupied under an excluded licence.
+(1C) Because of section 232 (forfeiture and notices to quit) of the Renting Homes (Wales) Act 2016 (anaw 1), this section does not apply to a dwelling in Wales which is subject to an occupation contract.
+(2) In this section “prescribed” means prescribed by regulations made by the Secretary of State by statutory instrument, and a statutory instrument containing any such regulations shall be subject to annulment in pursuance of a resolution of either House of Parliament.
+(3) Regulations under this section may make different provision in relation to different descriptions of lettings and different circumstances.
