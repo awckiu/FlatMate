@@ -691,9 +691,9 @@
         #copy-btn { border: 1px solid #e1e8e1; border-radius: 9px; background: #f8faf7; color: #385443; font-weight: 620; transition: background .28s var(--spring-settle), transform .32s var(--spring-micro); }
         #copy-btn:hover { background: #eef4ed; }
         .result-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-        #export-pdf-btn { border: 1px solid #d9e5da; border-radius: 9px; background: #eef5ed; color: #315d43; font-weight: 650; transition: background .28s var(--spring-settle), transform .32s var(--spring-micro); }
-        #export-pdf-btn:hover { background: #e1eedf; }
-        #export-pdf-btn:disabled { cursor: not-allowed; opacity: .55; }
+        #export-pdf-btn, #copy-review-link, #amend-open { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #d9e5da; border-radius: 9px; background: #eef5ed; color: #315d43; font-weight: 650; transition: background .28s var(--spring-settle), transform .32s var(--spring-micro); }
+        #export-pdf-btn:hover:not(:disabled), #copy-review-link:hover:not(:disabled), #amend-open:hover { background: #e1eedf; }
+        #export-pdf-btn:disabled, #copy-review-link:disabled { cursor: not-allowed; opacity: .55; }
         #review-saved { margin: 8px 0 0; color: #34724d; font-size: 12px; overflow-wrap: anywhere; }
         #add-to-account-btn { margin-top: 8px; padding: 7px 12px; border: 1px solid #d9e5da; border-radius: 9px; background: #eef5ed; color: #315d43; font-size: 12px; font-weight: 650; }
         #add-to-account-btn:hover { background: #e1eedf; }
@@ -810,7 +810,7 @@
             header, .stage-nav, #welcome-section, .journey, #product-roadmap, #steps-section,
             .stage-banner, .stage-guide,
             #input-section, #loading-section, #new-analysis-btn, #copy-btn,
-            #export-pdf-btn, #copy-review-link, #copy-feedback, #review-saved, #add-to-account-btn, .account-area, #original-pdf-link { display: none !important; }
+            #export-pdf-btn, #copy-review-link, #amend-open, #amend-panel, #copy-feedback, #review-saved, #add-to-account-btn, .account-area, #original-pdf-link { display: none !important; }
             main.max-w-4xl { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
             #results-section { display: block !important; animation: none !important; }
             .results-topline { margin-bottom: 20px !important; }
