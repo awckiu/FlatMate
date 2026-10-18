@@ -110,6 +110,18 @@ class SavedCaseTests(unittest.TestCase):
         self.assertEqual(reopened.status_code, 200)
         self.assertEqual(reopened.json()["flags"], RESULT["flags"])
 
+        self.assertEqual(reopened.json()["pdf_url"], body["pdf_url"])
+        pdf = client.get(body["pdf_url"])
+        self.assertEqual(pdf.status_code, 200)
+        self.assertEqual(pdf.headers["content-type"], "application/pdf")
+        self.assertEqual(pdf.content, b"%PDF-test")
+
+    def test_a_case_saved_without_its_pdf_has_no_pdf_link(self):
+        code = self.save()
+        with cases.connect() as conn:
+            self.assertIsNone(cases.get_case(conn, code)["pdf_url"])
+        self.assertEqual(TestClient(app).get(f"/api/cases/{code}/agreement.pdf").status_code, 404)
+
     def test_an_unknown_code_returns_404(self):
         response = TestClient(app).get("/api/cases/FLAT-ZZZZZZ")
         self.assertEqual(response.status_code, 404)

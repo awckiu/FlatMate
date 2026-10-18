@@ -680,6 +680,7 @@
         #review-saved { margin: 8px 0 0; color: #34724d; font-size: 12px; overflow-wrap: anywhere; }
         #add-to-account-btn { margin-top: 8px; padding: 7px 12px; border: 1px solid #d9e5da; border-radius: 9px; background: #eef5ed; color: #315d43; font-size: 12px; font-weight: 650; }
         #add-to-account-btn:hover { background: #e1eedf; }
+        #original-pdf-link:not(.hidden) { display: inline-flex; align-items: center; gap: 6px; margin: -4px 0 12px; color: var(--green); font-size: 13px; font-weight: 650; text-decoration: underline; text-underline-offset: 2px; }
 
         .header-end { display: inline-flex; align-items: center; gap: 16px; }
         .account-area { display: inline-flex; align-items: center; gap: 10px; color: #34473e; font-size: 13px; font-weight: 600; }
@@ -778,7 +779,7 @@
             body { background: #fff !important; color: #1f2937 !important; }
             header, #welcome-section, .journey, #product-roadmap, #steps-section,
             #input-section, #loading-section, #new-analysis-btn, #copy-btn,
-            #export-pdf-btn, #copy-review-link, #copy-feedback, #review-saved, #add-to-account-btn, .account-area { display: none !important; }
+            #export-pdf-btn, #copy-review-link, #copy-feedback, #review-saved, #add-to-account-btn, .account-area, #original-pdf-link { display: none !important; }
             main.max-w-4xl { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
             #results-section { display: block !important; animation: none !important; }
             .results-topline { margin-bottom: 20px !important; }
@@ -1351,6 +1352,7 @@
                     <i class="fa-solid fa-list-check text-green-500"></i> Your quick read
                 </h3>
                 <p id="analysis-meta" class="text-sm text-gray-500 mb-3"></p>
+                <a id="original-pdf-link" class="hidden" target="_blank" rel="noopener"><i class="fa-regular fa-file-pdf"></i> Open the original agreement</a>
                 <p id="analysis-summary" class="text-gray-600 leading-relaxed"></p>
                 <h4 class="text-lg font-semibold text-gray-800 mt-5 mb-2">Need-to-knows</h4>
                 <ul id="need-to-know-list" class="space-y-2 text-gray-700"></ul>
@@ -2471,6 +2473,10 @@
                 : 'This review was not saved, so it will be gone when you leave this page.';
             currentCaseCode = result.case_code || null;
             updateAddToAccount();
+            const pdfLink = document.getElementById('original-pdf-link');
+            if (result.pdf_url) pdfLink.href = result.pdf_url;
+            else pdfLink.removeAttribute('href');
+            pdfLink.classList.toggle('hidden', !result.pdf_url);
             if (result.case_code) {
                 history.replaceState(null, '', '?case=' + encodeURIComponent(result.case_code));
             }
