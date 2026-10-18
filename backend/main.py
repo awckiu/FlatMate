@@ -254,6 +254,11 @@ class SigningUpdateRequest(BaseModel):
     tenancy_start: str | None = None
 
 
+class ProgressUpdateRequest(BaseModel):
+    moved_in: bool | None = None
+    closed: bool | None = None
+
+
 class TenancyChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=4000)
     request_landlord_draft: bool = False
@@ -375,6 +380,16 @@ def update_tenancy_signing(
         )
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
+    return _profile_or_404(profile)
+
+
+@app.patch("/api/tenancies/{profile_id}/progress")
+def update_tenancy_progress(
+    profile_id: str,
+    body: ProgressUpdateRequest,
+    account: dict[str, str] = Depends(current_account),
+):
+    profile = tenancies.update_progress(profile_id, account["id"], body.moved_in, body.closed)
     return _profile_or_404(profile)
 
 

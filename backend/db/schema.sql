@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS tenancy_clause_status (
   issue_key   text NOT NULL,
   status      text NOT NULL CHECK (status IN ('open', 'resolved')),
   update_note text NOT NULL,
-  updated_by  text NOT NULL REFERENCES flatmate_accounts(id),
+  updated_by  text NOT NULL,             -- users.id of whoever reported the status
   updated_at  text NOT NULL,
   PRIMARY KEY (profile_id, issue_key)
 );
@@ -218,6 +218,9 @@ ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS review_id text;
 ALTER TABLE tenancy_photos ADD COLUMN IF NOT EXISTS data bytea;      -- photos used to be files
 ALTER TABLE tenancy_photos DROP COLUMN IF EXISTS storage_key;
 ALTER TABLE tenancy_calendar_items ALTER COLUMN amount TYPE numeric;
+-- Where the household is in the journey: moved in (photos done) and closed (moved out).
+ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS moved_in_at text;
+ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS closed_at text;
 
 DO $$
 DECLARE
