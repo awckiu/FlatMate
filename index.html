@@ -745,6 +745,14 @@
         .onboarding-subsection h3 { margin: 0 0 12px; color: #33473c; font-size: 15px; }
         .onboarding-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         .onboarding-fields label, .tenancy-workspace label { display: grid; gap: 6px; color: #48584f; font-size: 12px; font-weight: 650; }
+        .co-tenants-field { display: grid; gap: 6px; align-content: start; color: #48584f; font-size: 12px; font-weight: 650; }
+        .co-tenant-list { display: grid; gap: 8px; }
+        .co-tenant-row { display: flex; gap: 8px; align-items: center; }
+        .co-tenant-row input { flex: 1; }
+        .co-tenant-row .remove-co-tenant { flex: none; width: 42px; height: 42px; font-size: 20px; line-height: 1; border: 1px solid #dce5dc; border-radius: 10px; background: #fff; color: #6b7a71; cursor: pointer; }
+        .co-tenant-row .remove-co-tenant:hover { background: #f6f1f0; color: #933f39; }
+        #add-co-tenant { justify-self: start; padding: 7px 12px; font-size: 12px; }
+        #add-co-tenant span { font-size: 16px; line-height: 1; }
         .onboarding-fields input, .onboarding-fields select, .tenancy-workspace input, .tenancy-workspace select, .tenancy-workspace textarea { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #dce5dc; border-radius: 10px; background: #fff; color: #20372f; font: inherit; }
         .account-method { display: flex; gap: 8px; margin-bottom: 12px; }
         .account-method button { padding: 8px 12px; border: 1px solid #dce5dc; border-radius: 9px; background: #fff; color: #53655d; font-size: 12px; font-weight: 650; }
@@ -1268,9 +1276,11 @@
                             <label id="lead-tenant-name-wrap" for="lead-tenant-name" class="hidden">Lead tenant's name
                                 <input id="lead-tenant-name" maxlength="100" placeholder="Name of the lead tenant">
                             </label>
-                            <label id="co-tenants-wrap" for="co-tenants">Housemates on the agreement (optional)
-                                <input id="co-tenants" placeholder="Separate names with commas">
-                            </label>
+                            <div id="co-tenants-wrap" class="co-tenants-field" role="group" aria-labelledby="co-tenants-label">
+                                <span id="co-tenants-label">Housemates on the agreement (optional)</span>
+                                <div id="co-tenant-list" class="co-tenant-list"></div>
+                                <button type="button" id="add-co-tenant" class="btn secondary"><span aria-hidden="true">+</span> Add another housemate</button>
+                            </div>
                             <label for="property-address">Property address
                                 <input id="property-address" required maxlength="500" placeholder="e.g. 12 Example Road, Leeds LS6 1AA">
                             </label>
@@ -2144,6 +2154,48 @@
             if (joining && !state.user) setNotice('join-error', 'Log in first to join a tenancy.');
         }
 
+        // One name box per housemate; the + button adds another and each extra box can be removed.
+        function coTenantInputs() {
+            return [...$('co-tenant-list').querySelectorAll('input')];
+        }
+        function addCoTenantInput(focus) {
+            const row = document.createElement('div');
+            row.className = 'co-tenant-row';
+            const input = document.createElement('input');
+            input.maxLength = 100;
+            input.autocomplete = 'off';
+            input.setAttribute('aria-describedby', 'co-tenants-note');
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'remove-co-tenant';
+            remove.innerHTML = '<span aria-hidden="true">×</span>';
+            remove.addEventListener('click', () => {
+                const next = row.nextElementSibling || row.previousElementSibling;
+                row.remove();
+                if (!coTenantInputs().length) addCoTenantInput(false);
+                renumberCoTenants();
+                (next?.querySelector('input') || coTenantInputs()[0]).focus();
+            });
+            row.append(input, remove);
+            $('co-tenant-list').append(row);
+            renumberCoTenants();
+            if (focus) input.focus();
+        }
+        function renumberCoTenants() {
+            const rows = [...$('co-tenant-list').children];
+            rows.forEach((row, index) => {
+                const label = `Housemate ${index + 1}`;
+                row.querySelector('input').setAttribute('aria-label', `${label}'s name`);
+                row.querySelector('input').placeholder = index === 0 ? 'e.g. John Doe' : 'Full name';
+                const remove = row.querySelector('.remove-co-tenant');
+                remove.setAttribute('aria-label', `Remove ${label.toLowerCase()}`);
+                remove.hidden = rows.length === 1 && !row.querySelector('input').value;
+            });
+        }
+        $('add-co-tenant').addEventListener('click', () => addCoTenantInput(true));
+        $('co-tenant-list').addEventListener('input', renumberCoTenants);
+        addCoTenantInput(false);
+
         function updateRoleFields() {
             const solo = selectedHouseholdMode() === 'single';
             const role = $('current-role');
@@ -2311,7 +2363,7 @@
 
             let coTenantNames = selectedHouseholdMode() === 'single'
                 ? []
-                : $('co-tenants').value.split(',').map((name) => name.trim()).filter(Boolean);
+                : coTenantInputs().map((input) => input.value.trim().replace(/\s+/g, ' ')).filter(Boolean);
             if (currentRole === 'co_tenant' && !coTenantNames.some((name) => name.toLowerCase() === currentTenant.toLowerCase())) {
                 coTenantNames = [currentTenant, ...coTenantNames];
             }
