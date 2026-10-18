@@ -1,12 +1,18 @@
+import logging
+import sqlite3
+
+import psycopg
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from google.genai.errors import APIError
 from pypdf.errors import PdfReadError
 
-from app import config, pipeline
+from app import config, pipeline, reviews
 from app.pipeline import AnalysisInputError
 
 app = FastAPI(title="Tenancy Demystifier")
+logger = logging.getLogger(__name__)
 MAX_AGREEMENT_SIZE = 10 * 1024 * 1024
 
 
@@ -16,6 +22,7 @@ def health():
         "status": "ok",
         "gemini_configured": bool(config.GEMINI_API_KEY),
         "vector_store": "tiger_data" if config.DATABASE_URL else "local",
+        "review_store": "postgres" if config.DATABASE_URL else "sqlite",
     }
 
 
@@ -46,8 +53,29 @@ async def analyze(
         raise HTTPException(status_code=400, detail="Could not read that PDF")
     except AnalysisInputError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
+    except APIError as error:
+        logger.exception("Gemini API request failed during agreement analysis")
+        raise HTTPException(
+            status_code=502,
+            detail="Gemini could not analyze this agreement. Check the backend terminal for the provider error, then try again.",
+        ) from error
+    try:
+        review_id = reviews.save_review(
+            lead_tenant,
+            co_tenant_names,
+            property_address,
+            agreement.filename,
+            result,
+        )
+    except (OSError, sqlite3.Error, psycopg.Error) as error:
+        logger.exception("Could not save completed agreement review")
+        raise HTTPException(
+            status_code=503,
+            detail="The agreement was analyzed, but its review could not be saved. Please try again.",
+        ) from error
 
     return {
+        "review_id": review_id,
         "tenant_name": lead_tenant,
         "lead_tenant": lead_tenant,
         "co_tenants": co_tenant_names,

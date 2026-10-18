@@ -88,7 +88,7 @@ kept for the bills and area features later.
   - Analysis: the whole agreement plus the retrieved law sections go in one call
     (batched only for very long agreements), then one call drafts the landlord email.
     Never one call per clause, to stay inside the free tier's per-minute limits.
-  Default model `gemini-flash-latest` (`GEMINI_MODEL` in `.env`). The Gemini Pro student
+  Default model `gemini-3.5-flash-lite` (`GEMINI_MODEL` in `.env`). The Gemini Pro student
   offer is for the Gemini app, not the API; the API runs on an AI Studio key.
 - **Vultr**:
   - Cloud Compute VM running the app (frontend + backend, one process).
@@ -114,6 +114,10 @@ kept for the bills and area features later.
 - FastAPI serves the standalone `index.html` at `/` when it exists; otherwise it serves the
   built React frontend (`frontend/dist`). The app is one process on one URL. In dev, Vite
   proxies `/api` to FastAPI on port 8000.
+- Completed reviews are saved in `tenancy_reviews`: PostgreSQL when `DATABASE_URL` is set,
+  otherwise a local SQLite file at `backend/data/reviews.sqlite3` (ignored by git). The
+  analysis response includes a review reference. The results page can print the review;
+  choose “Save as PDF” in the browser print dialog to export it.
 
 ## Analysis pipeline (RAG over UK housing law)
 

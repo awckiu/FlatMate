@@ -1,0 +1,16 @@
+index.html:25: trailing whitespace.
+[32m+[m[41m        [m
+index.html:29: trailing whitespace.
+[32m+[m[41m            [m
+index.html:35: trailing whitespace.
+[32m+[m[32m                        <input type="text" id="tenant-name" required placeholder="e.g. Jane Doe"[m[41m [m
+index.html:38: trailing whitespace.
+[32m+[m[41m                    [m
+index.html:42: trailing whitespace.
+[32m+[m[32m                        <input type="text" id="property-address" required placeholder="e.g. 10 Downing Street, London"[m[41m [m
+index.html:84: trailing whitespace.
+[32m+[m[41m            [m
+index.html:124: trailing whitespace.
+[32m+[m[41m                [m
+index.html:154: trailing whitespace.
+[32m+[m[41m        [m

@@ -112,3 +112,14 @@ CREATE TABLE IF NOT EXISTS photos (
   uploaded_at  timestamptz NOT NULL DEFAULT now(),
   note         text
 );
+
+-- Completed analysis results, retained independently of user accounts/case setup.
+CREATE TABLE IF NOT EXISTS tenancy_reviews (
+  id                text PRIMARY KEY,
+  lead_tenant       text NOT NULL,
+  co_tenants        jsonb NOT NULL,
+  property_address  text NOT NULL,
+  filename          text,
+  review            jsonb NOT NULL,
+  created_at        timestamptz NOT NULL DEFAULT now()
+);
