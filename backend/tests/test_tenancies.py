@@ -30,7 +30,7 @@ class TenancyApiTests(unittest.TestCase):
         def test_account(request: Request):
             account = self.accounts.get(request.headers.get("x-test-account", ""))
             if account:
-                tenancies.sync_account(account)
+                self.add_user(account)
             return account
 
         app.dependency_overrides[optional_account] = test_account
@@ -51,6 +51,19 @@ class TenancyApiTests(unittest.TestCase):
         self.url_patch.stop()
         self.database_patch.stop()
         self.temp_dir.cleanup()
+
+    def add_user(self, account):
+        """The SQLite stand-in for a row in the users table (Postgres has the real one)."""
+        connection = tenancies._connection()
+        try:
+            tenancies._ensure_schema(connection)
+            connection.execute(
+                "INSERT OR IGNORE INTO users (id, email, display_name) VALUES (?, ?, ?)",
+                (account["id"], account["email"], account["display_name"]),
+            )
+            connection.commit()
+        finally:
+            connection.close()
 
     def register(self, client, email, name):
         account = {"id": str(uuid.uuid4()), "email": email, "display_name": name}

@@ -1,4 +1,4 @@
-"""Shared tenancy-profile persistence. Logins live in app.auth; flatmate_accounts mirrors them."""
+"""Shared tenancy-profile persistence. Logins live in app.auth (the users table); db/schema.sql owns the tables."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from typing import Any
 import psycopg
 from psycopg.rows import dict_row
 
-from app import config
+from app import cases, config
 
 HOUSEHOLD_MODES = {"single", "friends"}
 
@@ -49,15 +49,20 @@ def _sql(query: str) -> str:
 
 
 def _ensure_schema(connection) -> None:
+    if config.DATABASE_URL:
+        # Tiger Data: db/schema.sql is the only definition of these tables.
+        cases.ensure_schema()
+        return
+    # Everything below is the SQLite stand-in used by the tests (no DATABASE_URL). Keep it in
+    # step with db/schema.sql.
     connection.execute(
         _sql(
             """
-            CREATE TABLE IF NOT EXISTS flatmate_accounts (
+            CREATE TABLE IF NOT EXISTS users (
                 id text PRIMARY KEY,
                 email text NOT NULL UNIQUE,
                 display_name text NOT NULL,
-                password_hash text NOT NULL DEFAULT '',
-                created_at text NOT NULL
+                password_hash text
             )
             """
         )
@@ -68,7 +73,7 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_profiles (
                 id text PRIMARY KEY,
                 code text UNIQUE,
-                owner_account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                owner_account_id text NOT NULL REFERENCES users(id),
                 household_mode text NOT NULL,
                 hmo_status text NOT NULL,
                 property_address text NOT NULL,
@@ -87,22 +92,9 @@ def _ensure_schema(connection) -> None:
             """
         )
     )
-    if config.DATABASE_URL:
-        profile_columns = {
-            row["column_name"]
-            for row in connection.execute(
-                """
-                SELECT column_name
-                FROM information_schema.columns
-                WHERE table_schema = current_schema() AND table_name = 'tenancy_profiles'
-                """
-            ).fetchall()
-        }
-    else:
-        profile_columns = {
-            row["name"]
-            for row in connection.execute("PRAGMA table_info(tenancy_profiles)").fetchall()
-        }
+    profile_columns = {
+        row["name"] for row in connection.execute("PRAGMA table_info(tenancy_profiles)").fetchall()
+    }
     if "review_id" not in profile_columns:
         connection.execute("ALTER TABLE tenancy_profiles ADD COLUMN review_id text")
 
@@ -111,7 +103,7 @@ def _ensure_schema(connection) -> None:
             """
             CREATE TABLE IF NOT EXISTS tenancy_members (
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 name text NOT NULL,
                 role text NOT NULL,
                 is_current integer NOT NULL DEFAULT 1,
@@ -134,7 +126,7 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                account_id text NOT NULL REFERENCES users(id),
                 user_message text NOT NULL,
                 assistant_message text NOT NULL,
                 landlord_draft text NOT NULL,
@@ -145,31 +137,27 @@ def _ensure_schema(connection) -> None:
     )
     connection.execute(
         _sql(
-            f"""
+            """
             CREATE TABLE IF NOT EXISTS tenancy_photos (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                account_id text NOT NULL REFERENCES users(id),
                 room text NOT NULL,
                 note text NOT NULL,
-                data {"bytea" if config.DATABASE_URL else "blob"} NOT NULL,
+                data blob NOT NULL,
                 media_type text NOT NULL,
                 uploaded_at text NOT NULL
             )
             """
         )
     )
-    if config.DATABASE_URL:
-        # Photos used to be files (storage_key); the bytes now live in the row.
-        connection.execute("ALTER TABLE tenancy_photos ADD COLUMN IF NOT EXISTS data bytea")
-        connection.execute("ALTER TABLE tenancy_photos DROP COLUMN IF EXISTS storage_key")
     connection.execute(
         _sql(
             """
             CREATE TABLE IF NOT EXISTS tenancy_calendar_items (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                created_by text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                created_by text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 title text NOT NULL,
                 kind text NOT NULL,
                 due_date text NOT NULL,
@@ -184,7 +172,7 @@ def _ensure_schema(connection) -> None:
         _sql(
             """
             CREATE TABLE IF NOT EXISTS flatmate_notification_preferences (
-                account_id text PRIMARY KEY REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
                 email_reminders_enabled boolean NOT NULL DEFAULT false
             )
             """
@@ -195,7 +183,7 @@ def _ensure_schema(connection) -> None:
             """
             CREATE TABLE IF NOT EXISTS tenancy_calendar_reminders (
                 item_id text NOT NULL REFERENCES tenancy_calendar_items(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 due_date text NOT NULL,
                 status text NOT NULL,
                 updated_at text NOT NULL,
@@ -209,22 +197,6 @@ def _ensure_schema(connection) -> None:
 
 def _timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-
-def sync_account(account: dict[str, str]) -> None:
-    """Mirror a logged-in user (from app.auth) into flatmate_accounts, which the
-    tenancy, calendar and reminder tables reference."""
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with _transaction(connection):
-            connection.execute(
-                _sql(
-                    "INSERT INTO flatmate_accounts (id, email, display_name, password_hash, created_at) "
-                    "VALUES (?, ?, ?, '', ?) "
-                    "ON CONFLICT (id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name"
-                ),
-                (account["id"], account["email"], account["display_name"], _timestamp()),
-            )
 
 
 def validate_household(

@@ -33,6 +33,12 @@ def connect() -> psycopg.Connection:
     return conn
 
 
+def ensure_schema() -> None:
+    """Apply db/schema.sql if this process hasn't yet (the tenancy tables live there too)."""
+    if not _schema_applied:
+        connect().close()
+
+
 def save_case(
     conn: psycopg.Connection,
     *,

@@ -66,7 +66,7 @@ app.include_router(auth.router)
 
 
 def optional_account(request: Request) -> dict[str, str] | None:
-    """The logged-in user (app.auth), mirrored into the tenancy tables, or None."""
+    """The logged-in user (app.auth), or None. Accounts are optional."""
     user_id = auth.current_user_id(request)
     if not user_id or not config.DATABASE_URL:
         return None
@@ -78,9 +78,7 @@ def optional_account(request: Request) -> dict[str, str] | None:
         raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
     if row is None:
         return None
-    account = {"id": str(row[0]), "email": row[1], "display_name": row[2]}
-    tenancies.sync_account(account)
-    return account
+    return {"id": str(row[0]), "email": row[1], "display_name": row[2]}
 
 
 @app.get("/api/health")
