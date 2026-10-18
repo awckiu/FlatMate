@@ -1,19 +1,33 @@
 import json
 import logging
+import secrets
 
 import psycopg
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from google.genai.errors import APIError
 from pypdf.errors import PdfReadError
+from starlette.middleware.sessions import SessionMiddleware
 
-from app import cases, config, pipeline
+from app import auth, cases, config, pipeline
 from app.pipeline import AnalysisInputError
 
 app = FastAPI(title="Tenancy Demystifier")
 logger = logging.getLogger(__name__)
 MAX_AGREEMENT_SIZE = 10 * 1024 * 1024
+
+if not config.SESSION_SECRET:
+    logger.warning("SESSION_SECRET is not set; logins will not survive a restart")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=config.SESSION_SECRET or secrets.token_urlsafe(32),
+    session_cookie="flatmate_session",
+    max_age=30 * 24 * 60 * 60,
+    same_site="lax",
+    https_only=config.SESSION_HTTPS_ONLY,
+)
+app.include_router(auth.router)
 
 
 @app.get("/api/health")
@@ -28,6 +42,7 @@ def health():
 
 @app.post("/api/analyze")
 async def analyze(
+    request: Request,
     agreement: UploadFile = File(...),
     lead_tenant: str | None = Form(default=None),
     co_tenants: str = Form(default=""),
@@ -85,6 +100,7 @@ async def analyze(
                     agreement_text=agreement_text,
                     clauses=clauses,
                     result=result,
+                    user_id=auth.current_user_id(request),
                 )
         except Exception:
             logger.exception("Could not save the case")
@@ -118,6 +134,33 @@ def get_case(code: str):
     if case is None:
         raise HTTPException(status_code=404, detail="No case was found with that code.")
     return case
+
+
+@app.get("/api/my/cases")
+def my_cases(request: Request):
+    user_id = auth.require_user_id(request)
+    auth.require_database()
+    try:
+        with cases.connect() as conn:
+            return {"cases": cases.list_cases(conn, user_id)}
+    except psycopg.Error as error:
+        logger.exception("Could not list cases")
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+
+
+@app.post("/api/cases/{code}/join")
+def join_case(code: str, request: Request):
+    """Add a case to the logged-in user's account, e.g. a co-tenant entering the code."""
+    user = auth.me(request)
+    try:
+        with cases.connect() as conn:
+            found = cases.join_case(conn, cases.normalize_code(code), user["id"], user["display_name"])
+    except psycopg.Error as error:
+        logger.exception("Could not join case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if not found:
+        raise HTTPException(status_code=404, detail="No case was found with that code.")
+    return {"ok": True}
 
 
 # Serve the standalone app when it is present; otherwise use the built React app.

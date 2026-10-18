@@ -43,15 +43,17 @@ def save_case(
     agreement_text: str,
     clauses: list[dict],
     result: dict,
+    user_id: str | None = None,
 ) -> str:
-    """Save one analysis as a new case and return its code."""
+    """Save one analysis as a new case and return its code. A logged-in uploader is
+    linked to the lead tenant, so the case appears in their account."""
     for _ in range(5):
         code = new_code()
         try:
             with conn.transaction():
                 _insert_case(
                     conn, code, lead_tenant, co_tenants, property_address,
-                    filename, agreement_text, clauses, result,
+                    filename, agreement_text, clauses, result, user_id,
                 )
             return code
         except psycopg.errors.UniqueViolation:
@@ -59,7 +61,7 @@ def save_case(
     raise RuntimeError("Could not generate a unique case code")
 
 
-def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename, agreement_text, clauses, result):
+def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename, agreement_text, clauses, result, user_id):
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO cases (code, property_address) VALUES (%s, %s) RETURNING id",
@@ -67,8 +69,8 @@ def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename
         )
         case_id = cur.fetchone()[0]
         cur.executemany(
-            "INSERT INTO tenants (case_id, name, role) VALUES (%s, %s, %s)",
-            [(case_id, lead_tenant, "lead"), *((case_id, name, "co_tenant") for name in co_tenants)],
+            "INSERT INTO tenants (case_id, user_id, name, role) VALUES (%s, %s, %s, %s)",
+            [(case_id, user_id, lead_tenant, "lead"), *((case_id, None, name, "co_tenant") for name in co_tenants)],
         )
         cur.execute(
             """INSERT INTO agreements
@@ -180,3 +182,45 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
         "law_data_available": bool(law_data_available),
         "disclaimer": DISCLAIMER,
     }
+
+
+def list_cases(conn: psycopg.Connection, user_id: str) -> list[dict]:
+    """The cases a user is linked to, newest first."""
+    return [
+        {"case_code": code, "property_address": address, "role": role, "created_at": created_at.isoformat()}
+        for code, address, role, created_at in conn.execute(
+            """SELECT c.code, c.property_address, t.role, c.created_at
+               FROM tenants t JOIN cases c ON c.id = t.case_id
+               WHERE t.user_id = %s ORDER BY c.created_at DESC""",
+            (user_id,),
+        )
+    ]
+
+
+def join_case(conn: psycopg.Connection, code: str, user_id: str, display_name: str) -> bool:
+    """Link a user to a case by its code. They take the unclaimed tenant whose name matches
+    theirs, otherwise they are added as a new co-tenant. False if no case has that code."""
+    with conn.transaction():
+        row = conn.execute("SELECT id FROM cases WHERE code = %s", (code,)).fetchone()
+        if row is None:
+            return False
+        case_id = row[0]
+        already = conn.execute(
+            "SELECT 1 FROM tenants WHERE case_id = %s AND user_id = %s", (case_id, user_id)
+        ).fetchone()
+        if already:
+            return True
+        unclaimed = conn.execute(
+            """SELECT id FROM tenants
+               WHERE case_id = %s AND user_id IS NULL AND lower(name) = lower(%s)
+               ORDER BY id LIMIT 1 FOR UPDATE""",
+            (case_id, display_name.strip()),
+        ).fetchone()
+        if unclaimed:
+            conn.execute("UPDATE tenants SET user_id = %s WHERE id = %s", (user_id, unclaimed[0]))
+        else:
+            conn.execute(
+                "INSERT INTO tenants (case_id, user_id, name, role) VALUES (%s, %s, %s, 'co_tenant')",
+                (case_id, user_id, display_name.strip()),
+            )
+    return True
