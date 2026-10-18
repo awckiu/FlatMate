@@ -70,9 +70,9 @@ def _version_key(number: str) -> tuple[int, str]:
     return (int(match.group(1)), match.group(2)) if match else (-1, number)
 
 
-def _keeps(spec: str, kind: str, number: str) -> bool:
-    if kind == "section" and spec.startswith("s."):
-        low, _, high = spec[2:].partition("-")
+def _keeps(spec: str, kind: str, number: str, label: str = "s.") -> bool:
+    if kind == "section" and spec.startswith(label):
+        low, _, high = spec[len(label) :].partition("-")
         key = _version_key(number)
         return _version_key(low) <= key <= _version_key(high or low)
     return kind == "schedule" and spec.casefold() == f"sch {number}".casefold()
@@ -117,7 +117,7 @@ def fetch_legislation(source: TrustedSource) -> str:
     sections = []
     used = set()
     for kind, number, heading, uri, el in units:
-        matched = [spec for spec in source.keep if _keeps(spec, kind, number)]
+        matched = [spec for spec in source.keep if _keeps(spec, kind, number, source.label)]
         if not matched:
             continue
         used.update(matched)
@@ -125,7 +125,7 @@ def fetch_legislation(source: TrustedSource) -> str:
         if len(re.sub(r"[^A-Za-z]", "", text)) < 40:
             print(f"  skip {kind} {number}: repealed or empty")
             continue
-        ref = f"s.{number}" if kind == "section" else f"Sch {number}"
+        ref = f"{source.label}{number}" if kind == "section" else f"Sch {number}"
         url = uri.replace("http://", "https://") or source.url
         sections.append((ref, heading, url, text))
     for spec in source.keep:
@@ -226,9 +226,10 @@ def main():
     by_stem = {s.stem: s for s in TRUSTED_SOURCES}
 
     if args.list:
-        _, units = legislation_units(by_stem[args.list])
+        source = by_stem[args.list]
+        _, units = legislation_units(source)
         for kind, number, heading, _, _ in units:
-            print(f"{'s.' if kind == 'section' else 'Sch '}{number}  {heading}")
+            print(f"{source.label if kind == 'section' else 'Sch '}{number}  {heading}")
         return
 
     if args.only and args.only not in by_stem:

@@ -1,8 +1,8 @@
 """The only law sources the app may ingest (agreed with the team, 2026-10-18).
 
-Everything comes from two official publishers: legislation.gov.uk (revised Acts) and
-gov.uk (government guidance). scripts/fetch_law.py downloads exactly these, and
-scripts/ingest_law.py refuses any file that doesn't match an entry here.
+Everything comes from two official publishers: legislation.gov.uk (revised Acts and
+regulations) and gov.uk (government guidance). scripts/fetch_law.py downloads exactly
+these, and scripts/ingest_law.py refuses any file that doesn't match an entry here.
 """
 
 from dataclasses import dataclass
@@ -19,6 +19,7 @@ class TrustedSource:
     kind: str  # "legislation" or "guidance"
     # Legislation only: which parts to keep, e.g. "s.4A-4B", "s.16", "Sch 2".
     keep: tuple[str, ...] = ()
+    label: str = "s."  # how sections are cited: "s." for Acts, "reg " for regulations
 
 
 TRUSTED_SOURCES = [
@@ -34,7 +35,7 @@ TRUSTED_SOURCES = [
         "Housing Act 2004",
         "https://www.legislation.gov.uk/ukpga/2004/34",
         "legislation",
-        ("s.1-2", "s.4", "s.55", "s.61", "s.72-73", "s.75", "s.212-215C", "s.254"),
+        ("s.1-2", "s.4", "s.55", "s.61", "s.67", "s.72-73", "s.75", "s.212-215C", "s.254", "Sch 4"),
     ),
     TrustedSource(
         "tenant_fees_act_2019",
@@ -65,6 +66,14 @@ TRUSTED_SOURCES = [
         "https://www.legislation.gov.uk/ukpga/1977/43",
         "legislation",
         ("s.1-3A", "s.5"),
+    ),
+    TrustedSource(
+        "hmo_management_regulations_2006",
+        "Management of Houses in Multiple Occupation (England) Regulations 2006",
+        "https://www.legislation.gov.uk/uksi/2006/372",
+        "legislation",
+        ("reg 3-10",),
+        "reg ",
     ),
     TrustedSource(
         "deposit_protection",

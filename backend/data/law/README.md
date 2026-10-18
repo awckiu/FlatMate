@@ -5,11 +5,12 @@ Only these trusted sources are used (the list lives in `backend/app/rag/sources.
 | File | Source | Publisher |
 |---|---|---|
 | `housing_act_1988.txt` | Housing Act 1988 (revised, includes Renters' Rights Act changes) | legislation.gov.uk |
-| `housing_act_2004.txt` | Housing Act 2004 (hazards, HMO licensing, deposit protection) | legislation.gov.uk |
+| `housing_act_2004.txt` | Housing Act 2004 (hazards, HMO licensing and licence conditions, deposit protection) | legislation.gov.uk |
 | `tenant_fees_act_2019.txt` | Tenant Fees Act 2019 | legislation.gov.uk |
 | `renters_rights_act_2025.txt` | Renters' Rights Act 2025 (parts that don't just amend the 1988 Act) | legislation.gov.uk |
 | `landlord_and_tenant_act_1985.txt` | Landlord and Tenant Act 1985 (landlord details, repairs, fitness) | legislation.gov.uk |
 | `protection_from_eviction_act_1977.txt` | Protection from Eviction Act 1977 (unlawful eviction, harassment, notice to quit) | legislation.gov.uk |
+| `hmo_management_regulations_2006.txt` | Management of HMOs (England) Regulations 2006 (manager and occupier duties) | legislation.gov.uk |
 | `deposit_protection.txt` | Tenancy deposit protection | gov.uk |
 | `how_to_rent.txt` | How to rent: the checklist for renting in England | gov.uk |
 

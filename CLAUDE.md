@@ -172,8 +172,8 @@ chunks for each supplied source rather than appending duplicates.
 Knowledge base:
 - Trusted sources only (list in `app/rag/sources.py`): Housing Act 1988, Housing Act 2004,
   Tenant Fees Act 2019, Renters' Rights Act 2025, Landlord and Tenant Act 1985, Protection
-  from Eviction Act 1977 (legislation.gov.uk, revised text, trimmed to the relevant
-  sections), and gov.uk "Tenancy deposit protection" and "How to rent". From `backend/` run
+  from Eviction Act 1977, HMO Management Regulations 2006 (legislation.gov.uk, revised
+  text, trimmed to the relevant sections), and gov.uk "Tenancy deposit protection" and "How to rent". From `backend/` run
   `.venv\Scripts\python -m scripts.fetch_law` then `.venv\Scripts\python -m scripts.ingest_law`.
   Both refuse anything outside legislation.gov.uk / gov.uk; see `backend/data/law/README.md`.
 - Chunked by section (`app/rag/ingest.py`), embedded with Gemini embeddings.

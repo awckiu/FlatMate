@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -88,6 +89,12 @@ class LawSourcesTests(unittest.TestCase):
         self.assertIn("Quoted text", s5.text)
         self.assertEqual(sch1.heading, "Permitted payments")
         self.assertIn("2 A tenancy deposit is a permitted payment", sch1.text)
+
+    def test_regulations_are_cited_as_reg(self):
+        regs = replace(SOURCES["hmo_management_regulations_2006"], keep=("reg 1",))
+        with patch("scripts.fetch_law.fetch", return_value=ACT_XML):
+            law = parse_law_file(Path(fetch_law.fetch_legislation(regs)).read_text(encoding="utf-8"))
+        self.assertEqual([c.section for c in law.chunks], ["reg 1"])
 
     def test_guidance_parts_become_sections(self):
         with patch("scripts.fetch_law.fetch", return_value=json.dumps(GUIDE_JSON).encode()):
