@@ -101,10 +101,7 @@ and optional landlord email/text drafts. FlatMate does **not** send messages. Mo
 unlock when the tenancy starts; supported image uploads are stored as evidence and are not
 analysed by AI.
 
-For local development, photos are stored under `backend/data/photos`. To use private
-S3-compatible storage, set `PHOTO_STORAGE_ENDPOINT`, `PHOTO_STORAGE_BUCKET`,
-`PHOTO_STORAGE_ACCESS_KEY`, and `PHOTO_STORAGE_SECRET_KEY` in `backend/.env`; optionally set
-`PHOTO_STORAGE_REGION`. Keep the bucket private. Behind HTTPS in production, set
+Move-in photos are stored in the database (`tenancy_photos.data`), not in S3 or on disk. Behind HTTPS in production, set
 `SESSION_HTTPS_ONLY=true` so the login cookie is sent only over HTTPS. Accounts and tenancy
 profiles need `DATABASE_URL` (Tiger Data).
 

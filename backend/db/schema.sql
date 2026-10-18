@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS tenancy_photos (
   account_id  text NOT NULL REFERENCES flatmate_accounts(id),
   room        text NOT NULL,
   note        text NOT NULL,
-  storage_key text NOT NULL,
+  data        bytea NOT NULL,             -- the image itself (no S3 or disk copy)
   media_type  text NOT NULL,
   uploaded_at text NOT NULL
 );

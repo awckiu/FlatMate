@@ -113,7 +113,6 @@ kept for the bills and area features later.
   offer is for the Gemini app, not the API; the API runs on an AI Studio key.
 - **Vultr**:
   - Cloud Compute VM running the app (frontend + backend, one process).
-  - Object Storage (S3-compatible) for move-in photo files.
 - **Tiger Data** (Postgres + pgvector):
   - Law knowledge base: each source's sections and embeddings, stored once, with the
     source's last-updated date.

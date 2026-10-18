@@ -21,10 +21,8 @@ class TenancyApiTests(unittest.TestCase):
         self.database_path = Path(self.temp_dir.name) / "flatmate.sqlite3"
         self.database_patch = patch.object(config, "REVIEWS_DB_PATH", self.database_path)
         self.url_patch = patch.object(config, "DATABASE_URL", None)
-        self.photo_patch = patch.object(config, "PHOTO_STORAGE_DIR", Path(self.temp_dir.name) / "photos")
         self.database_patch.start()
         self.url_patch.start()
-        self.photo_patch.start()
         # Logins come from app.auth (Postgres); here each client names its account in a header.
         self.accounts = {}
         self.cases = {}
@@ -51,7 +49,6 @@ class TenancyApiTests(unittest.TestCase):
             case_patch.stop()
         app.dependency_overrides.pop(optional_account, None)
         self.url_patch.stop()
-        self.photo_patch.stop()
         self.database_patch.stop()
         self.temp_dir.cleanup()
 

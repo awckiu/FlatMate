@@ -145,20 +145,24 @@ def _ensure_schema(connection) -> None:
     )
     connection.execute(
         _sql(
-            """
+            f"""
             CREATE TABLE IF NOT EXISTS tenancy_photos (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
                 account_id text NOT NULL REFERENCES flatmate_accounts(id),
                 room text NOT NULL,
                 note text NOT NULL,
-                storage_key text NOT NULL,
+                data {"bytea" if config.DATABASE_URL else "blob"} NOT NULL,
                 media_type text NOT NULL,
                 uploaded_at text NOT NULL
             )
             """
         )
     )
+    if config.DATABASE_URL:
+        # Photos used to be files (storage_key); the bytes now live in the row.
+        connection.execute("ALTER TABLE tenancy_photos ADD COLUMN IF NOT EXISTS data bytea")
+        connection.execute("ALTER TABLE tenancy_photos DROP COLUMN IF EXISTS storage_key")
     connection.execute(
         _sql(
             """
@@ -576,7 +580,7 @@ def add_photo(
     account_id: str,
     room: str,
     note: str,
-    storage_key: str,
+    data: bytes,
     media_type: str,
 ) -> str:
     photo_id = uuid.uuid4().hex
@@ -599,7 +603,7 @@ def add_photo(
                 _sql(
                     """
                     INSERT INTO tenancy_photos
-                        (id, profile_id, account_id, room, note, storage_key, media_type, uploaded_at)
+                        (id, profile_id, account_id, room, note, data, media_type, uploaded_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
                 ),
@@ -609,7 +613,7 @@ def add_photo(
                     account_id,
                     room,
                     note,
-                    storage_key,
+                    data,
                     media_type,
                     _timestamp(),
                 ),
@@ -634,13 +638,13 @@ def list_photos(profile_id: str, account_id: str) -> list[dict[str, Any]]:
     return [dict(row) for row in rows]
 
 
-def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, str] | None:
+def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, Any] | None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
         row = connection.execute(
             _sql(
                 """
-                SELECT p.storage_key, p.media_type
+                SELECT p.data, p.media_type
                 FROM tenancy_photos p JOIN tenancy_members m ON m.profile_id = p.profile_id
                 WHERE p.profile_id = ? AND p.id = ? AND m.account_id = ?
                 """

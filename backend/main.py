@@ -528,9 +528,9 @@ async def upload_tenancy_photo(
         raise HTTPException(status_code=409, detail="Move-in photo uploads unlock when the tenancy starts.")
     content = await photo.read(media.MAX_PHOTO_SIZE + 1)
     try:
-        storage_key, media_type = media.store_photo(content, photo.content_type or "")
+        media_type = media.validate_photo(content, photo.content_type or "")
         photo_id = tenancies.add_photo(
-            profile_id, account["id"], room.strip(), note.strip(), storage_key, media_type
+            profile_id, account["id"], room.strip(), note.strip(), content, media_type
         )
     except media.InvalidPhoto as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
@@ -552,12 +552,7 @@ def read_tenancy_photo(
     photo = tenancies.get_photo(profile_id, photo_id, account["id"])
     if photo is None:
         raise HTTPException(status_code=404, detail="Photo not found.")
-    try:
-        content = media.read_photo(photo["storage_key"])
-    except (OSError, RuntimeError) as error:
-        logger.exception("Could not read stored tenancy photo")
-        raise HTTPException(status_code=503, detail="The photo could not be loaded.") from error
-    return Response(content=content, media_type=photo["media_type"])
+    return Response(content=bytes(photo["data"]), media_type=photo["media_type"])
 
 
 @app.delete("/api/tenancies/{profile_id}/photos/{photo_id}", status_code=204)
@@ -571,9 +566,8 @@ def delete_tenancy_photo(
     if photo is None:
         raise HTTPException(status_code=404, detail="Photo not found.")
     try:
-        media.delete_photo(photo["storage_key"])
         tenancies.delete_photo(profile_id, photo_id, account["id"])
-    except (OSError, RuntimeError) as error:
+    except (OSError, RuntimeError, sqlite3.Error, psycopg.Error) as error:
         logger.exception("Could not delete tenancy photo")
         raise HTTPException(status_code=503, detail="The photo could not be deleted.") from error
 
