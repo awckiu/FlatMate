@@ -76,6 +76,18 @@
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                 </button>
             </form>
+
+            <!-- Reopen a saved case -->
+            <form id="open-case-form" class="mt-8 pt-6 border-t">
+                <label for="case-code-input" class="block text-sm font-medium text-gray-700 mb-1">Already analysed? Enter your case code</label>
+                <div class="flex gap-2">
+                    <input type="text" id="case-code-input" required placeholder="e.g. FLAT-7KQ2XM" autocomplete="off"
+                        class="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-lg uppercase focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+                    <button type="submit" id="open-case-btn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Open
+                    </button>
+                </div>
+            </form>
         </section>
 
         <!-- LOADING STATE (Hidden by default) -->
@@ -87,6 +99,13 @@
 
         <!-- RESULTS SECTION (Hidden by default) -->
         <section id="results-section" class="hidden space-y-8">
+
+            <!-- Case code -->
+            <div id="case-code-banner" class="hidden bg-indigo-50 p-4 rounded-xl border border-indigo-200 text-indigo-900">
+                <p>Your case code is <strong id="case-code" class="font-mono text-lg"></strong></p>
+                <p class="text-sm mt-1">Keep it to open these results again, and share it with your co-tenants.</p>
+            </div>
+            <p id="not-saved-note" class="hidden text-sm text-gray-500">These results were not saved, so they will be gone when you leave this page.</p>
 
             <!-- Summary -->
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -286,7 +305,62 @@
                 'hidden', result.mode === 'placeholder' || result.law_data_available
             );
             emailContent.textContent = result.email || 'No email draft was generated because no issues were flagged.';
+            document.getElementById('case-code').textContent = result.case_code || '';
+            document.getElementById('case-code-banner').classList.toggle('hidden', !result.case_code);
+            document.getElementById('not-saved-note').classList.toggle('hidden', Boolean(result.case_code));
+            if (result.case_code) {
+                history.replaceState(null, '', '?case=' + encodeURIComponent(result.case_code));
+            }
         }
+
+        // Fetch results (a new analysis or a saved case) and show them, or show the error.
+        async function loadResults(request, fallbackError) {
+            requestError.textContent = '';
+            requestError.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            inputSection.classList.add('hidden');
+            loadingSection.classList.remove('hidden');
+            loadingSection.classList.add('flex');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await request();
+                let result;
+                try {
+                    result = await response.json();
+                } catch {
+                    throw new Error('The server returned an invalid response.');
+                }
+                if (!response.ok) {
+                    throw new Error(result.detail || fallbackError);
+                }
+                renderResults(result);
+                resultsSection.classList.remove('hidden');
+            } catch (error) {
+                requestError.textContent = error instanceof Error ? error.message : fallbackError;
+                requestError.classList.remove('hidden');
+                inputSection.classList.remove('hidden');
+            } finally {
+                loadingSection.classList.remove('flex');
+                loadingSection.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        }
+
+        function openCase(code) {
+            return loadResults(
+                () => fetch('/api/cases/' + encodeURIComponent(code.trim())),
+                'Could not open that case. Please try again.'
+            );
+        }
+
+        document.getElementById('open-case-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            openCase(document.getElementById('case-code-input').value);
+        });
+
+        const sharedCode = new URLSearchParams(location.search).get('case');
+        if (sharedCode) openCase(sharedCode);
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault(); // Prevent page reload
@@ -300,44 +374,16 @@
                 return;
             }
 
-            requestError.textContent = '';
-            requestError.classList.add('hidden');
-            resultsSection.classList.add('hidden');
-            inputSection.classList.add('hidden');
-            loadingSection.classList.remove('hidden');
-            loadingSection.classList.add('flex');
-            submitBtn.disabled = true;
-
             const body = new FormData();
             body.append('agreement', file);
             body.append('lead_tenant', tenantNameInput.value);
             body.append('co_tenants', coTenantsInput.value);
             body.append('property_address', propertyAddressInput.value);
 
-            try {
-                const response = await fetch('/api/analyze', { method: 'POST', body });
-                let result;
-                try {
-                    result = await response.json();
-                } catch {
-                    throw new Error('The server returned an invalid response.');
-                }
-                if (!response.ok) {
-                    throw new Error(result.detail || 'Agreement analysis failed.');
-                }
-                renderResults(result);
-                resultsSection.classList.remove('hidden');
-            } catch (error) {
-                requestError.textContent = error instanceof Error
-                    ? error.message
-                    : 'Could not analyze the agreement. Please try again.';
-                requestError.classList.remove('hidden');
-                inputSection.classList.remove('hidden');
-            } finally {
-                loadingSection.classList.remove('flex');
-                loadingSection.classList.add('hidden');
-                submitBtn.disabled = false;
-            }
+            await loadResults(
+                () => fetch('/api/analyze', { method: 'POST', body }),
+                'Agreement analysis failed.'
+            );
         });
 
         // Handle Copy to Clipboard
@@ -370,6 +416,7 @@
             requestError.classList.add('hidden');
             resultsSection.classList.add('hidden');
             inputSection.classList.remove('hidden');
+            history.replaceState(null, '', location.pathname);
         });
     </script>
 </body>

@@ -114,6 +114,12 @@ class LawIngestionTests(unittest.TestCase):
 
 
 class AnalyzeApiTests(unittest.TestCase):
+    def setUp(self):
+        # Never save test uploads to the real database from a developer's .env.
+        patcher = patch.object(pipeline.config, "DATABASE_URL", None)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_analyze_accepts_the_planned_form_fields(self):
         client = TestClient(app)
         pipeline_result = {

@@ -1,13 +1,14 @@
 import json
 import logging
 
+import psycopg
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from google.genai import errors as gemini_errors
 from pypdf.errors import PdfReadError
 
-from app import config, pipeline
+from app import cases, config, pipeline
 from app.pipeline import AnalysisInputError
 
 logger = logging.getLogger(__name__)
@@ -66,7 +67,29 @@ async def analyze(
             status_code=502, detail="Gemini returned an unexpected answer. Please try again."
         ) from error
 
+    agreement_text = result.pop("agreement_text", "")
+    clauses = result.pop("clauses", [])
+    case_code = None
+    if config.DATABASE_URL:
+        # Saving must never break the demo: show the results even if the database is down.
+        try:
+            with cases.connect() as conn:
+                case_code = cases.save_case(
+                    conn,
+                    lead_tenant=lead_tenant,
+                    co_tenants=co_tenant_names,
+                    property_address=property_address,
+                    filename=agreement.filename,
+                    agreement_text=agreement_text,
+                    clauses=clauses,
+                    result=result,
+                )
+        except Exception:
+            logger.exception("Could not save the case")
+
     return {
+        "case_code": case_code,
+        "saved": case_code is not None,
         "tenant_name": lead_tenant,
         "lead_tenant": lead_tenant,
         "co_tenants": co_tenant_names,
@@ -78,6 +101,21 @@ async def analyze(
         "filename": agreement.filename,
         **result,
     }
+
+
+@app.get("/api/cases/{code}")
+def get_case(code: str):
+    if not config.DATABASE_URL:
+        raise HTTPException(status_code=503, detail="Saved cases need the database, which isn't set up on this server.")
+    try:
+        with cases.connect() as conn:
+            case = cases.get_case(conn, cases.normalize_code(code))
+    except psycopg.Error as error:
+        logger.exception("Could not load case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if case is None:
+        raise HTTPException(status_code=404, detail="No case was found with that code.")
+    return case
 
 
 # Serve the standalone app when it is present; otherwise use the built React app.
