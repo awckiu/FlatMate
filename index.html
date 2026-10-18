@@ -1275,6 +1275,7 @@
                                 <input id="property-address" required maxlength="500" placeholder="e.g. 12 Example Road, Leeds LS6 1AA">
                             </label>
                         </div>
+                        <p id="co-tenants-note" class="notice" role="note"><strong>Check the names now:</strong> housemates can't be added or removed after this step. Enter everyone named on the agreement, spelt as it is there, because housemates join the tenancy later by matching their name.</p>
                         <div class="onboarding-fields" style="margin-top:12px">
                             <label for="agreement-signed">Have you signed the agreement?
                                 <select id="agreement-signed">
@@ -2151,6 +2152,7 @@
             const isCoTenant = role.value === 'co_tenant';
             $('lead-tenant-name-wrap').classList.toggle('hidden', !isCoTenant);
             $('co-tenants-wrap').classList.toggle('hidden', solo);
+            $('co-tenants-note').classList.toggle('hidden', solo);
             const hmo = $('hmo-status');
             if (solo) {
                 hmo.value = 'not_applicable';
