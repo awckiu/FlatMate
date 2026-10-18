@@ -227,6 +227,27 @@ def sync_account(account: dict[str, str]) -> None:
             )
 
 
+def validate_household(
+    household_mode: str, hmo_status: str, lead_tenant: str, co_tenants: list[str]
+) -> None:
+    """Rules shared by the analysis and the tenancy profile, so a review that is accepted
+    can always be turned into a tenancy."""
+    if household_mode not in HOUSEHOLD_MODES:
+        raise ValueError("Choose a valid household setup.")
+    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
+        raise ValueError("Choose whether the property is an HMO, not an HMO, or unknown.")
+    if household_mode == "friends" and hmo_status == "not_applicable":
+        raise ValueError("Choose an HMO status when living with friends.")
+    if household_mode == "single" and co_tenants:
+        raise ValueError("A solo tenancy must have one lead tenant and no co-tenants.")
+    if any(not name.strip() for name in co_tenants):
+        raise ValueError("Co-tenant names cannot be blank.")
+    if len({name.casefold() for name in co_tenants}) != len(co_tenants):
+        raise ValueError("Enter each co-tenant only once.")
+    if lead_tenant.casefold() in {name.casefold() for name in co_tenants}:
+        raise ValueError("The lead tenant should not be repeated in the co-tenant list.")
+
+
 def create_profile(
     account: dict[str, str],
     household_mode: str,
@@ -242,12 +263,7 @@ def create_profile(
     signed_on: str | None = None,
     tenancy_start: str | None = None,
 ) -> dict[str, Any]:
-    if household_mode not in HOUSEHOLD_MODES:
-        raise ValueError("Choose a valid household setup.")
-    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
-        raise ValueError("Choose whether the property is an HMO, not an HMO, or unknown.")
-    if household_mode == "friends" and hmo_status == "not_applicable":
-        raise ValueError("Choose an HMO status when living with friends.")
+    validate_household(household_mode, hmo_status, lead_tenant, co_tenants)
     if current_role not in {"lead", "co_tenant"}:
         raise ValueError("Choose whether you are the lead tenant or a co-tenant.")
     if current_role == "lead" and current_tenant.casefold() != lead_tenant.casefold():
@@ -256,26 +272,27 @@ def create_profile(
         name.casefold() for name in co_tenants
     }:
         raise ValueError("The signed-in tenant's name must appear in the co-tenant list.")
-    if household_mode == "single" and (current_role != "lead" or co_tenants):
+    if household_mode == "single" and current_role != "lead":
         raise ValueError("A solo tenancy must have one lead tenant and no co-tenants.")
-    if any(not name.strip() for name in co_tenants):
-        raise ValueError("Co-tenant names cannot be blank.")
-    if len({name.casefold() for name in co_tenants}) != len(co_tenants):
-        raise ValueError("Enter each co-tenant only once.")
-    if lead_tenant.casefold() in {name.casefold() for name in co_tenants}:
-        raise ValueError("The lead tenant should not be repeated in the co-tenant list.")
-    if tenancy_start:
-        date.fromisoformat(tenancy_start)
-    if signed_on:
-        date.fromisoformat(signed_on)
-    if agreement_signed and not signed_on:
-        raise ValueError("Enter the date the agreement was signed.")
-    if not agreement_signed and signed_on:
-        raise ValueError("Only enter a signing date after the agreement has been signed.")
+    _validate_signing(agreement_signed, signed_on, tenancy_start)
 
     profile_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
+        existing = connection.execute(
+            _sql(
+                """
+                SELECT p.id FROM tenancy_profiles p JOIN tenancy_members m ON m.profile_id = p.id
+                WHERE p.review_id = ? AND m.account_id = ?
+                """
+            ),
+            (review_id, account["id"]),
+        ).fetchone()
+        if existing is not None:
+            # The same review submitted again (e.g. a retry) reuses this account's tenancy.
+            profile = get_profile(existing["id"], account["id"])
+            if profile is not None:
+                return profile
         with _transaction(connection):
             connection.execute(
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
@@ -319,6 +336,19 @@ def create_profile(
     if profile is None:
         raise RuntimeError("The tenancy profile could not be loaded after creation.")
     return profile
+
+
+def _validate_signing(agreement_signed: bool, signed_on: str | None, tenancy_start: str | None) -> None:
+    signed_date = date.fromisoformat(signed_on) if signed_on else None
+    start_date = date.fromisoformat(tenancy_start) if tenancy_start else None
+    if agreement_signed and not signed_on:
+        raise ValueError("Enter the date the agreement was signed.")
+    if not agreement_signed and signed_on:
+        raise ValueError("Only enter a signing date after the agreement has been signed.")
+    if agreement_signed and not tenancy_start:
+        raise ValueError("Enter the tenancy start date so the tenancy code can be issued.")
+    if signed_date and start_date and start_date < signed_date:
+        raise ValueError("The tenancy cannot start before the agreement was signed.")
 
 
 def _activate_due_profiles(connection, account_id: str | None = None) -> None:
@@ -467,12 +497,7 @@ def update_signing(
     signed_on: str | None,
     tenancy_start: str | None,
 ) -> dict[str, Any] | None:
-    if agreement_signed and not signed_on:
-        raise ValueError("Enter the date the agreement was signed.")
-    if signed_on:
-        date.fromisoformat(signed_on)
-    if tenancy_start:
-        date.fromisoformat(tenancy_start)
+    _validate_signing(agreement_signed, signed_on, tenancy_start)
     with closing(_connection()) as connection:
         _ensure_schema(connection)
         with _transaction(connection):

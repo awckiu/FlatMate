@@ -121,6 +121,10 @@ ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;
 
+-- Household setup chosen for the review (solo or friends, and HMO status), so reopening a case shows it.
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS household_mode text;
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS hmo_status text;
+
 -- The original agreement PDF, so it can be downloaded again later.
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS pdf bytea;
 

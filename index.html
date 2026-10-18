@@ -1861,6 +1861,7 @@
             document.getElementById('workspace-signed-on').value = profile.signed_on || '';
             document.getElementById('workspace-tenancy-start').value = profile.tenancy_start || '';
             document.getElementById('workspace-signed-on').required = true;
+            document.getElementById('workspace-tenancy-start').required = true;
             document.getElementById('tenancy-chat-section').classList.toggle('hidden', !profile.agreement_signed);
             document.getElementById('move-in-photos-section').classList.toggle('hidden', !profile.is_active);
             document.getElementById('workspace-error').classList.add('hidden');
@@ -2129,6 +2130,7 @@
             const signed = event.target.value === 'yes';
             document.getElementById('signing-dates').classList.toggle('hidden', !signed);
             document.getElementById('signed-on').required = signed;
+            document.getElementById('tenancy-start').required = signed;
         });
         document.getElementById('register-mode').addEventListener('click', () => {
             accountIntent = 'register';
@@ -2767,6 +2769,7 @@
             body.append('agreement', file);
             body.append('lead_tenant', leadTenant);
             body.append('co_tenants', coTenantNames.join(', '));
+            body.append('current_tenant', currentTenant);
             body.append('property_address', propertyAddressInput.value);
             body.append('household_mode', selectedHouseholdMode());
             body.append('hmo_status', document.getElementById('hmo-status').value);
