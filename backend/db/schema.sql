@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS agreements (
   id                 bigserial PRIMARY KEY,
   case_id            uuid NOT NULL UNIQUE REFERENCES cases(id) ON DELETE CASCADE,
   original_filename  text,
-  object_key         text,                 -- PDF in Vultr Object Storage
+  object_key         text,                 -- unused: the PDF is stored in pdf (below)
   page_count         int,
   text               text NOT NULL,
   summary            text,                 -- one plain-language paragraph about the whole agreement
@@ -120,3 +120,6 @@ ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'g
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;
+
+-- The original agreement PDF, so it can be downloaded again later.
+ALTER TABLE agreements ADD COLUMN IF NOT EXISTS pdf bytea;

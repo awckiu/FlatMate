@@ -44,6 +44,7 @@ def save_case(
     clauses: list[dict],
     result: dict,
     user_id: str | None = None,
+    pdf: bytes | None = None,
 ) -> str:
     """Save one analysis as a new case and return its code. A logged-in uploader is
     linked to the lead tenant, so the case appears in their account."""
@@ -53,7 +54,7 @@ def save_case(
             with conn.transaction():
                 _insert_case(
                     conn, code, lead_tenant, co_tenants, property_address,
-                    filename, agreement_text, clauses, result, user_id,
+                    filename, agreement_text, clauses, result, user_id, pdf,
                 )
             return code
         except psycopg.errors.UniqueViolation:
@@ -61,7 +62,7 @@ def save_case(
     raise RuntimeError("Could not generate a unique case code")
 
 
-def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename, agreement_text, clauses, result, user_id):
+def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename, agreement_text, clauses, result, user_id, pdf):
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO cases (code, property_address) VALUES (%s, %s) RETURNING id",
@@ -74,11 +75,11 @@ def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename
         )
         cur.execute(
             """INSERT INTO agreements
-                 (case_id, original_filename, page_count, text, summary, analysis_mode, law_data_available)
-               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                 (case_id, original_filename, page_count, text, summary, analysis_mode, law_data_available, pdf)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
             (
                 case_id, filename, result["pages"], agreement_text, result["summary"],
-                result["mode"], result["law_data_available"],
+                result["mode"], result["law_data_available"], pdf,
             ),
         )
         agreement_id = cur.fetchone()[0]
@@ -126,7 +127,7 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
     """A saved case in the same shape as the /api/analyze response, or None."""
     row = conn.execute(
         """SELECT c.id, c.code, c.property_address, a.id, a.original_filename, a.page_count,
-                  a.summary, a.analysis_mode, a.law_data_available, e.body
+                  a.summary, a.analysis_mode, a.law_data_available, e.body, a.pdf IS NOT NULL
            FROM cases c
            JOIN agreements a ON a.case_id = c.id
            LEFT JOIN emails e ON e.case_id = c.id
@@ -135,7 +136,7 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
     ).fetchone()
     if row is None:
         return None
-    case_id, code, address, agreement_id, filename, pages, summary, mode, law_data_available, email = row
+    case_id, code, address, agreement_id, filename, pages, summary, mode, law_data_available, email, has_pdf = row
 
     tenants = [
         {"name": name, "role": role}
@@ -173,6 +174,7 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
         "tenants": tenants,
         "property_address": address,
         "filename": filename,
+        "pdf_url": pdf_url(code) if has_pdf else None,
         "pages": pages,
         "summary": summary or "",
         "need_to_knows": need_to_knows,
@@ -182,6 +184,20 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
         "law_data_available": bool(law_data_available),
         "disclaimer": DISCLAIMER,
     }
+
+
+def pdf_url(code: str) -> str:
+    return f"/api/cases/{code}/agreement.pdf"
+
+
+def get_pdf(conn: psycopg.Connection, code: str) -> tuple[bytes, str | None] | None:
+    """The original agreement PDF and its file name, or None if the case or PDF is missing."""
+    row = conn.execute(
+        """SELECT a.pdf, a.original_filename FROM agreements a JOIN cases c ON c.id = a.case_id
+           WHERE c.code = %s AND a.pdf IS NOT NULL""",
+        (code,),
+    ).fetchone()
+    return (bytes(row[0]), row[1]) if row else None
 
 
 def list_cases(conn: psycopg.Connection, user_id: str) -> list[dict]:

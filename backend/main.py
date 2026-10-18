@@ -1,10 +1,11 @@
 import json
 import logging
 import secrets
+from urllib.parse import quote
 
 import psycopg
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from google.genai.errors import APIError
 from pypdf.errors import PdfReadError
@@ -101,6 +102,7 @@ async def analyze(
                     clauses=clauses,
                     result=result,
                     user_id=auth.current_user_id(request),
+                    pdf=pdf_bytes,
                 )
         except Exception:
             logger.exception("Could not save the case")
@@ -117,6 +119,7 @@ async def analyze(
         ],
         "property_address": property_address,
         "filename": agreement.filename,
+        "pdf_url": cases.pdf_url(case_code) if case_code else None,
         **result,
     }
 
@@ -134,6 +137,30 @@ def get_case(code: str):
     if case is None:
         raise HTTPException(status_code=404, detail="No case was found with that code.")
     return case
+
+
+@app.get("/api/cases/{code}/agreement.pdf")
+def get_agreement_pdf(code: str):
+    if not config.DATABASE_URL:
+        raise HTTPException(status_code=503, detail="Saved cases need the database, which isn't set up on this server.")
+    try:
+        with cases.connect() as conn:
+            found = cases.get_pdf(conn, cases.normalize_code(code))
+    except psycopg.Error as error:
+        logger.exception("Could not load the PDF for case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if found is None:
+        raise HTTPException(status_code=404, detail="No PDF was saved for that case.")
+    pdf, filename = found
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={
+            # inline opens it in the browser's PDF viewer; quote() keeps odd file names header-safe.
+            "Content-Disposition": f"inline; filename*=UTF-8''{quote(filename or 'agreement.pdf')}",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @app.get("/api/my/cases")
