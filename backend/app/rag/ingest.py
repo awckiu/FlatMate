@@ -1,35 +1,87 @@
-"""Split legislation text into section-sized chunks and load them into the vector store."""
+"""Parse the fetched law files into section-sized chunks and load them into the vector store."""
 
-import re
+import time
+from dataclasses import dataclass
 
 from app import llm
 from app.rag.store import Chunk, VectorStore
 
-# Lines like "1 Prohibitions applying to landlords" or "21 Recovery of possession..."
-SECTION_HEADING = re.compile(r"^\s*(\d+[A-Z]?)\s+[A-Z][^\n]{3,}$", re.MULTILINE)
-
 MAX_CHARS = 4000
+# Gemini's free tier caps embedding tokens per minute, so a long Act is spread over minutes.
+RATE_LIMIT_WAIT_SECONDS = 60
+RATE_LIMIT_RETRIES = 5
 
 
-def chunk_by_section(text: str, source: str, url: str = "") -> list[Chunk]:
-    matches = list(SECTION_HEADING.finditer(text))
-    if not matches:
-        return [Chunk(source, "", text[i : i + MAX_CHARS], url) for i in range(0, len(text), MAX_CHARS)]
+@dataclass
+class LawFile:
+    source: str
+    url: str
+    last_updated: str  # YYYY-MM-DD
+    chunks: list[Chunk]
+
+
+def parse_law_file(text: str) -> LawFile:
+    """Parse the format scripts/fetch_law.py writes (see backend/data/law/README.md)."""
+    header, _, body = text.partition("\n### ")
+    meta = {}
+    for line in header.splitlines():
+        key, sep, value = line.partition(":")
+        if sep:
+            meta[key.strip()] = value.strip()
+    missing = [key for key in ("source", "url", "last_updated") if not meta.get(key)]
+    if missing:
+        raise ValueError(f"law file header is missing {', '.join(missing)}")
 
     chunks = []
-    for m, nxt in zip(matches, matches[1:] + [None]):
-        body = text[m.start() : nxt.start() if nxt else len(text)].strip()
-        for i in range(0, len(body), MAX_CHARS):
-            chunks.append(Chunk(source, f"s.{m.group(1)}", body[i : i + MAX_CHARS], url))
-    return chunks
+    for block in ("### " + body).split("\n### ") if body else []:
+        title, _, section_text = block.removeprefix("### ").partition("\n")
+        parts = [part.strip() for part in title.split("|")]
+        if len(parts) != 3 or not parts[0]:
+            raise ValueError(f"bad section line: ### {title}")
+        section_ref, heading, url = parts
+        for piece in _split(section_text.strip()):
+            chunks.append(Chunk(meta["source"], section_ref, piece, url, heading))
+    return LawFile(meta["source"], meta["url"], meta["last_updated"], chunks)
 
 
-def ingest(store: VectorStore, chunks: list[Chunk], batch_size: int = 50) -> int:
+def _split(text: str) -> list[str]:
+    """Split a long section into pieces of at most MAX_CHARS, at line breaks where possible."""
+    pieces, current = [], ""
+    for line in text.splitlines():
+        if current and len(current) + 1 + len(line) > MAX_CHARS:
+            pieces.append(current)
+            current = ""
+        while len(line) > MAX_CHARS:
+            pieces.append(line[:MAX_CHARS])
+            line = line[MAX_CHARS:]
+        current = f"{current}\n{line}" if current else line
+    return pieces + ([current] if current else [])
+
+
+def _embed_with_retry(texts: list[str]) -> list[list[float]]:
+    for attempt in range(RATE_LIMIT_RETRIES + 1):
+        try:
+            return llm.embed(texts)
+        except Exception as error:
+            if getattr(error, "code", None) != 429 or attempt == RATE_LIMIT_RETRIES:
+                raise
+            print(f"  Gemini rate limit hit; waiting {RATE_LIMIT_WAIT_SECONDS}s")
+            time.sleep(RATE_LIMIT_WAIT_SECONDS)
+
+
+def ingest(
+    store: VectorStore,
+    chunks: list[Chunk],
+    batch_size: int = 20,
+    last_updated: str | None = None,
+    source_url: str | None = None,
+) -> int:
     if not chunks:
         return 0
     embeddings = []
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i : i + batch_size]
-        embeddings.extend(llm.embed([c.text for c in batch]))
-    store.replace_source(chunks[0].source, chunks, embeddings)
+        # The heading helps matching ("Access for repairs"), so it is embedded with the text.
+        embeddings.extend(_embed_with_retry([f"{c.heading}\n{c.text}" if c.heading else c.text for c in batch]))
+    store.replace_source(chunks[0].source, chunks, embeddings, last_updated, source_url)
     return len(chunks)

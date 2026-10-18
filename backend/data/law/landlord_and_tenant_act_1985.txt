@@ -1,0 +1,216 @@
+source: Landlord and Tenant Act 1985
+url: https://www.legislation.gov.uk/ukpga/1985/70
+last_updated: 2026-06-29
+
+### s.1 | Disclosure of landlord’s identity. | https://www.legislation.gov.uk/ukpga/1985/70/section/1
+(1) If the tenant of premises occupied as a dwelling makes a written request for the landlord’s name and address to—
+(a) any person who demands, or the last person who received, rent payable under the tenancy, or
+(b) any other person for the time being acting as agent for the landlord, in relation to the tenancy,
+that person shall supply the tenant with a written statement of the landlord’s name and address within the period of 21 days beginning with the day on which he receives the request.
+(2) A person who, without reasonable excuse, fails to comply with subsection (1) commits a summary offence and is liable on conviction to a fine not exceeding level 4 on the standard scale.
+(3) In this section and section 2—
+(a) “tenant” includes a statutory tenant; and
+(b) “landlord” means the immediate landlord.
+
+### s.2 | Disclosure of directors, &c. of corporate landlord. | https://www.legislation.gov.uk/ukpga/1985/70/section/2
+(1) Where a tenant is supplied under section 1 with the name and address of his landlord and the landlord is a body corporate, he may make a further written request to the landlord for the name and address of every director and of the secretary of the landlord.
+(2) The landlord shall supply the tenant with a written statement of the information requested within the period of 21 days beginning with the day on which he receives the request.
+(3) A request under this section is duly made to the landlord if it is made to—
+(a) an agent of the landlord, or
+(b) a person who demands the rent of the premises concerned:
+and any such agent or person to whom such a request is made shall forward it to the landlord as soon as may be.
+(4) A landlord who, without reasonable excuse, fails to comply with a request under this section, and a person who, without reasonable excuse, fails to comply with a requirement imposed on him by subsection (3), commits a summary offence and is liable on conviction to a fine not exceeding level 4 on the standard scale.
+
+### s.3 | Duty to inform tenant of assignment of landlord’s interest. | https://www.legislation.gov.uk/ukpga/1985/70/section/3
+(1) If the interest of the landlord under a tenancy of premises which consist of or include a dwelling is assigned, the new landlord shall give notice in writing of the assignment, and of his name and address, to the tenant not later than the next day on which rent is payable under the tenancy or, if that is within two months of the assignment, the end of that period of two months.
+(2) If trustees consititute the new landlord, a collective description of the trustes as the trustees of the trust in question may be given as the name of the landlord, and where such a collective description is given—
+(a) the address of the new landlord may be given as the address from which the affairs of the trust are conducted, and
+(b) a change in the persons who are for the time being the trustees of the trust shall not be treated as an assignment of the interest of the landlord.
+(3) A person who is the new landlord under a tenancy falling within subsection (1) and who fails, without reasonable excuse to give the notice required by that subsection, commits a summary offence and is liable on conviction to a fine not exceeding level 4 on the standard scale.
+(3A) The person who was the landlord under the tenancy immediately before the assignment (“the old landlord”) shall be liable to the tenant in respect of any breach of any covenant, condition or agreement under the tenancy occurring before the end of the relevant period in like manner as if the interest assigned were still vested in him; and where the new landlord is also liable to the tenant in respect of any such breach occurring within that period, he and the old landlord shall be jointly and severally liable in respect of it.
+(3B) In subsection (3A) “the relevant period” means the period beginning with the date of the assignment and ending with the date when—
+(a) notice in writing of the assignment, and of the new landlord’s name and address, is given to the tenant by the new landlord (whether in accordance with subsection (1) or not), or
+(b) notice in writing of the assignment, and of the new landlord’s name and last-known address, is given to the tenant by the old landlord,
+whichever happens first.
+(4) In this section—
+(a) “tenancy” includes a statutory tenancy, and
+(b) references to the assignment of the landlord’s interest include any conveyance other than a mortgage or charge.
+
+### s.9A | Fitness for human habitation of dwellings in England | https://www.legislation.gov.uk/ukpga/1985/70/section/9A
+(1) In a lease to which this section applies of a dwelling in England (see section 9B), there is implied a covenant by the lessor that the dwelling—
+(a) is fit for human habitation at the time the lease is granted or otherwise created or, if later, at the beginning of the term of the lease, and
+(b) will remain fit for human habitation during the term of the lease.
+(2) The implied covenant is not to be taken as requiring the lessor—
+(a) to carry out works or repairs for which the lessee is liable by virtue of—
+(i) the duty of the lessee to use the premises in a tenant-like manner, or
+(ii) an express covenant of the lessee of substantially the same effect as that duty;
+(b) to rebuild or reinstate the dwelling in the case of destruction or damage by fire, storm, flood or other inevitable accident;
+(c) to keep in repair or maintain anything which the lessee is entitled to remove from the dwelling;
+(d) to carry out works or repairs which, if carried out, would put the lessor in breach of any obligation imposed by any enactment (whenever passed or made);
+(e) to carry out works or repairs requiring the consent of a superior landlord or other third party in circumstances where consent has not been obtained following reasonable endeavours to obtain it.
+(3) The implied covenant is also not to be taken as imposing on the lessor any liability in respect of the dwelling being unfit for human habitation if the unfitness is wholly or mainly attributable to—
+(a) the lessee’s own breach of covenant, or
+(b) disrepair which the lessor is not obliged to make good because of an exclusion or modification under section 12 (power of county court to authorise exclusions or modifications in leases in respect of repairing obligations under section 11).
+(4) Any provision of a lease or of any agreement relating to a lease (whether made before or after the grant or creation of the lease) is void to the extent that it purports—
+(a) to exclude or limit the obligations of the lessor under the implied covenant, or
+(b) to authorise any forfeiture or impose on the lessee any penalty, disability or obligation in the event of the lessee enforcing or relying upon those obligations.
+(5) Where in any proceedings before a court it is alleged that a lessor is in breach of an obligation under the implied covenant, the court may order specific performance of the obligation (regardless of any equitable rule restricting the scope of that remedy).
+(6) Where a lease to which this section applies of a dwelling in England forms part only of a building, the implied covenant has effect as if the reference to the dwelling in subsection (1) included a reference to any common parts of the building in which the lessor has an estate or interest.
+(7) In a lease to which this section applies of a dwelling in England, there is also implied a covenant by the lessee that the lessor, or a person authorised in writing by the lessor, may enter the dwelling for the purpose of viewing its condition and state of repair.
+(8) The covenant implied by subsection (7) requires entry to the dwelling to be permitted—
+(a) only at reasonable times of the day, and
+(b) only if at least 24 hours’ notice in writing has been given to the occupier of the dwelling.
+(9) In this section—
+“common parts” has the meaning given by section 60(1) of the Landlord and Tenant Act 1987;
+“lease” does not include a mortgage term;
+“lessee” means the person for the time being entitled to the term of a lease;
+“lessor” means the person for the time being entitled to the reversion expectant on a lease.
+
+### s.9B | Leases to which section 9A applies | https://www.legislation.gov.uk/ukpga/1985/70/section/9B
+(1) Section 9A applies to a lease under which a dwelling is let wholly or mainly for human habitation if either of the following applies—
+(a) the lease is for a term of less than 7 years, or
+(b) the lease is of a kind mentioned in subsection (1A) , (1AA) or (1AB) of section 13 (certain leases to which section 11 applies).
+This is subject as follows.
+(2) Section 9A does not apply to any lease of a kind mentioned in section 14 (exceptions for leases to which section 11 applies).
+(3) Except as mentioned in subsections (4), (5) and (6), section 9A does not apply to a lease granted—
+(a) before the commencement date, or
+(b) on or after that date in pursuance of an agreement entered into, or an order of a court made, before the commencement date.
+(4) Section 9A applies to a periodic or secure tenancy that is in existence on the commencement date, but in the case of any such tenancy the covenant implied by that section has effect in the following way—
+(a) subsection (1)(a) of that section has effect as if the reference to the later of the times there mentioned were a reference to the time that begins at the end of the period of 12 months beginning with the commencement date, and
+(b) subsection (1)(b) of that section has effect only in respect of times falling after the end of that 12 month period.
+(5) Section 9A applies to a periodic or secure tenancy that comes into existence after the commencement date on expiry of a term of a lease granted before that date.
+(6) Section 9A applies to a lease for a fixed term which—
+(a) is granted or renewed before the commencement date, and
+(b) is renewed for a further fixed term on or after that date,
+and for this purpose the renewal on or after the commencement date is to be treated as a grant of the lease on or after that date.
+(7) For the purposes of subsection (1) it is immaterial—
+(a) whether the dwelling is to be occupied under the lease or under an inferior lease derived out of it, or
+(b) that the lease also demises other property (which may consist of or include one or more other dwellings).
+(8) In determining for the purposes of subsection (1)(a) whether a lease is for a term of less than 7 years—
+(a) any part of the term falling before the grant or creation is to be ignored and the lease is to be treated as a lease for a term commencing with the grant or creation;
+(b) a lease which is determinable at the option of the lessor before the expiry of 7 years from the commencement of the term is to be treated as a lease for a term of less than 7 years;
+(c) a lease (other than one to which paragraph (b) applies) is not to be treated as a lease for a term of less than 7 years if it confers on the lessee an option for renewal for a term which, together with the original term, amounts to 7 years or more.
+(9) In this section—
+“the commencement date” means the date on which the Homes (Fitness for Human Habitation) Act 2018 comes into force;
+“lease”, “lessee” and “lessor” have the same meanings as in section 9A;
+“secure tenancy” has the meaning given by section 79 of the Housing Act 1985.
+
+### s.9C | Application of section 9A to certain dwellings occupied by agricultural workers | https://www.legislation.gov.uk/ukpga/1985/70/section/9C
+(1) This section applies where under a contract of employment of a worker employed in agriculture—
+(a) the provision of a dwelling for the worker’s occupation forms part of the worker’s remuneration, and
+(b) the provisions of section 9A (implied term as to fitness for human habitation of dwellings in England) are inapplicable by reason only of the dwelling not being let to the worker.
+(2) There is implied as part of the contract of employment (in spite of any stipulation to the contrary) a term having the same effect as the covenant that would be implied by section 9A if the dwelling were let by a lease to which that section applies.
+(3) The provisions of section 9A apply accordingly—
+(a) with the substitution of “employer” and “employee” for “lessor” and “lessee”, and
+(b) with such other modifications as may be necessary.
+(4) This section does not affect—
+(a) any obligation of a person other than the employer to repair a dwelling to which the covenant implied by section 9A applies by virtue of this section, or
+(b) any remedy for enforcing such an obligation.
+
+### s.10 | Fitness for human habitation. | https://www.legislation.gov.uk/ukpga/1985/70/section/10
+(1) In determining for the purposes of this Act whether a house or dwelling is unfit for human habitation, regard shall be had to its condition in respect of the following matters—
+repair,
+stability,
+freedom from damp,
+internal arrangement,
+natural lighting,
+ventilation,
+water supply,
+drainage and sanitary conveniences,
+facilities for preparation and cooking of food and for the disposal of waste water;
+in relation to a dwelling in England, any prescribed hazard;
+and the house or dwelling shall be regarded as unfit for human habitation if, and only if, it is so far defective in one or more of those matters that it is not reasonably suitable for occupation in that condition.
+(2) In subsection (1) “prescribed hazard” means any matter or circumstance amounting to a hazard for the time being prescribed in regulations made by the Secretary of State under section 2 of the Housing Act 2004.
+(3) The definition of “hazard” in section 2(1) of the Housing Act 2004 applies for the purposes of subsection (2) as though the reference to a potential occupier were omitted.
+
+### s.11 | Repairing obligations in short leases. | https://www.legislation.gov.uk/ukpga/1985/70/section/11
+(1) In a lease to which this section applies (as to which, see sections 13 and 14) there is implied a covenant by the lessor—
+(a) to keep in repair the structure and exterior of the dwelling-house (including drains, gutters and external pipes),
+(b) to keep in repair and proper working order the installations in the dwelling-house for the supply of water, gas and electricity and for sanitation (including basins, sinks, baths and sanitary conveniences, but not other fixtures, fittings and appliances for making use of the supply of water, gas or electricity), and
+(c) to keep in repair and proper working order the installations in the dwelling-house for space heating and heating water.
+(1A) If a lease to which this section applies is a lease of a dwelling-house which forms part only of a building, then, subject to subsection (1B), the covenant implied by subsection (1) shall have effect as if—
+(a) the reference in paragraph (a) of that subsection to the dwelling-house included a reference to any part of the building in which the lessor has an estate or interest; and
+(b) any reference in paragraphs (b) and (c) of that subsection to an installation in the dwelling-house included a reference to an installation which, directly or indirectly, serves the dwelling-house and which either—
+(i) forms part of any part of a building in which the lessor has an estate or interest; or
+(ii) is owned by the lessor or under his control.
+(1B) Nothing in subsection (1A) shall be construed as requiring the lessor to carry out any works or repairs unless the disrepair (or failure to maintain in working order) is such as to affect the lessee’s enjoyment of the dwelling-house or of any common parts, as defined in section 60(1) of the Landlord and Tenant Act 1987, which the lessee, as such, is entitled to use.
+(2) The covenant implied by subsection (1) (“the lessor’s repairing covenant”) shall not be construed as requiring the lessor—
+(a) to carry out works or repairs for which the lessee is liable by virtue of his duty to use the premises in a tenant-like manner, or would be so liable but for an express covenant on his part,
+(b) to rebuild or reinstate the premises in the case of destruction or damage by fire, or by tempest, flood or other inevitable accident, or
+(c) to keep in repair or maintain anything which the lessee is entitled to remove from the dwelling-house.
+(3) In determining the standard of repair required by the lessor’s repairing covenant, regard shall be had to the age, character and prospective life of the dwelling-house and the locality in which it is situated.
+(3A) In any case where—
+(a) the lessor’s repairing covenant has effect as mentioned in subsection (1A), and
+(b) in order to comply with the covenant the lessor needs to carry out works or repairs otherwise than in, or to an installation in, the dwelling-house, and
+(c) the lessor does not have a sufficient right in the part of the building or the installation concerned to enable him to carry out the required works or repairs,
+then, in any proceedings relating to a failure to comply with the lessor’s repairing covenant, so far as it requires the lessor to carry out the works or repairs in question, it shall be a defence for the lessor to prove that he used all reasonable endeavours to obtain, but was unable to obtain, such rights as would be adequate to enable him to carry out the works or repairs.
+(4) A covenant by the lessee for the repair of the premises is of no effect so far as it relates to the matters mentioned in subsection (1)(a) to (c), except so far as it imposes on the lessee any of the requirements mentioned in subsection (2)(a) or (c).
+(5) The reference in subsection (4) to a covenant by the lessee for the repair of the premises includes a covenant—
+(a) to put in repair or deliver up in repair,
+(b) to paint, point or render,
+(c) to pay money in lieu of repairs by the lessee, or
+(d) to pay money on account of repairs by the lessor.
+(6) In a lease in which the lessor’s repairing covenant is implied there is also implied a covenant by the lessee that the lessor, or any person authorised by him in writing, may at reasonable times of the day and on giving 24 hours’ notice in writing to the occupier, enter the premises comprised in the lease for the purpose of viewing their condition and state of repair.
+
+### s.12 | Restriction on contracting out of s. 11. | https://www.legislation.gov.uk/ukpga/1985/70/section/12
+(1) A covenant or agreement, whether contained in a lease to which section 11 applies or in an agreement collateral to such a lease, is void in so far as it purports—
+(a) to exclude or limit the obligations of the lessor or the immunities of the lessee under that section, or
+(b) to authorise any forfeiture or impose on the lessee any penalty, disability or obligation in the event of his enforcing or relying upon those obligations or immunities,
+unless the inclusion of the provision was authorised by the county court.
+(2) The county court may, by order made with the consent of the parties, authorise the inclusion in a lease, or in an agreement collateral to a lease, of provisions excluding or modifying in relation to the lease, the provisions of section 11 with respect to the repairing obligations of the parties if it appears to the court that it is reasonable to do so, having regard to all the circumstances of the case, including the other terms and conditions of the lease.
+
+### s.13 | Leases to which s. 11 applies: general rule. | https://www.legislation.gov.uk/ukpga/1985/70/section/13
+(1) Section 11 (repairing obligations) applies to a lease of a dwelling-house granted on or after 24th October 1961 for a term of less than seven years.
+(1AZA) But that is subject to subsections (1ZA) to (1ZC).
+(1ZA) In the case of a dwelling-house in Wales, section 11 does not apply if the dwelling-house is subject to an occupation contract (for provisions about repairing obligations in the case of occupation contracts, see Part 4 of the Renting Homes (Wales) Act 2016 (anaw 1)).
+(1ZB) In this section, “occupation contract” has the same meaning as in the Renting Homes (Wales) Act 2016 (see section 7 of that Act).
+(1ZC) Section 11 does not apply to a lease of a dwelling-house in England which—
+(a) was an assured tenancy immediately before the commencement date (which has the meaning given by section 146(3) of the Renters’ Rights Act 2025), and
+(b) was granted—
+(i) for a term of seven years or more, and
+(ii) by a person other than a private registered provider of social housing.
+(1A) Section 11 also applies to a lease of a dwelling-house in England granted on or after the day on which section 166 of the Localism Act 2011 came into force which is—
+(a) a secure tenancy for a fixed term of seven years or more granted by a person within section 80(1) of the Housing Act 1985 (secure tenancies: the landlord condition), ...
+(b) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+(1AA) Section 11 also applies to a lease of a dwelling-house in England granted on or after the day on which section 166 of the Localism Act 2011 came into force which is a tenancy for a fixed term of more than seven years that—
+(a) would be an assured tenancy if it were not for a term of more than seven years,
+(b) is not a shared ownership lease, and
+(c) is granted by a private registered provider of social housing.
+(1B) In this section—
+“assured tenancy” has the same meaning as in Part 1 of the Housing Act 1988;
+“secure tenancy” has the meaning given by section 79 of the Housing Act 1985; and
+“shared ownership lease” means a lease—
+granted on payment of a premium calculated by reference to a percentage of the value of the dwelling-house or of the cost of providing it, or
+under which the lessee (or the lessee's personal representatives) will or may be entitled to a sum calculated by reference, directly or indirectly, to the value of the dwelling-house.
+(2) In determining whether a lease is one to which section 11 applies—
+(a) any part of the term which falls before the grant shall be left out of account and the lease shall be treated as a lease for a term commencing with the grant,
+(b) a lease which is determinable at the option of the lessor before the expiration of seven years from the commencement of the term shall be treated as a lease for a term of less than seven years, and
+(c) a lease (other than a lease to which paragraph (b) applies) shall not be treated as a lease for a term of less than seven years if it confers on the lessee an option for renewal for a term which, together with the original term, amounts to seven years or more.
+(3) This section has effect subject to—
+section 14 (leases to which section 11 applies: exceptions), and
+section 32(2) (provisions not applying to tenancies within Part II of the Landlord and Tenant Act 1954).
+
+### s.14 | Leases to which s. 11 applies: exceptions. | https://www.legislation.gov.uk/ukpga/1985/70/section/14
+(1) Section 11 (repairing obligations) does not apply to a new lease granted to an existing tenant, or to a former tenant still in possession, if the previous lease was not a lease to which section 11 applied (and, in the case of a lease granted before 24th October 1961, would not have been if it had been granted on or after that date).
+(2) In subsection (1)—
+“existing tenant” means a person who is when, or immediately before, the new lease is granted, the lessee under another lease of the dwelling-house;
+“former tenant is still in possession” means a person who—
+(a) was the lessee under another lease of the dwelling-house which terminated at some time before the new lease was granted, and
+(b) between the termination of that other lease and the grant of the new lease was continuously in possession of the dwelling-house or of the rents and profits of the dwelling-house; and
+“the previous lease” means the other lease referred to in the above definitions.
+(3) Section 11 does not apply to a lease of a dwelling-house which is a tenancy of an agricultural holding within the meaning of the Agricultural Holdings Act 1986and in relation to which that Act applies or to a farm business tenancy within the meaning of the Agricultural Tenancies Act 1995.
+(4) Section 11 does not apply to a lease granted on or after 3rd October 1980 to—
+a local authority,
+a National Park Authority
+a new town corporation,
+an urban development corporation,
+a Mayoral development corporation,
+the Development Board for Rural Wales,
+a non-profit registered provider of social housing
+a registered social landlord,
+a co-operative housing association, or
+an educational institution or other body specified, or of a class specified, by regulations under section 8 of the Rent Act 1977 or paragraph 8 of Schedule 1 to the Housing Act 1988 (bodies making student lettings)
+a housing action trust established under Part III of the Housing Act 1988.
+(5) Section 11 does not apply to a lease granted on or after 3rd October 1980 to—
+(a) Her Majesty in right of the Crown (unless the lease is under the management of the Crown Estate Commissioners), or
+(b) a government department or a person holding in trust for Her Majesty for the purposes of a government department.
