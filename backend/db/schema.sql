@@ -107,6 +107,16 @@ CREATE TABLE IF NOT EXISTS emails (
 -- (The old Vultr-storage `photos` table is gone: move-in photos live in tenancy_photos, below.)
 DROP TABLE IF EXISTS photos;
 
+-- Changes to the agreement after the first review: a new PDF version ('pdf', body = file
+-- name) or a written amendment such as a landlord's email ('text', body = the amendment).
+CREATE TABLE IF NOT EXISTS agreement_amendments (
+  id          bigserial PRIMARY KEY,
+  case_id     uuid NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
+  kind        text NOT NULL CHECK (kind IN ('pdf', 'text')),
+  body        text NOT NULL,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
 -- Saved analyses: what the results page needs to show a case again.
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'gemini' or 'placeholder'
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;

@@ -141,6 +141,10 @@ kept for the bills and area features later.
   code like `FLAT-7KQ2XM4PTD`. `GET /api/cases/{code}` and `/?case=CODE` reopen it; the code is
   how co-tenants share a case. Without a database, results are shown unsaved.
   The results page can print the review; choose “Save as PDF” in the print dialog.
+  “Update agreement” on the review calls `POST /api/cases/{code}/amendments` with either a new
+  PDF (re-read and re-analysed, replacing the agreement under the same code) or amendment text
+  such as a landlord's email (Gemini rewrites the clauses it changes in place, then the amended
+  agreement is re-analysed). Each update is logged in `agreement_amendments`.
 - Accounts are optional, email + password (`backend/app/auth.py`): `POST /api/auth/signup`,
   `/api/auth/login`, `/api/auth/logout`, `GET /api/me`. Passwords are hashed with scrypt;
   the login is a signed cookie (`SESSION_SECRET`). An analysis run while logged in is linked

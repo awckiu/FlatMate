@@ -1,5 +1,6 @@
 """Saved analyses in Tiger Data: one case per tenancy, reopened with its case code."""
 
+import re
 import secrets
 
 import psycopg
@@ -93,54 +94,199 @@ def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename
                 ),
             ],
         )
-        cur.execute(
-            """INSERT INTO agreements
-                 (case_id, original_filename, page_count, text, summary, analysis_mode, law_data_available, pdf)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
-            (
-                case_id, filename, result["pages"], agreement_text, result["summary"],
-                result["mode"], result["law_data_available"], pdf,
-            ),
+        _insert_agreement(cur, case_id, filename, agreement_text, clauses, result, pdf)
+
+
+def _insert_agreement(cur, case_id, filename, agreement_text, clauses, result, pdf) -> None:
+    """The agreement row, its clauses, findings and email draft for one case."""
+    cur.execute(
+        """INSERT INTO agreements
+             (case_id, original_filename, page_count, text, summary, analysis_mode, law_data_available, pdf)
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+        (
+            case_id, filename, result["pages"], agreement_text, result["summary"],
+            result["mode"], result["law_data_available"], pdf,
+        ),
+    )
+    agreement_id = cur.fetchone()[0]
+
+    # One row per clause number.
+    clause_texts: dict[str, str] = {}
+    for clause in clauses:
+        clause_texts.setdefault(clause["clause_ref"].strip(), clause["text"])
+    clause_ids = _add_clauses(cur, agreement_id, clause_texts)
+    _insert_findings(cur, agreement_id, clause_ids, result)
+    _save_email(cur, case_id, result.get("email", ""))
+
+
+def _add_clauses(cur, agreement_id: int, clause_texts: dict[str, str]) -> dict[str, int]:
+    if not clause_texts:
+        return {}
+    # Batched: Tiger Data is a round trip away from the server.
+    cur.executemany(
+        "INSERT INTO clauses (agreement_id, number, text) VALUES (%s, %s, %s) RETURNING id",
+        [(agreement_id, number, text) for number, text in clause_texts.items()],
+        returning=True,
+    )
+    return dict(zip(clause_texts, (result_set.fetchone()[0] for result_set in cur.results())))
+
+
+def _save_email(cur, case_id, body: str) -> None:
+    cur.execute("DELETE FROM emails WHERE case_id = %s", (case_id,))
+    if body:
+        cur.execute("INSERT INTO emails (case_id, body) VALUES (%s, %s)", (case_id, body))
+
+
+def _insert_findings(cur, agreement_id: int, clause_ids: dict[str, int], result: dict) -> None:
+    """Need-to-knows and flags. Findings that name a clause the agreement doesn't have get
+    their own clause row with empty text."""
+    missing = {
+        item["clause_ref"].strip(): ""
+        for item in [*result["need_to_knows"], *result["flags"]]
+        if item["clause_ref"].strip() not in clause_ids
+    }
+    clause_ids = {**clause_ids, **_add_clauses(cur, agreement_id, missing)}
+    rows = [
+        (clause_ids[item["clause_ref"].strip()], "need_to_know", item["topic"], item["text"],
+         None, None, None, None)
+        for item in result["need_to_knows"]
+    ]
+    for flag in result["flags"]:
+        citation = flag.get("citation") or {}
+        rows.append((
+            clause_ids[flag["clause_ref"].strip()], flag["kind"], None, flag["explanation"],
+            flag["clause_excerpt"], citation.get("source"), citation.get("section"), citation.get("url"),
+        ))
+    if rows:
+        cur.executemany(
+            """INSERT INTO flags
+                 (clause_id, kind, topic, explanation, excerpt, cited_source, cited_section, cited_url)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+            rows,
         )
-        agreement_id = cur.fetchone()[0]
 
-        # One row per clause number. Findings that name a clause the splitter didn't find
-        # get their own row with empty text.
-        clause_texts: dict[str, str] = {}
-        for clause in clauses:
-            clause_texts.setdefault(clause["clause_ref"].strip(), clause["text"])
-        for item in [*result["need_to_knows"], *result["flags"]]:
-            clause_texts.setdefault(item["clause_ref"].strip(), "")
-        clause_ids: dict[str, int] = {}
-        if clause_texts:
-            # Batched: Tiger Data is a round trip away from the server.
-            cur.executemany(
-                "INSERT INTO clauses (agreement_id, number, text) VALUES (%s, %s, %s) RETURNING id",
-                [(agreement_id, number, text) for number, text in clause_texts.items()],
-                returning=True,
-            )
-            clause_ids = dict(zip(clause_texts, (result_set.fetchone()[0] for result_set in cur.results())))
 
-        rows = [
-            (clause_ids[item["clause_ref"].strip()], "need_to_know", item["topic"], item["text"],
-             None, None, None, None)
-            for item in result["need_to_knows"]
-        ]
-        for flag in result["flags"]:
-            citation = flag.get("citation") or {}
-            rows.append((
-                clause_ids[flag["clause_ref"].strip()], flag["kind"], None, flag["explanation"],
-                flag["clause_excerpt"], citation.get("source"), citation.get("section"), citation.get("url"),
-            ))
-        if rows:
-            cur.executemany(
-                """INSERT INTO flags
-                     (clause_id, kind, topic, explanation, excerpt, cited_source, cited_section, cited_url)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-                rows,
-            )
-        if result.get("email"):
-            cur.execute("INSERT INTO emails (case_id, body) VALUES (%s, %s)", (case_id, result["email"]))
+def get_agreement_source(conn: psycopg.Connection, code: str) -> dict | None:
+    """What an amendment needs: the case's tenants, setup, agreement text and clauses."""
+    row = conn.execute(
+        """SELECT c.id, c.property_address, c.household_mode, c.hmo_status, a.id, a.text, a.page_count
+           FROM cases c JOIN agreements a ON a.case_id = c.id WHERE c.code = %s""",
+        (code,),
+    ).fetchone()
+    if row is None:
+        return None
+    case_id, address, household_mode, hmo_status, agreement_id, text, pages = row
+    tenants = conn.execute(
+        "SELECT name, role FROM tenants WHERE case_id = %s ORDER BY role = 'co_tenant', id", (case_id,)
+    ).fetchall()
+    clauses = [
+        {"clause_ref": number, "text": clause_text}
+        for number, clause_text in conn.execute(
+            "SELECT number, text FROM clauses WHERE agreement_id = %s AND text <> '' ORDER BY id",
+            (agreement_id,),
+        )
+    ]
+    return {
+        "case_id": case_id,
+        "agreement_id": agreement_id,
+        "property_address": address,
+        "household_mode": household_mode or "single",
+        "hmo_status": hmo_status or "unknown",
+        "lead_tenant": next((name for name, role in tenants if role == "lead"), ""),
+        "co_tenants": [name for name, role in tenants if role == "co_tenant"],
+        "text": text,
+        "pages": pages,
+        "clauses": clauses,
+    }
+
+
+def replace_agreement(
+    conn: psycopg.Connection,
+    code: str,
+    *,
+    filename: str | None,
+    agreement_text: str,
+    clauses: list[dict],
+    result: dict,
+    pdf: bytes,
+) -> None:
+    """A new PDF version of the agreement: replace the agreement, its clauses and findings
+    (the case, its code and tenants stay the same)."""
+    with conn.transaction(), conn.cursor() as cur:
+        case_id = cur.execute("SELECT id FROM cases WHERE code = %s", (code,)).fetchone()[0]
+        cur.execute("DELETE FROM agreements WHERE case_id = %s", (case_id,))  # cascades to clauses, flags
+        _insert_agreement(cur, case_id, filename, agreement_text, clauses, result, pdf)
+        cur.execute(
+            "INSERT INTO agreement_amendments (case_id, kind, body) VALUES (%s, 'pdf', %s)",
+            (case_id, filename or "agreement.pdf"),
+        )
+
+
+def amend_agreement(
+    conn: psycopg.Connection,
+    source: dict,
+    *,
+    amendment: str,
+    changes: list[dict[str, str]],
+    agreement_text: str,
+    result: dict,
+) -> None:
+    """A written amendment: update the changed clauses in place, add new ones, and replace the
+    findings with the re-analysis of the amended agreement."""
+    agreement_id = source["agreement_id"]
+    with conn.transaction(), conn.cursor() as cur:
+        clause_ids = {
+            number: clause_id
+            for clause_id, number in cur.execute(
+                "SELECT id, number FROM clauses WHERE agreement_id = %s ORDER BY id DESC", (agreement_id,)
+            ).fetchall()
+        }
+        added = {}
+        for change in changes:
+            if change["clause_ref"] in clause_ids:
+                cur.execute(
+                    "UPDATE clauses SET text = %s WHERE id = %s",
+                    (change["text"], clause_ids[change["clause_ref"]]),
+                )
+            else:
+                added[change["clause_ref"]] = change["text"]
+        clause_ids.update(_add_clauses(cur, agreement_id, added))
+        cur.execute(
+            """UPDATE agreements SET text = %s, summary = %s, analysis_mode = %s, law_data_available = %s
+               WHERE id = %s""",
+            (agreement_text, result["summary"], result["mode"], result["law_data_available"], agreement_id),
+        )
+        cur.execute(
+            "DELETE FROM flags WHERE clause_id IN (SELECT id FROM clauses WHERE agreement_id = %s)",
+            (agreement_id,),
+        )
+        _insert_findings(cur, agreement_id, clause_ids, result)
+        _save_email(cur, source["case_id"], result.get("email", ""))
+        cur.execute(
+            "INSERT INTO agreement_amendments (case_id, kind, body) VALUES (%s, 'text', %s)",
+            (source["case_id"], amendment),
+        )
+
+
+def apply_text_changes(text: str, clauses: list[dict], changes: list[dict[str, str]]) -> str:
+    """The full agreement text with amended clauses swapped in and new clauses appended.
+
+    Also sets each change's "text": the clause as stored, starting with its number written the
+    way the agreement writes it ("3." or "3)").
+    """
+    by_ref = {clause["clause_ref"]: clause["text"] for clause in clauses}
+    for change in changes:
+        old = by_ref.get(change["clause_ref"])
+        number = change["clause_ref"]
+        if number and old:
+            written = re.match(rf"\s*{re.escape(number)}[.)]?", old)
+            number = written.group(0).strip() if written else number
+        new = change["text"] = f"{number} {change['new_text']}" if number else change["new_text"]
+        if old and old in text:
+            text = text.replace(old, new, 1)
+        else:
+            text = f"{text.rstrip()}\n\n{new}"
+    return text
 
 
 def get_case(conn: psycopg.Connection, code: str) -> dict | None:
@@ -185,6 +331,13 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
                 ),
             })
 
+    amendments = [
+        {"kind": kind, "note": body if kind == "pdf" else "", "created_at": created_at.isoformat()}
+        for kind, body, created_at in conn.execute(
+            "SELECT kind, body, created_at FROM agreement_amendments WHERE case_id = %s ORDER BY id",
+            (case_id,),
+        )
+    ]
     lead = next((t["name"] for t in tenants if t["role"] == "lead"), "")
     return {
         "case_code": code,
@@ -205,6 +358,7 @@ def get_case(conn: psycopg.Connection, code: str) -> dict | None:
         "email": email or "",
         "mode": mode or "gemini",
         "law_data_available": bool(law_data_available),
+        "amendments": amendments,
         "disclaimer": DISCLAIMER,
     }
 

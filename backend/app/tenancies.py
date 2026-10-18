@@ -328,6 +328,27 @@ def create_profile(
     return profile
 
 
+def refresh_review(review_id: str, review: dict[str, Any]) -> None:
+    """After the agreement is amended, give every tenancy built on that review the new
+    findings. Saved issue statuses are keyed by the old findings' positions, so they reset."""
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        with _transaction(connection):
+            connection.execute(
+                _sql(
+                    """
+                    DELETE FROM tenancy_clause_status
+                    WHERE profile_id IN (SELECT id FROM tenancy_profiles WHERE review_id = ?)
+                    """
+                ),
+                (review_id,),
+            )
+            connection.execute(
+                _sql("UPDATE tenancy_profiles SET review = ? WHERE review_id = ?"),
+                (json.dumps(review), review_id),
+            )
+
+
 def _validate_signing(agreement_signed: bool, signed_on: str | None, tenancy_start: str | None) -> None:
     signed_date = date.fromisoformat(signed_on) if signed_on else None
     start_date = date.fromisoformat(tenancy_start) if tenancy_start else None

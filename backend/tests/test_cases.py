@@ -147,3 +147,25 @@ class SavedCaseTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AmendmentTextTests(unittest.TestCase):
+    def test_amended_clauses_are_swapped_in_and_new_ones_appended(self):
+        text = "1. Rent is £800 a month, due on the 1st.\n2. No pets are allowed at the property."
+        clauses = [
+            {"clause_ref": "1", "text": "1. Rent is £800 a month, due on the 1st."},
+            {"clause_ref": "2", "text": "2. No pets are allowed at the property."},
+        ]
+        changes = [
+            {"clause_ref": "2", "new_text": "One cat is allowed at the property."},
+            {"clause_ref": "3", "new_text": "The landlord pays for the broadband."},
+        ]
+
+        amended = cases.apply_text_changes(text, clauses, changes)
+
+        self.assertEqual(
+            amended,
+            "1. Rent is £800 a month, due on the 1st.\n2. One cat is allowed at the property.\n\n"
+            "3 The landlord pays for the broadband.",
+        )
+        self.assertEqual(changes[0]["text"], "2. One cat is allowed at the property.")

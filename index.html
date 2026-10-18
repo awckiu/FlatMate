@@ -975,6 +975,13 @@
         .btn:disabled { cursor: not-allowed; opacity: .55; }
         .btn.secondary { border-color: #cfe0d2; background: #fff; color: var(--green-dark); }
         .btn.secondary:hover:not(:disabled) { background: #f1f7f1; }
+        /* A <label> styled as a button (file pickers) must not take the grey form-label text. */
+        .form-skin label.btn { display: inline-flex; color: #fff; font-size: 13px; font-weight: 700; }
+        .form-skin label.btn.secondary { color: var(--green-dark); }
+        .form-skin label.choice-card { display: flex; font-weight: 400; }
+        .btn.camera { padding: 12px 18px; border-color: var(--green-dark); background: var(--green-dark); color: #fff; font-size: 14px; box-shadow: 0 6px 16px rgba(29,77,60,.28); }
+        .btn.camera:hover { background: #143a2c; }
+        .btn.camera:focus-within { outline: 3px solid #f4c430; outline-offset: 2px; }
         .btn.danger { border-color: #e8c4c0; background: #fff; color: #9a3d36; }
         .btn.big { padding: 14px 20px; font-size: 14px; box-shadow: 0 10px 24px rgba(40, 98, 78, .22); }
         .btn.small { padding: 6px 10px; font-size: 12px; border-radius: 9px; }
@@ -1349,11 +1356,43 @@
                             <button type="button" id="copy-review-link" class="py-3 px-4" disabled>
                                 <i class="fa-solid fa-link"></i> Copy review link
                             </button>
+                            <button type="button" id="amend-open" class="py-3 px-4 hidden" aria-expanded="false" aria-controls="amend-panel">
+                                <i class="fa-solid fa-file-pen"></i> Update agreement
+                            </button>
                         </div>
                         <p id="review-saved" role="status"></p>
                         <button type="button" id="add-to-account-btn" class="hidden">Add to my account</button>
                     </div>
                 </div>
+
+                <form id="amend-panel" class="result-card form-skin hidden" novalidate>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-file-pen text-green-500"></i> Update your agreement
+                    </h3>
+                    <p class="muted" style="margin-bottom:12px">Got a new version of the contract, or did your landlord agree a change by email? Add it here: we update the saved clauses and check the whole agreement again. The review code stays the same.</p>
+                    <fieldset class="onboarding-choice-grid" style="border:0;padding:0;margin:0 0 12px" aria-label="What kind of update">
+                        <label class="choice-card">
+                            <input type="radio" name="amend-kind" value="pdf" checked>
+                            <span><strong>A new PDF of the agreement</strong><span>The whole contract again, with the changes in it.</span></span>
+                        </label>
+                        <label class="choice-card">
+                            <input type="radio" name="amend-kind" value="text">
+                            <span><strong>A change agreed in writing</strong><span>Paste the landlord's email or the amended wording.</span></span>
+                        </label>
+                    </fieldset>
+                    <label id="amend-pdf-wrap" for="amend-pdf">New agreement PDF
+                        <input id="amend-pdf" type="file" accept="application/pdf">
+                    </label>
+                    <label id="amend-text-wrap" for="amend-text" class="hidden">The amendment
+                        <textarea id="amend-text" rows="6" maxlength="20000" placeholder="e.g. Hi Jamie, I'm happy to remove the cleaning fee in clause 3 and allow one cat."></textarea>
+                    </label>
+                    <div class="btn-row">
+                        <button type="submit" id="amend-submit" class="btn"><i class="fa-solid fa-rotate"></i> Update and re-check</button>
+                        <button type="button" id="amend-cancel" class="btn secondary">Cancel</button>
+                        <span id="amend-status" class="muted" role="status" aria-live="polite"></span>
+                    </div>
+                    <p id="amend-error" class="notice error" role="alert"></p>
+                </form>
 
                 <div class="result-card">
                     <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
@@ -1602,7 +1641,7 @@
                         <label for="photo-note">Note (optional)<input id="photo-note" maxlength="500" placeholder="e.g. Scratch beside the oven"></label>
                     </div>
                     <div class="btn-row">
-                        <label class="btn" for="photo-camera" style="display:inline-flex"><i class="fa-solid fa-camera"></i> Take a photo
+                        <label class="btn camera" for="photo-camera"><i class="fa-solid fa-camera"></i> Take a photo
                             <input id="photo-camera" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" class="sr-only">
                         </label>
                         <label class="btn secondary" for="photo-file" style="display:inline-flex"><i class="fa-regular fa-image"></i> Upload from device
@@ -1779,12 +1818,13 @@
 
             <div class="panel form-skin">
                 <h2><i class="fa-solid fa-calendar-xmark" style="color:var(--green)"></i> Notice period</h2>
-                <p class="muted">Most tenants have to give at least two months' notice in writing. Check your agreement for the exact period and any fixed term or break clause.</p>
+                <p class="muted">Most tenants have to give at least two months' notice in writing, and it has to end at the end of a rental period: the day before your rent day (the day of the month your tenancy started), or on the rent day itself. So once the two months are up you still finish out that rental month. Check your agreement for the exact period and any fixed term or break clause.</p>
                 <div class="workspace-row">
                     <label for="notice-date">Date you'll give notice<input id="notice-date" type="date"></label>
                     <div>
                         <p class="field-hint" style="margin:0 0 6px">Earliest move-out date</p>
                         <p id="notice-end" class="workspace-code" style="font-size:16px;margin:0"></p>
+                        <p id="notice-end-why" class="field-hint" style="margin:6px 0 0"></p>
                     </div>
                 </div>
                 <div class="btn-row">
@@ -2132,6 +2172,25 @@
             $('tenancy-start-wrap').classList.toggle('hidden', !signed);
         });
 
+        // The agreement can't be signed after the tenancy starts: each date picker limits the other.
+        function linkSigningDates(signedId, startId) {
+            const sync = () => {
+                $(startId).min = $(signedId).value || '';
+                $(signedId).max = $(startId).value || '';
+            };
+            $(signedId).addEventListener('change', sync);
+            $(startId).addEventListener('change', sync);
+            return sync;
+        }
+        linkSigningDates('signed-on', 'tenancy-start');
+        const syncWorkspaceDates = linkSigningDates('workspace-signed-on', 'workspace-tenancy-start');
+
+        function signingDateProblem(signedOn, tenancyStart) {
+            return signedOn && tenancyStart && signedOn > tenancyStart
+                ? "The date you signed can't be after the tenancy start date. Check both dates."
+                : '';
+        }
+
         function enterSetup() {
             state.inSetup = true;
             showSetupLoading(false);
@@ -2251,8 +2310,9 @@
             if (signed && (!$('signed-on').value || !$('tenancy-start').value)) problems.push('the signing and start dates');
             const file = fileInput.files[0];
             if (!file) problems.push('your agreement PDF');
-            if (problems.length) {
-                setNotice('setup-error', `Please add ${problems.join(', ')}.`);
+            const dateProblem = signed ? signingDateProblem($('signed-on').value, $('tenancy-start').value) : '';
+            if (problems.length || dateProblem) {
+                setNotice('setup-error', problems.length ? `Please add ${problems.join(', ')}.` : dateProblem);
                 $('setup-error').focus();
                 return;
             }
@@ -2382,8 +2442,17 @@
             });
             $('no-clarifications').classList.toggle('hidden', flags.some(isClarifyFlag));
             $('no-legal-flags').classList.toggle('hidden', !result.law_data_available || flags.some(isLegalFlag));
-            $('analysis-meta').textContent = [result.filename || 'Agreement', result.pages ? `${result.pages} page(s)` : '', result.property_address]
-                .filter(Boolean).join(' · ');
+            const amendments = Array.isArray(result.amendments) ? result.amendments : [];
+            const lastAmendment = amendments[amendments.length - 1];
+            $('analysis-meta').textContent = [
+                result.filename || 'Agreement',
+                result.pages ? `${result.pages} page(s)` : '',
+                result.property_address,
+                lastAmendment
+                    ? `Updated ${new Date(lastAmendment.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} (${lastAmendment.kind === 'pdf' ? 'new PDF' : 'written amendment'})`
+                    : '',
+            ].filter(Boolean).join(' · ');
+            $('amend-open').classList.toggle('hidden', !result.case_code);
             $('analysis-summary').textContent = result.summary || 'No summary was returned for this agreement.';
             const needToKnows = Array.isArray(result.need_to_knows) ? result.need_to_knows : [];
             needToKnows.forEach((item) => {
@@ -2447,6 +2516,70 @@
                 .catch(() => { feedback.textContent = 'Could not access the clipboard. Select the email text and copy it manually.'; });
         });
         $('export-pdf-btn').addEventListener('click', () => window.print());
+
+        // ---------- Update the agreement: a new PDF version or a written amendment ----------
+
+        function amendKind() {
+            return document.querySelector('input[name="amend-kind"]:checked').value;
+        }
+
+        function showAmendPanel(open) {
+            $('amend-panel').classList.toggle('hidden', !open);
+            $('amend-open').setAttribute('aria-expanded', String(open));
+            setNotice('amend-error', '');
+            if (open) $('amend-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        $('amend-open').addEventListener('click', () => showAmendPanel($('amend-panel').classList.contains('hidden')));
+        $('amend-cancel').addEventListener('click', () => showAmendPanel(false));
+        document.querySelectorAll('input[name="amend-kind"]').forEach((input) => input.addEventListener('change', () => {
+            $('amend-pdf-wrap').classList.toggle('hidden', amendKind() !== 'pdf');
+            $('amend-text-wrap').classList.toggle('hidden', amendKind() !== 'text');
+            setNotice('amend-error', '');
+        }));
+
+        $('amend-panel').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            setNotice('amend-error', '');
+            const code = state.review?.case_code;
+            if (!code) return setNotice('amend-error', 'Only a saved review can be updated.');
+            const body = new FormData();
+            if (amendKind() === 'pdf') {
+                const file = $('amend-pdf').files[0];
+                if (!file) return setNotice('amend-error', 'Choose the new agreement PDF.');
+                if (file.type !== 'application/pdf') return setNotice('amend-error', 'Please choose a PDF file.');
+                body.append('agreement', file);
+            } else {
+                const text = $('amend-text').value.trim();
+                if (!text) return setNotice('amend-error', "Paste the landlord's email or the amended wording.");
+                body.append('amendment_text', text);
+            }
+            $('amend-submit').disabled = true;
+            $('amend-status').textContent = amendKind() === 'pdf' ? 'Reading the new agreement…' : 'Applying the change and re-checking…';
+            try {
+                const updated = await apiJson(`/api/cases/${encodeURIComponent(code)}/amendments`, { method: 'POST', body });
+                if (state.profile && state.profile.review_id === updated.case_code) {
+                    useProfile(await apiJson(`/api/tenancies/${state.profile.id}`));
+                } else {
+                    state.review = { ...state.review, ...updated };
+                }
+                renderResults(state.review);
+                $('amend-panel').reset();
+                $('amend-pdf-wrap').classList.remove('hidden');
+                $('amend-text-wrap').classList.add('hidden');
+                showAmendPanel(false);
+                const clauses = updated.amended_clauses || [];
+                $('review-saved').textContent = clauses.length
+                    ? `Updated clause${clauses.length > 1 ? 's' : ''} ${clauses.join(', ')} and checked the agreement again.`
+                    : 'Replaced the agreement with the new PDF and checked it again.';
+                $('review-title').focus();
+            } catch (error) {
+                setNotice('amend-error', errorText(error, 'Could not update the agreement. Please try again.'));
+            } finally {
+                $('amend-submit').disabled = false;
+                $('amend-status').textContent = '';
+            }
+        });
         $('copy-review-link').addEventListener('click', async () => {
             const code = $('copy-review-link').dataset.reviewCode;
             if (!code) return;
@@ -2597,6 +2730,7 @@
                 : 'Add the date you signed and your tenancy start date. Photos and the shared tenancy code unlock on the start date.';
             $('workspace-signed-on').value = profile.signed_on || '';
             $('workspace-tenancy-start').value = profile.tenancy_start || '';
+            syncWorkspaceDates();
             $('save-signing-details').disabled = !isOwner;
             setNotice('signing-error', isOwner ? '' : 'Only the person who set up this tenancy can change the dates.');
             $('tenancy-code-block').classList.toggle('hidden', !profile.code);
@@ -2627,6 +2761,8 @@
 
         $('save-signing-details').addEventListener('click', async () => {
             setNotice('signing-error', '');
+            const dateProblem = signingDateProblem($('workspace-signed-on').value, $('workspace-tenancy-start').value);
+            if (dateProblem) return setNotice('signing-error', dateProblem);
             try {
                 const profile = await apiJson(`/api/tenancies/${state.profile.id}/signing`, jsonBody('PATCH', {
                     agreement_signed: true,
@@ -3212,10 +3348,41 @@
                 return;
             }
             const served = parseLocalDate(value);
-            const end = new Date(served.getFullYear(), served.getMonth() + 2, served.getDate());
-            if (end.getDate() !== served.getDate()) end.setDate(0); // e.g. 31 Dec + 2 months = 28/29 Feb
+            const twoMonths = addMonths(served, 2);
+            const start = state.profile?.tenancy_start ? parseLocalDate(state.profile.tenancy_start) : null;
+            let end = twoMonths;
+            let why = 'Add your tenancy start date to line this up with the end of a rental period.';
+            if (start) {
+                // Notice has to end at the end of a rental period: the day before the rent day
+                // (the start date's day of the month). Finish out the rental month the two months land in.
+                const rentDay = start.getDate();
+                end = new Date(twoMonths);
+                while (!isLastDayOfRentalPeriod(end, rentDay)) end.setDate(end.getDate() + 1);
+                why = `Two months after notice is ${prettyDate(localDateValue(twoMonths), { day: 'numeric', month: 'short' })}; `
+                    + `your rental periods run from the ${ordinal(rentDay)}, so the tenancy can end on `
+                    + `${prettyDate(localDateValue(end), { day: 'numeric', month: 'short' })} (the day before your rent day) `
+                    + 'or on the rent day itself.';
+            }
             $('notice-end').textContent = end.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
             $('notice-end').dataset.value = localDateValue(end);
+            $('notice-end-why').textContent = why;
+        }
+
+        function addMonths(date, months) {
+            const result = new Date(date.getFullYear(), date.getMonth() + months, date.getDate());
+            if (result.getDate() !== date.getDate()) result.setDate(0); // e.g. 31 Dec + 2 months = 28/29 Feb
+            return result;
+        }
+
+        function isLastDayOfRentalPeriod(date, rentDay) {
+            const next = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            const daysInMonth = new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate();
+            return next.getDate() === Math.min(rentDay, daysInMonth); // a 31st rent day falls on the 30th/28th in shorter months
+        }
+
+        function ordinal(day) {
+            const suffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+            return `${day}${suffix}`;
         }
         $('notice-date').addEventListener('change', updateNoticeEnd);
 
