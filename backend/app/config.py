@@ -26,6 +26,23 @@ LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
 # Checklist Gemini follows for the quick read (summary + need-to-knows). Skipped if missing.
 CHECKLIST_PATH = BACKEND_DIR.parent / "docs" / "things_to_check.txt"
+REVIEWS_DB_PATH = DATA_DIR / "reviews.sqlite3"
+REMINDER_SMTP_HOST = os.getenv("REMINDER_SMTP_HOST") or None
+REMINDER_SMTP_PORT = int(os.getenv("REMINDER_SMTP_PORT", "587"))
+REMINDER_SMTP_USERNAME = os.getenv("REMINDER_SMTP_USERNAME") or None
+REMINDER_SMTP_PASSWORD = os.getenv("REMINDER_SMTP_PASSWORD") or None
+REMINDER_SMTP_USE_SSL = os.getenv("REMINDER_SMTP_USE_SSL", "false").lower() == "true"
+REMINDER_FROM_EMAIL = os.getenv("REMINDER_FROM_EMAIL") or REMINDER_SMTP_USERNAME
+
+EMAIL_REMINDERS_CONFIGURED = bool(
+    REMINDER_SMTP_HOST
+    and REMINDER_FROM_EMAIL
+    and REMINDER_SMTP_PORT > 0
+    and (
+        (REMINDER_SMTP_USERNAME is None and REMINDER_SMTP_PASSWORD is None)
+        or (REMINDER_SMTP_USERNAME and REMINDER_SMTP_PASSWORD)
+    )
+)
 
 FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
 STANDALONE_FRONTEND = BACKEND_DIR.parent / "index.html"

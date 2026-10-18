@@ -15,12 +15,20 @@ class Chunk:
     section: str  # e.g. "s.1"
     text: str
     url: str = ""
+    heading: str = ""
 
 
 class VectorStore(Protocol):
     def add(self, chunks: list[Chunk], embeddings: list[list[float]]) -> None: ...
 
-    def replace_source(self, source: str, chunks: list[Chunk], embeddings: list[list[float]]) -> None: ...
+    def replace_source(
+        self,
+        source: str,
+        chunks: list[Chunk],
+        embeddings: list[list[float]],
+        last_updated: str | None = None,
+        source_url: str | None = None,
+    ) -> None: ...
 
     def is_empty(self) -> bool: ...
 
@@ -50,7 +58,7 @@ class LocalStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(self.path, vectors=self.vectors, chunks=json.dumps([asdict(c) for c in self.chunks]))
 
-    def replace_source(self, source, chunks, embeddings):
+    def replace_source(self, source, chunks, embeddings, last_updated=None, source_url=None):
         if any(chunk.source != source for chunk in chunks):
             raise ValueError("All replacement chunks must belong to the requested source")
         keep = [index for index, chunk in enumerate(self.chunks) if chunk.source != source]
@@ -106,23 +114,28 @@ class PgVectorStore:
                 ],
             )
 
-    def replace_source(self, source, chunks, embeddings):
+    def replace_source(self, source, chunks, embeddings, last_updated=None, source_url=None):
         if any(chunk.source != source for chunk in chunks):
             raise ValueError("All replacement chunks must belong to the requested source")
-        url = chunks[0].url if chunks else None
+        url = source_url or (chunks[0].url if chunks else None)
         with self.conn.transaction():
             with self.conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO law_sources (name, url) VALUES (%s, %s)
-                       ON CONFLICT (name) DO UPDATE SET url = EXCLUDED.url, ingested_at = now()
+                    """INSERT INTO law_sources (name, url, last_updated) VALUES (%s, %s, %s)
+                       ON CONFLICT (name) DO UPDATE SET url = EXCLUDED.url,
+                         last_updated = EXCLUDED.last_updated, ingested_at = now()
                        RETURNING id""",
-                    (source, url),
+                    (source, url, last_updated),
                 )
                 source_id = cur.fetchone()[0]
                 cur.execute("DELETE FROM law_sections WHERE source_id = %s", (source_id,))
                 cur.executemany(
-                    "INSERT INTO law_sections (source_id, section_ref, text, url, embedding) VALUES (%s, %s, %s, %s, %s)",
-                    [(source_id, c.section, c.text, c.url, np.asarray(e)) for c, e in zip(chunks, embeddings)],
+                    """INSERT INTO law_sections (source_id, section_ref, heading, text, url, embedding)
+                       VALUES (%s, %s, %s, %s, %s, %s)""",
+                    [
+                        (source_id, c.section, c.heading or None, c.text, c.url, np.asarray(e))
+                        for c, e in zip(chunks, embeddings)
+                    ],
                 )
 
     def is_empty(self):
@@ -130,7 +143,7 @@ class PgVectorStore:
 
     def search(self, embedding, k):
         rows = self.conn.execute(
-            """SELECT src.name, s.section_ref, s.text, s.url
+            """SELECT src.name, s.section_ref, s.text, s.url, coalesce(s.heading, '')
                FROM law_sections s JOIN law_sources src ON src.id = s.source_id
                ORDER BY s.embedding <=> %s LIMIT %s""",
             (np.asarray(embedding), k),

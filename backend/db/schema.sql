@@ -120,3 +120,92 @@ ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'g
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;
+
+-- FlatMate tenancy profiles. flatmate_accounts mirrors users (app/tenancies.py sync_account). Shared codes are only issued after
+-- the agreement is signed and the tenancy start date has arrived.
+CREATE TABLE IF NOT EXISTS flatmate_accounts (
+  id            text PRIMARY KEY,
+  email         text NOT NULL UNIQUE,
+  display_name  text NOT NULL,
+  password_hash text NOT NULL DEFAULT '',
+  created_at    text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tenancy_profiles (
+  id                text PRIMARY KEY,
+  code              text UNIQUE,
+  owner_account_id  text NOT NULL REFERENCES flatmate_accounts(id),
+  household_mode    text NOT NULL,
+  hmo_status        text NOT NULL,
+  property_address  text NOT NULL,
+  lead_tenant       text NOT NULL,
+  co_tenants        text NOT NULL,
+  current_tenant    text NOT NULL,
+  "current_role"    text NOT NULL,
+  agreement_signed  integer NOT NULL DEFAULT 0,
+  signed_on         text,
+  tenancy_start     text,
+  is_active         integer NOT NULL DEFAULT 0,
+  review_id         text NOT NULL,
+  review            text NOT NULL,
+  created_at        text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tenancy_members (
+  profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+  account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  name       text NOT NULL,
+  role       text NOT NULL CHECK (role IN ('lead', 'co_tenant')),
+  is_current integer NOT NULL DEFAULT 1,
+  PRIMARY KEY (profile_id, account_id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS one_current_tenancy_per_account
+  ON tenancy_members(account_id) WHERE is_current = 1;
+
+CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
+  id                text PRIMARY KEY,
+  profile_id        text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+  account_id        text NOT NULL REFERENCES flatmate_accounts(id),
+  user_message      text NOT NULL,
+  assistant_message text NOT NULL,
+  landlord_draft    text NOT NULL,
+  created_at        text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tenancy_photos (
+  id          text PRIMARY KEY,
+  profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+  account_id  text NOT NULL REFERENCES flatmate_accounts(id),
+  room        text NOT NULL,
+  note        text NOT NULL,
+  data        bytea NOT NULL,             -- the image itself (no S3 or disk copy)
+  media_type  text NOT NULL,
+  uploaded_at text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tenancy_calendar_items (
+  id          text PRIMARY KEY,
+  profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+  created_by  text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  title       text NOT NULL,
+  kind        text NOT NULL CHECK (kind IN ('rent', 'bill')),
+  due_date    text NOT NULL,
+  recurrence  text NOT NULL CHECK (recurrence IN ('once', 'monthly')),
+  amount      numeric,
+  created_at  text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS flatmate_notification_preferences (
+  account_id             text PRIMARY KEY REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  email_reminders_enabled boolean NOT NULL DEFAULT false
+);
+
+CREATE TABLE IF NOT EXISTS tenancy_calendar_reminders (
+  item_id     text NOT NULL REFERENCES tenancy_calendar_items(id) ON DELETE CASCADE,
+  account_id  text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  due_date    text NOT NULL,
+  status      text NOT NULL,
+  updated_at  text NOT NULL,
+  PRIMARY KEY (item_id, account_id, due_date)
+);
