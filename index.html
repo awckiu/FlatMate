@@ -3231,6 +3231,7 @@
             $('home-eyebrow').textContent = profile.property_address;
             $('home-status').textContent = [
                 profile.role === 'lead' ? 'Lead tenant' : 'Co-tenant',
+                profile.co_tenants?.length ? `Co-tenants: ${profile.co_tenants.join(', ')}` : '',
                 profile.tenancy_start ? `tenancy started ${prettyDate(profile.tenancy_start)}` : 'start date not set',
                 profile.code ? `tenancy code ${profile.code}` : '',
             ].filter(Boolean).join(' · ');
