@@ -221,7 +221,7 @@ def send_due_reminders(today: date | None = None) -> int:
                    a.id AS account_id, a.email, p.property_address
             FROM tenancy_calendar_items c
             JOIN tenancy_members m ON m.profile_id = c.profile_id
-            JOIN flatmate_accounts a ON a.id = m.account_id
+            JOIN users a ON a.id = m.account_id
             JOIN flatmate_notification_preferences n ON n.account_id = a.id
             JOIN tenancy_profiles p ON p.id = c.profile_id
             WHERE n.email_reminders_enabled

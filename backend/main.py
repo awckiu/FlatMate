@@ -66,7 +66,7 @@ app.include_router(auth.router)
 
 
 def optional_account(request: Request) -> dict[str, str] | None:
-    """The logged-in user (app.auth), mirrored into the tenancy tables, or None."""
+    """The logged-in user (app.auth), or None. Accounts are optional."""
     user_id = auth.current_user_id(request)
     if not user_id or not config.DATABASE_URL:
         return None
@@ -78,9 +78,7 @@ def optional_account(request: Request) -> dict[str, str] | None:
         raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
     if row is None:
         return None
-    account = {"id": str(row[0]), "email": row[1], "display_name": row[2]}
-    tenancies.sync_account(account)
-    return account
+    return {"id": str(row[0]), "email": row[1], "display_name": row[2]}
 
 
 @app.get("/api/health")
@@ -104,17 +102,16 @@ async def analyze(
     tenant_name: str | None = Form(default=None),
     household_mode: str = Form(default="single"),
     hmo_status: str = Form(default="unknown"),
+    current_tenant: str | None = Form(default=None),
 ):
     lead_tenant = (lead_tenant or tenant_name or "").strip()
     if not lead_tenant:
         raise HTTPException(status_code=422, detail="Please enter the lead tenant's name")
-    if household_mode not in tenancies.HOUSEHOLD_MODES:
-        raise HTTPException(status_code=422, detail="Please choose a household setup")
-    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
-        raise HTTPException(status_code=422, detail="Please choose an HMO status")
-    if household_mode == "friends" and hmo_status == "not_applicable":
-        raise HTTPException(status_code=422, detail="Choose an HMO status when living with friends")
     co_tenant_names = [name.strip() for name in co_tenants.split(",") if name.strip()]
+    try:
+        tenancies.validate_household(household_mode, hmo_status, lead_tenant, co_tenant_names)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
     if agreement.content_type != "application/pdf":
         raise HTTPException(status_code=400, detail="Please upload a PDF")
@@ -183,6 +180,7 @@ async def analyze(
                     result=result,
                     user_id=auth.current_user_id(request),
                     pdf=pdf_bytes,
+                    current_tenant=current_tenant,
                 )
         except Exception:
             logger.exception("Could not save the case")
@@ -318,9 +316,9 @@ def create_tenancy_profile(
             account,
             body.household_mode,
             body.hmo_status,
-            body.property_address,
-            body.lead_tenant,
-            body.co_tenants,
+            review["property_address"],
+            review["lead_tenant"],
+            review["co_tenants"],
             body.current_tenant,
             body.current_role,
             review["case_code"],
@@ -342,7 +340,14 @@ def join_tenancy(
         profile = tenancies.join_profile(body.code, account, body.tenant_name, body.role)
     except (ValueError, sqlite3.IntegrityError, psycopg.errors.UniqueViolation) as error:
         raise HTTPException(status_code=409, detail=str(error)) from error
-    return _profile_or_404(profile)
+    profile = _profile_or_404(profile)
+    # Joining by tenancy code also adds the agreement review to the account's cases.
+    try:
+        with cases.connect() as conn:
+            cases.join_case(conn, profile["review_id"], account["id"], body.tenant_name)
+    except Exception:  # best effort: the tenancy join itself already succeeded
+        logger.exception("Could not link case %s to the joined account", profile["review_id"])
+    return profile
 
 
 @app.get("/api/tenancies/{profile_id}")
@@ -587,6 +592,14 @@ def get_case(code: str):
         raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
     if case is None:
         raise HTTPException(status_code=404, detail="No case was found with that code.")
+    # Not stored: recomputed so a reopened review shows the same bills as the first run.
+    case["bills_estimate"] = bills.estimate_bills(
+        property_address=case["property_address"],
+        tenant_count=len(case["co_tenants"]) + 1,
+        need_to_knows=case.get("need_to_knows"),
+        lead_tenant=case["lead_tenant"],
+        co_tenants=case["co_tenants"],
+    )
     return case
 
 

@@ -734,6 +734,8 @@
         .account-method button[aria-pressed="true"] { border-color: var(--green); background: #edf5ee; color: var(--green-dark); }
         .onboarding-submit { display: flex; justify-content: flex-end; margin-top: 16px; }
         .onboarding-submit button, .tenancy-workspace button { padding: 10px 15px; border: 0; border-radius: 10px; background: var(--green); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .25s var(--spring-micro), background .2s; }
+        .onboarding-submit { gap: 10px; flex-wrap: wrap; }
+        .onboarding-submit button.secondary-action { background: #fff; color: var(--green-dark); border: 1px solid var(--green); }
         .onboarding-submit button:hover, .tenancy-workspace button:hover { transform: translateY(-1px); background: var(--green-dark); }
         #onboarding-message:not(:empty) { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: #fff8e7; color: #795c20; font-size: 12px; }
         .tenancy-workspace { padding: 20px; border: 1px solid #dbe8dc; border-radius: 16px; background: #f8fbf7; }
@@ -1033,7 +1035,7 @@
                         <input id="onboarding-password" type="password" autocomplete="new-password" required minlength="8" maxlength="256">
                     </label>
                 </div>
-                <p class="field-hint">Use at least 8 characters. Your password is stored as a salted hash.</p>
+                <p class="field-hint">Use at least 8 characters. Your password is stored as a salted hash. An account is optional: without one you still get your review and a case code, but not the tenancy calendar, buddy or photos.</p>
             </div>
             <div id="authenticated-summary" class="hidden onboarding-subsection">
                 <p id="account-summary" class="mb-0"></p>
@@ -1041,6 +1043,7 @@
             </div>
             <div class="onboarding-submit">
                 <button type="button" id="continue-onboarding">Continue to your agreement <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" id="continue-guest" class="secondary-action">Continue without an account</button>
             </div>
             <p id="onboarding-message" role="status" aria-live="polite"></p>
             <div id="existing-tenancy-list" class="hidden onboarding-subsection">
@@ -1051,7 +1054,7 @@
                 <summary>Open a saved agreement review</summary>
                 <div class="onboarding-fields" style="margin-top:12px">
                     <label for="saved-review-code">Agreement review code
-                        <input id="saved-review-code" autocomplete="off" autocapitalize="characters" maxlength="15" placeholder="e.g. FLAT-7KQ2XM">
+                        <input id="saved-review-code" autocomplete="off" autocapitalize="characters" maxlength="15" placeholder="e.g. FLAT-7KQ2XM4PTD">
                     </label>
                     <button type="button" id="open-saved-review">Open review</button>
                 </div>
@@ -1302,7 +1305,7 @@
             <form id="open-case-form">
                 <label for="case-code-input">Already reviewed? Enter your case code</label>
                 <div class="open-case-row">
-                    <input type="text" id="case-code-input" required placeholder="e.g. FLAT-7KQ2XM" autocomplete="off">
+                    <input type="text" id="case-code-input" required placeholder="e.g. FLAT-7KQ2XM4PTD" autocomplete="off">
                     <button type="submit" id="open-case-btn">Open</button>
                 </div>
             </form>
@@ -1729,6 +1732,7 @@
             const joining = currentEntryFlow() === 'code';
             document.getElementById('new-household-setup').classList.toggle('hidden', joining);
             document.getElementById('join-code-setup').classList.toggle('hidden', !joining);
+            document.getElementById('continue-guest').classList.toggle('hidden', joining || Boolean(signedInAccount));
             document.getElementById('continue-onboarding').innerHTML = joining
                 ? 'Join this tenancy <i class="fa-solid fa-arrow-right"></i>'
                 : 'Continue to your agreement <i class="fa-solid fa-arrow-right"></i>';
@@ -1770,6 +1774,7 @@
 
         function setAuthenticatedAccount(account) {
             signedInAccount = account;
+            document.getElementById('continue-guest').classList.toggle('hidden', Boolean(account) || currentEntryFlow() === 'code');
             document.getElementById('account-auth-block').classList.toggle('hidden', Boolean(account));
             document.getElementById('authenticated-summary').classList.toggle('hidden', !account);
             if (account) {
@@ -1861,6 +1866,7 @@
             document.getElementById('workspace-signed-on').value = profile.signed_on || '';
             document.getElementById('workspace-tenancy-start').value = profile.tenancy_start || '';
             document.getElementById('workspace-signed-on').required = true;
+            document.getElementById('workspace-tenancy-start').required = true;
             document.getElementById('tenancy-chat-section').classList.toggle('hidden', !profile.agreement_signed);
             document.getElementById('move-in-photos-section').classList.toggle('hidden', !profile.is_active);
             document.getElementById('workspace-error').classList.add('hidden');
@@ -2050,7 +2056,7 @@
             element.classList.remove('hidden');
         }
 
-        async function continueOnboarding() {
+        async function continueOnboarding(guest = false) {
             setOnboardingMessage('');
             const flow = currentEntryFlow();
             const household = selectedHouseholdMode();
@@ -2065,7 +2071,7 @@
                 return;
             }
 
-            if (!signedInAccount) {
+            if (!signedInAccount && !guest) {
                 const email = document.getElementById('onboarding-email');
                 const password = document.getElementById('onboarding-password');
                 const displayName = document.getElementById('onboarding-name');
@@ -2129,6 +2135,7 @@
             const signed = event.target.value === 'yes';
             document.getElementById('signing-dates').classList.toggle('hidden', !signed);
             document.getElementById('signed-on').required = signed;
+            document.getElementById('tenancy-start').required = signed;
         });
         document.getElementById('register-mode').addEventListener('click', () => {
             accountIntent = 'register';
@@ -2148,7 +2155,8 @@
             document.getElementById('onboarding-password').autocomplete = 'current-password';
             document.getElementById('account-heading').textContent = 'Sign in to FlatMate';
         });
-        document.getElementById('continue-onboarding').addEventListener('click', continueOnboarding);
+        document.getElementById('continue-onboarding').addEventListener('click', () => continueOnboarding());
+        document.getElementById('continue-guest').addEventListener('click', () => continueOnboarding(true));
         document.getElementById('onboarding-signout').addEventListener('click', async () => {
             try {
                 await apiJson('/api/auth/logout', { method: 'POST' });
@@ -2469,7 +2477,8 @@
             copyBtn.disabled = !result.email;
             copyFeedback.textContent = '';
             reviewSaved.textContent = result.case_code
-                ? `Saved · Your case code is ${result.case_code}. Keep it to reopen this review, or share it with your co-tenants.`
+                ? `Saved · Your case code is ${result.case_code}. Keep it to reopen this review, or share it with your co-tenants.` +
+                    (signedInAccount ? '' : ' Create an account to unlock the tenancy calendar, buddy and photos.')
                 : 'This review was not saved, so it will be gone when you leave this page.';
             currentCaseCode = result.case_code || null;
             updateAddToAccount();
@@ -2732,12 +2741,6 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault(); // Prevent page reload
 
-            if (!signedInAccount) {
-                setOnboardingMessage('Sign in before reviewing an agreement so the tenancy can be saved to your private account.', true);
-                onboardingSection.classList.remove('hidden');
-                inputSection.classList.add('hidden');
-                return;
-            }
             const file = fileInput.files[0];
             if (!file || !showFile(file)) {
                 if (!file) {
@@ -2767,6 +2770,7 @@
             body.append('agreement', file);
             body.append('lead_tenant', leadTenant);
             body.append('co_tenants', coTenantNames.join(', '));
+            body.append('current_tenant', currentTenant);
             body.append('property_address', propertyAddressInput.value);
             body.append('household_mode', selectedHouseholdMode());
             body.append('hmo_status', document.getElementById('hmo-status').value);

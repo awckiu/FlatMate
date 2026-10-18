@@ -90,6 +90,24 @@ class SavedCaseTests(unittest.TestCase):
         for field in ("pages", "summary", "need_to_knows", "flags", "email", "mode", "law_data_available"):
             self.assertEqual(case[field], RESULT[field], field)
 
+    def test_household_setup_and_owner_row_round_trip(self):
+        result = {**RESULT, "household_mode": "friends", "hmo_status": "yes"}
+        with cases.connect() as conn:
+            user_id = conn.execute(
+                "INSERT INTO users (email, display_name, password_hash) VALUES (%s, %s, 'x') RETURNING id",
+                (f"owner-{cases.new_code()}@example.com", "Sam Lee"),
+            ).fetchone()[0]
+            code = cases.save_case(
+                conn, lead_tenant="Jane Doe", co_tenants=["Sam Lee"], property_address="1 Example Street",
+                filename=None, agreement_text="t", clauses=CLAUSES, result=result,
+                user_id=str(user_id), current_tenant="Sam Lee",
+            )
+            case = cases.get_case(conn, code)
+            mine = cases.list_cases(conn, str(user_id))
+            conn.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        self.assertEqual((case["household_mode"], case["hmo_status"]), ("friends", "yes"))
+        self.assertEqual([c["role"] for c in mine], ["co_tenant"])
+
     def test_two_cases_get_different_codes(self):
         self.assertNotEqual(self.save(), self.save())
 

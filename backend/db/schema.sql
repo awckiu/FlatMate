@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- how co-tenants join.
 CREATE TABLE IF NOT EXISTS cases (
   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code              text NOT NULL UNIQUE,  -- 'FLAT-7KQ2'
+  code              text NOT NULL UNIQUE,  -- 'FLAT-7KQ2XM4PTD'
   property_address  text NOT NULL,
   postcode          text,
   tenancy_start     date,
@@ -104,16 +104,8 @@ CREATE TABLE IF NOT EXISTS emails (
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 
--- Move-in photos are evidence only; no AI analysis.
-CREATE TABLE IF NOT EXISTS photos (
-  id           bigserial PRIMARY KEY,
-  case_id      uuid NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
-  room         text NOT NULL,              -- 'kitchen', 'bedroom 1'
-  object_key   text NOT NULL,              -- file in Vultr Object Storage
-  taken_at     timestamptz,                -- from EXIF if present
-  uploaded_at  timestamptz NOT NULL DEFAULT now(),
-  note         text
-);
+-- (The old Vultr-storage `photos` table is gone: move-in photos live in tenancy_photos, below.)
+DROP TABLE IF EXISTS photos;
 
 -- Saved analyses: what the results page needs to show a case again.
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'gemini' or 'placeholder'
@@ -121,23 +113,20 @@ ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
 ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;
 
+-- Household setup chosen for the review (solo or friends, and HMO status), so reopening a case shows it.
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS household_mode text;
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS hmo_status text;
+
 -- The original agreement PDF, so it can be downloaded again later.
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS pdf bytea;
 
--- FlatMate tenancy profiles. flatmate_accounts mirrors users (app/tenancies.py sync_account). Shared codes are only issued after
--- the agreement is signed and the tenancy start date has arrived.
-CREATE TABLE IF NOT EXISTS flatmate_accounts (
-  id            text PRIMARY KEY,
-  email         text NOT NULL UNIQUE,
-  display_name  text NOT NULL,
-  password_hash text NOT NULL DEFAULT '',
-  created_at    text NOT NULL
-);
-
+-- FlatMate tenancy profiles. They hang off the same users table as the login (there is no
+-- separate accounts table). A shared HOME- code is only issued after the agreement is signed
+-- and the tenancy start date has arrived.
 CREATE TABLE IF NOT EXISTS tenancy_profiles (
   id                text PRIMARY KEY,
   code              text UNIQUE,
-  owner_account_id  text NOT NULL REFERENCES flatmate_accounts(id),
+  owner_account_id  uuid NOT NULL REFERENCES users(id),
   household_mode    text NOT NULL,
   hmo_status        text NOT NULL,
   property_address  text NOT NULL,
@@ -149,14 +138,14 @@ CREATE TABLE IF NOT EXISTS tenancy_profiles (
   signed_on         text,
   tenancy_start     text,
   is_active         integer NOT NULL DEFAULT 0,
-  review_id         text NOT NULL,
+  review_id         text NOT NULL,        -- the FLAT- case code this tenancy was made from
   review            text NOT NULL,
   created_at        text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tenancy_members (
   profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-  account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  account_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   name       text NOT NULL,
   role       text NOT NULL CHECK (role IN ('lead', 'co_tenant')),
   is_current integer NOT NULL DEFAULT 1,
@@ -169,7 +158,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_current_tenancy_per_account
 CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
   id                text PRIMARY KEY,
   profile_id        text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-  account_id        text NOT NULL REFERENCES flatmate_accounts(id),
+  account_id        uuid NOT NULL REFERENCES users(id),
   user_message      text NOT NULL,
   assistant_message text NOT NULL,
   landlord_draft    text NOT NULL,
@@ -179,7 +168,7 @@ CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
 CREATE TABLE IF NOT EXISTS tenancy_photos (
   id          text PRIMARY KEY,
   profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-  account_id  text NOT NULL REFERENCES flatmate_accounts(id),
+  account_id  uuid NOT NULL REFERENCES users(id),
   room        text NOT NULL,
   note        text NOT NULL,
   data        bytea NOT NULL,             -- the image itself (no S3 or disk copy)
@@ -190,7 +179,7 @@ CREATE TABLE IF NOT EXISTS tenancy_photos (
 CREATE TABLE IF NOT EXISTS tenancy_calendar_items (
   id          text PRIMARY KEY,
   profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-  created_by  text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  created_by  uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title       text NOT NULL,
   kind        text NOT NULL CHECK (kind IN ('rent', 'bill')),
   due_date    text NOT NULL,
@@ -200,15 +189,66 @@ CREATE TABLE IF NOT EXISTS tenancy_calendar_items (
 );
 
 CREATE TABLE IF NOT EXISTS flatmate_notification_preferences (
-  account_id             text PRIMARY KEY REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  account_id              uuid PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   email_reminders_enabled boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS tenancy_calendar_reminders (
   item_id     text NOT NULL REFERENCES tenancy_calendar_items(id) ON DELETE CASCADE,
-  account_id  text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+  account_id  uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   due_date    text NOT NULL,
   status      text NOT NULL,
   updated_at  text NOT NULL,
   PRIMARY KEY (item_id, account_id, due_date)
 );
+
+-- ===== One-off upgrades for databases made before the tenancy tables were merged in here =====
+-- Each is a no-op on a fresh database.
+ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS review_id text;
+ALTER TABLE tenancy_photos ADD COLUMN IF NOT EXISTS data bytea;      -- photos used to be files
+ALTER TABLE tenancy_photos DROP COLUMN IF EXISTS storage_key;
+ALTER TABLE tenancy_calendar_items ALTER COLUMN amount TYPE numeric;
+
+DO $$
+DECLARE
+  fk record;
+BEGIN
+  -- The old flatmate_accounts table mirrored users (same ids), so point everything at users.
+  IF to_regclass('flatmate_accounts') IS NOT NULL THEN
+    FOR fk IN
+      SELECT conrelid::regclass AS tbl, conname FROM pg_constraint
+      WHERE contype = 'f' AND confrelid = 'flatmate_accounts'::regclass
+    LOOP
+      EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I', fk.tbl, fk.conname);
+    END LOOP;
+    ALTER TABLE tenancy_profiles ALTER COLUMN owner_account_id TYPE uuid USING owner_account_id::uuid;
+    ALTER TABLE tenancy_members ALTER COLUMN account_id TYPE uuid USING account_id::uuid;
+    ALTER TABLE tenancy_chat_messages ALTER COLUMN account_id TYPE uuid USING account_id::uuid;
+    ALTER TABLE tenancy_photos ALTER COLUMN account_id TYPE uuid USING account_id::uuid;
+    ALTER TABLE tenancy_calendar_items ALTER COLUMN created_by TYPE uuid USING created_by::uuid;
+    ALTER TABLE flatmate_notification_preferences ALTER COLUMN account_id TYPE uuid USING account_id::uuid;
+    ALTER TABLE tenancy_calendar_reminders ALTER COLUMN account_id TYPE uuid USING account_id::uuid;
+    ALTER TABLE tenancy_profiles ADD FOREIGN KEY (owner_account_id) REFERENCES users(id);
+    ALTER TABLE tenancy_members ADD FOREIGN KEY (account_id) REFERENCES users(id) ON DELETE CASCADE;
+    ALTER TABLE tenancy_chat_messages ADD FOREIGN KEY (account_id) REFERENCES users(id);
+    ALTER TABLE tenancy_photos ADD FOREIGN KEY (account_id) REFERENCES users(id);
+    ALTER TABLE tenancy_calendar_items ADD FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE;
+    ALTER TABLE flatmate_notification_preferences ADD FOREIGN KEY (account_id) REFERENCES users(id) ON DELETE CASCADE;
+    ALTER TABLE tenancy_calendar_reminders ADD FOREIGN KEY (account_id) REFERENCES users(id) ON DELETE CASCADE;
+    DROP TABLE flatmate_accounts;
+  END IF;
+
+  -- The CHECKs the old tables never had; NOT VALID applies them to new rows only.
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenancy_members_role_check') THEN
+    ALTER TABLE tenancy_members ADD CONSTRAINT tenancy_members_role_check
+      CHECK (role IN ('lead', 'co_tenant')) NOT VALID;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenancy_calendar_items_kind_check') THEN
+    ALTER TABLE tenancy_calendar_items ADD CONSTRAINT tenancy_calendar_items_kind_check
+      CHECK (kind IN ('rent', 'bill')) NOT VALID;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenancy_calendar_items_recurrence_check') THEN
+    ALTER TABLE tenancy_calendar_items ADD CONSTRAINT tenancy_calendar_items_recurrence_check
+      CHECK (recurrence IN ('once', 'monthly')) NOT VALID;
+  END IF;
+END $$;

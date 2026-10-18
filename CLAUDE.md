@@ -138,7 +138,7 @@ kept for the bills and area features later.
   proxies `/api` to FastAPI on port 8000.
 - When `DATABASE_URL` is set, each analysis is saved in Tiger Data as a case (`cases`,
   `tenants`, `agreements`, `clauses`, `flags`, `emails`; `backend/app/cases.py`) under a
-  code like `FLAT-7KQ2XM`. `GET /api/cases/{code}` and `/?case=CODE` reopen it; the code is
+  code like `FLAT-7KQ2XM4PTD`. `GET /api/cases/{code}` and `/?case=CODE` reopen it; the code is
   how co-tenants share a case. Without a database, results are shown unsaved.
   The results page can print the review; choose “Save as PDF” in the print dialog.
 - Accounts are optional, email + password (`backend/app/auth.py`): `POST /api/auth/signup`,

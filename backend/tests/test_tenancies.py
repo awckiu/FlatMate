@@ -30,7 +30,7 @@ class TenancyApiTests(unittest.TestCase):
         def test_account(request: Request):
             account = self.accounts.get(request.headers.get("x-test-account", ""))
             if account:
-                tenancies.sync_account(account)
+                self.add_user(account)
             return account
 
         app.dependency_overrides[optional_account] = test_account
@@ -51,6 +51,19 @@ class TenancyApiTests(unittest.TestCase):
         self.url_patch.stop()
         self.database_patch.stop()
         self.temp_dir.cleanup()
+
+    def add_user(self, account):
+        """The SQLite stand-in for a row in the users table (Postgres has the real one)."""
+        connection = tenancies._connection()
+        try:
+            tenancies._ensure_schema(connection)
+            connection.execute(
+                "INSERT OR IGNORE INTO users (id, email, display_name) VALUES (?, ?, ?)",
+                (account["id"], account["email"], account["display_name"]),
+            )
+            connection.commit()
+        finally:
+            connection.close()
 
     def register(self, client, email, name):
         account = {"id": str(uuid.uuid4()), "email": email, "display_name": name}
@@ -214,6 +227,39 @@ class TenancyApiTests(unittest.TestCase):
         current_profiles = [profile for profile in profiles if profile["is_current"]]
         self.assertEqual(len(current_profiles), 1)
         self.assertEqual(current_profiles[0]["id"], second.json()["id"])
+
+    def test_signed_agreement_needs_a_start_date_not_before_signing(self):
+        client = self.client
+        body = {
+            "household_mode": "single", "hmo_status": "not_applicable",
+            "property_address": "x", "lead_tenant": "A", "co_tenants": [],
+            "current_tenant": "A", "current_role": "lead", "agreement_signed": True,
+            "signed_on": date.today().isoformat(), "tenancy_start": None,
+        }
+        self.create_profile()  # registers a case
+        code = next(iter(self.cases))
+        body["case_code"] = code
+        self.cases[code]["lead_tenant"], self.cases[code]["co_tenants"] = "A", []
+        self.assertEqual(client.post("/api/tenancies", json=body).status_code, 422)
+        body["tenancy_start"] = (date.today() - timedelta(days=1)).isoformat()
+        self.assertEqual(client.post("/api/tenancies", json=body).status_code, 422)
+
+    def test_submitting_the_same_review_twice_reuses_the_tenancy(self):
+        first = self.create_profile()
+        code = next(reversed(self.cases))
+        body = {
+            "household_mode": "friends", "hmo_status": "unknown", "property_address": "x",
+            "lead_tenant": "Lead Tenant", "co_tenants": ["Friend Tenant"],
+            "current_tenant": "Lead Tenant", "current_role": "lead", "agreement_signed": False,
+            "case_code": code,
+        }
+        second = self.client.post("/api/tenancies", json=body)
+        self.assertEqual(second.status_code, 201, second.text)
+        self.assertEqual(second.json()["id"], first.json()["id"])
+
+    def test_solo_household_with_co_tenants_is_rejected_by_the_shared_check(self):
+        with self.assertRaises(ValueError):
+            tenancies.validate_household("single", "not_applicable", "A", ["B"])
 
     def test_family_household_setup_is_rejected(self):
         response = self.create_profile(household_mode="family")
