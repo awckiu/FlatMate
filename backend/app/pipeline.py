@@ -9,7 +9,6 @@ from app import config, llm
 from app.rag.retrieve import retrieve_many
 
 MAX_ANALYSIS_CHARS = 100_000
-DISCLAIMER = "This tool provides information, not legal advice."
 CLAUSE_START = re.compile(r"^\s*(\d+(?:\.\d+)*)(?:[.)])?\s+", re.MULTILINE)
 
 
@@ -93,9 +92,7 @@ def analyze(
             "email": "",
             "mode": "placeholder",
             "law_data_available": False,
-            "disclaimer": DISCLAIMER,
-            "agreement_text": text,
-            "clauses": split_clauses(text),
+            "disclaimer": "This tool provides information, not legal advice.",
         }
 
     clauses = split_clauses(text)
@@ -154,8 +151,5 @@ def analyze(
         "email": email,
         "mode": "gemini",
         "law_data_available": bool(law_sections),
-        "disclaimer": DISCLAIMER,
-        # Used to save the case; main.py removes these before responding.
-        "agreement_text": text,
-        "clauses": clauses,
+        "disclaimer": "This tool provides information, not legal advice.",
     }

@@ -12,6 +12,7 @@ __pycache__/
 
 # Generated vector index
 backend/data/law_index.npz
+backend/data/reviews.sqlite3
 
 # Build output
 dist/
