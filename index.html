@@ -462,7 +462,8 @@
         #analysis-form > * { margin: 0; }
         #analysis-form > .grid { gap: 17px 20px; }
         #analysis-form label:not([for="file-upload"]) { display: block; margin-bottom: 7px; color: #34473e; font-size: 12px; font-weight: 680; }
-        #analysis-form input[type="text"] {
+        #analysis-form input[type="text"],
+        #case-code-input {
             width: 100%;
             min-height: 48px;
             padding: 12px 14px;
@@ -475,9 +476,15 @@
             transition: border-color .28s var(--spring-settle), box-shadow .32s var(--spring-motion), background .28s var(--spring-settle);
         }
 
-        #analysis-form input[type="text"]::placeholder { color: #a1aca5; }
-        #analysis-form input[type="text"]:hover { border-color: #b6c9b9; }
-        #analysis-form input[type="text"]:focus { border-color: #4c896b; background: white; box-shadow: 0 0 0 4px rgba(76, 137, 107, .12); }
+        #analysis-form input[type="text"]::placeholder, #case-code-input::placeholder { color: #a1aca5; }
+        #analysis-form input[type="text"]:hover, #case-code-input:hover { border-color: #b6c9b9; }
+        #analysis-form input[type="text"]:focus, #case-code-input:focus { border-color: #4c896b; background: white; box-shadow: 0 0 0 4px rgba(76, 137, 107, .12); }
+        #open-case-form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #edf0ec; }
+        #open-case-form label { display: block; margin-bottom: 7px; color: #34473e; font-size: 12px; font-weight: 680; }
+        .open-case-row { display: flex; gap: 10px; }
+        #case-code-input { flex: 1; min-width: 0; text-transform: uppercase; }
+        #open-case-btn { flex: 0 0 auto; padding: 0 18px; border: 1px solid #d9e5da; border-radius: 11px; background: #eef5ed; color: #315d43; font-weight: 650; transition: background .28s var(--spring-settle); }
+        #open-case-btn:hover { background: #e1eedf; }
         .field-hint { margin: 7px 0 0; color: #829087; font-size: 11px; }
 
         .upload-label { margin-bottom: 8px; color: #34473e; font-size: 12px; font-weight: 680; }
@@ -1064,6 +1071,15 @@
                 </button>
                 <p class="text-center text-xs text-gray-500">By continuing, you'll get an AI-generated review to help you know what to ask.</p>
             </form>
+
+            <!-- Reopen a saved review -->
+            <form id="open-case-form">
+                <label for="case-code-input">Already reviewed? Enter your case code</label>
+                <div class="open-case-row">
+                    <input type="text" id="case-code-input" required placeholder="e.g. FLAT-7KQ2XM" autocomplete="off">
+                    <button type="submit" id="open-case-btn">Open</button>
+                </div>
+            </form>
         </section>
 
         <!-- LOADING STATE (Hidden by default) -->
@@ -1359,11 +1375,65 @@
             emailContent.textContent = result.email || 'No email draft was generated because no issues were flagged.';
             copyBtn.disabled = !result.email;
             copyFeedback.textContent = '';
-            reviewSaved.textContent = result.review_id
-                ? `Saved to your review database · Reference ${result.review_id}`
-                : 'This review was not saved to the database.';
-            exportPdfBtn.disabled = !result.review_id;
+            reviewSaved.textContent = result.case_code
+                ? `Saved · Your case code is ${result.case_code}. Keep it to reopen this review, or share it with your co-tenants.`
+                : 'This review was not saved, so it will be gone when you leave this page.';
+            if (result.case_code) {
+                history.replaceState(null, '', '?case=' + encodeURIComponent(result.case_code));
+            }
         }
+
+        // Read a JSON API response, throwing an Error with a message to show the user.
+        async function readResult(response, fallbackError) {
+            const responseBody = await response.text();
+            let result;
+            try {
+                result = JSON.parse(responseBody);
+            } catch {
+                if (!response.ok) {
+                    throw new Error(
+                        `The server could not complete this request (HTTP ${response.status}). Check the backend terminal for details.`
+                    );
+                }
+                throw new Error('The server returned an unreadable response. Please try again.');
+            }
+            if (!response.ok) {
+                const detail = result && typeof result === 'object' && typeof result.detail === 'string'
+                    ? result.detail
+                    : fallbackError;
+                throw new Error(detail);
+            }
+            return result;
+        }
+
+        function showRequestError(error, fallbackError) {
+            requestError.textContent = error instanceof Error ? error.message : fallbackError;
+            requestError.classList.remove('hidden');
+            showStage('form');
+            requestError.focus();
+        }
+
+        async function openCase(code) {
+            requestError.textContent = '';
+            requestError.classList.add('hidden');
+            showStage('loading');
+            try {
+                const response = await fetch('/api/cases/' + encodeURIComponent(code.trim()));
+                renderResults(await readResult(response, 'Could not open that review.'));
+                showStage('results');
+                document.querySelector('.results-topline h2').focus({ preventScroll: true });
+            } catch (error) {
+                showRequestError(error, 'Could not open that review. Please try again.');
+            }
+        }
+
+        document.getElementById('open-case-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            openCase(document.getElementById('case-code-input').value);
+        });
+
+        const sharedCode = new URLSearchParams(location.search).get('case');
+        if (sharedCode) openCase(sharedCode);
 
         exportPdfBtn.addEventListener('click', () => {
             if (!exportPdfBtn.disabled) window.print();
@@ -1396,34 +1466,11 @@
 
             try {
                 const response = await fetch('/api/analyze', { method: 'POST', body });
-                const responseBody = await response.text();
-                let result;
-                try {
-                    result = JSON.parse(responseBody);
-                } catch {
-                    if (!response.ok) {
-                        throw new Error(
-                            `The server could not analyze this agreement (HTTP ${response.status}). Check the backend terminal for details.`
-                        );
-                    }
-                    throw new Error('The server returned an unreadable response. Please try again.');
-                }
-                if (!response.ok) {
-                    const detail = result && typeof result === 'object' && typeof result.detail === 'string'
-                        ? result.detail
-                        : 'Agreement analysis failed.';
-                    throw new Error(detail);
-                }
-                renderResults(result);
+                renderResults(await readResult(response, 'Agreement analysis failed.'));
                 showStage('results');
                 document.querySelector('.results-topline h2').focus({ preventScroll: true });
             } catch (error) {
-                requestError.textContent = error instanceof Error
-                    ? error.message
-                    : 'Could not analyze the agreement. Please try again.';
-                requestError.classList.remove('hidden');
-                showStage('form');
-                requestError.focus();
+                showRequestError(error, 'Could not analyze the agreement. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitLabel.textContent = originalSubmitLabel;
@@ -1455,6 +1502,7 @@
             requestError.classList.add('hidden');
             copyFeedback.textContent = '';
             copyBtn.disabled = false;
+            history.replaceState(null, '', location.pathname);
             showStage('form');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('tenant-name').focus({ preventScroll: true });

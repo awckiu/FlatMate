@@ -19,7 +19,6 @@ SCHEMA_PATH = BACKEND_DIR / "db" / "schema.sql"
 DATA_DIR = BACKEND_DIR / "data"
 LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
-REVIEWS_DB_PATH = DATA_DIR / "reviews.sqlite3"
 
 FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
 STANDALONE_FRONTEND = BACKEND_DIR.parent / "index.html"
