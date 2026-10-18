@@ -1,14 +1,18 @@
+import copy
 import tempfile
+import uuid
+from contextlib import nullcontext
 import unittest
 from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
+from fastapi import Request
 from fastapi.testclient import TestClient
 
 from app import calendar as tenancy_calendar
-from app import config, reviews, tenancies
-from main import app
+from app import config, tenancies
+from main import app, optional_account
 
 
 class TenancyApiTests(unittest.TestCase):
@@ -17,29 +21,55 @@ class TenancyApiTests(unittest.TestCase):
         self.database_path = Path(self.temp_dir.name) / "flatmate.sqlite3"
         self.database_patch = patch.object(config, "REVIEWS_DB_PATH", self.database_path)
         self.url_patch = patch.object(config, "DATABASE_URL", None)
-        self.photo_patch = patch.object(config, "PHOTO_STORAGE_DIR", Path(self.temp_dir.name) / "photos")
         self.database_patch.start()
         self.url_patch.start()
-        self.photo_patch.start()
+        # Logins come from app.auth (Postgres); here each client names its account in a header.
+        self.accounts = {}
+        self.cases = {}
+
+        def test_account(request: Request):
+            account = self.accounts.get(request.headers.get("x-test-account", ""))
+            if account:
+                self.add_user(account)
+            return account
+
+        app.dependency_overrides[optional_account] = test_account
+        self.case_patches = [
+            patch("main.cases.connect", side_effect=lambda: nullcontext()),
+            patch("main.cases.get_case", side_effect=lambda _conn, code: copy.deepcopy(self.cases.get(code))),
+        ]
+        for case_patch in self.case_patches:
+            case_patch.start()
         self.client = TestClient(app)
         self.account = self.register(self.client, "lead@example.test", "Lead Tenant")
 
     def tearDown(self):
         self.client.close()
+        for case_patch in self.case_patches:
+            case_patch.stop()
+        app.dependency_overrides.pop(optional_account, None)
         self.url_patch.stop()
-        self.photo_patch.stop()
         self.database_patch.stop()
         self.temp_dir.cleanup()
 
-    @staticmethod
-    def register(client, email, name):
-        response = client.post(
-            "/api/auth/register",
-            json={"email": email, "display_name": name, "password": "correct-horse-battery"},
-        )
-        if response.status_code != 201:
-            raise AssertionError(response.text)
-        return response.json()
+    def add_user(self, account):
+        """The SQLite stand-in for a row in the users table (Postgres has the real one)."""
+        connection = tenancies._connection()
+        try:
+            tenancies._ensure_schema(connection)
+            connection.execute(
+                "INSERT OR IGNORE INTO users (id, email, display_name) VALUES (?, ?, ?)",
+                (account["id"], account["email"], account["display_name"]),
+            )
+            connection.commit()
+        finally:
+            connection.close()
+
+    def register(self, client, email, name):
+        account = {"id": str(uuid.uuid4()), "email": email, "display_name": name}
+        self.accounts[account["id"]] = account
+        client.headers["x-test-account"] = account["id"]
+        return account
 
     def create_profile(
         self,
@@ -55,19 +85,17 @@ class TenancyApiTests(unittest.TestCase):
     ):
         client = client or self.client
         tenant_names = ["Friend Tenant"] if co_tenants is None else co_tenants
-        review_id = reviews.save_review(
-            lead_tenant,
-            tenant_names,
-            "10 Example Road, Leeds LS1 2AB",
-            "agreement.pdf",
-            {
-                "summary": "Quiet enjoyment and repair details.",
-                "need_to_knows": [{"topic": "Repairs", "clause_ref": "4", "text": "Report urgent leaks promptly."}],
-                "flags": [],
-                "bills_estimate": {"totals": {"total_monthly": 200}},
-            },
-            owner_account_id=self.account["id"],
-        )
+        case_code = f"FLAT-{len(self.cases) + 2:06d}"
+        self.cases[case_code] = {
+            "case_code": case_code,
+            "lead_tenant": lead_tenant,
+            "co_tenants": tenant_names,
+            "property_address": "10 Example Road, Leeds LS1 2AB",
+            "filename": "agreement.pdf",
+            "summary": "Quiet enjoyment and repair details.",
+            "need_to_knows": [{"topic": "Repairs", "clause_ref": "4", "text": "Report urgent leaks promptly."}],
+            "flags": [],
+        }
         body = {
             "household_mode": household_mode,
             "hmo_status": "unknown" if household_mode != "single" else "not_applicable",
@@ -79,23 +107,9 @@ class TenancyApiTests(unittest.TestCase):
             "agreement_signed": signed,
             "signed_on": date.today().isoformat() if signed else None,
             "tenancy_start": tenancy_start or date.today().isoformat(),
-            "review_id": review_id,
+            "case_code": case_code,
         }
         return client.post("/api/tenancies", json=body)
-
-    def test_account_registration_login_and_session_cookie(self):
-        self.assertIn("flatmate_session", self.client.cookies)
-        self.assertEqual(self.client.get("/api/auth/me").json()["id"], self.account["id"])
-
-        self.client.post("/api/auth/logout")
-        self.assertEqual(self.client.get("/api/auth/me").status_code, 401)
-        response = self.client.post(
-            "/api/auth/login",
-            json={"email": "LEAD@example.test", "password": "correct-horse-battery"},
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["id"], self.account["id"])
 
     def test_existing_profile_table_is_migrated_with_review_id(self):
         legacy_path = Path(self.temp_dir.name) / "legacy.sqlite3"
@@ -213,6 +227,39 @@ class TenancyApiTests(unittest.TestCase):
         current_profiles = [profile for profile in profiles if profile["is_current"]]
         self.assertEqual(len(current_profiles), 1)
         self.assertEqual(current_profiles[0]["id"], second.json()["id"])
+
+    def test_signed_agreement_needs_a_start_date_not_before_signing(self):
+        client = self.client
+        body = {
+            "household_mode": "single", "hmo_status": "not_applicable",
+            "property_address": "x", "lead_tenant": "A", "co_tenants": [],
+            "current_tenant": "A", "current_role": "lead", "agreement_signed": True,
+            "signed_on": date.today().isoformat(), "tenancy_start": None,
+        }
+        self.create_profile()  # registers a case
+        code = next(iter(self.cases))
+        body["case_code"] = code
+        self.cases[code]["lead_tenant"], self.cases[code]["co_tenants"] = "A", []
+        self.assertEqual(client.post("/api/tenancies", json=body).status_code, 422)
+        body["tenancy_start"] = (date.today() - timedelta(days=1)).isoformat()
+        self.assertEqual(client.post("/api/tenancies", json=body).status_code, 422)
+
+    def test_submitting_the_same_review_twice_reuses_the_tenancy(self):
+        first = self.create_profile()
+        code = next(reversed(self.cases))
+        body = {
+            "household_mode": "friends", "hmo_status": "unknown", "property_address": "x",
+            "lead_tenant": "Lead Tenant", "co_tenants": ["Friend Tenant"],
+            "current_tenant": "Lead Tenant", "current_role": "lead", "agreement_signed": False,
+            "case_code": code,
+        }
+        second = self.client.post("/api/tenancies", json=body)
+        self.assertEqual(second.status_code, 201, second.text)
+        self.assertEqual(second.json()["id"], first.json()["id"])
+
+    def test_solo_household_with_co_tenants_is_rejected_by_the_shared_check(self):
+        with self.assertRaises(ValueError):
+            tenancies.validate_household("single", "not_applicable", "A", ["B"])
 
     def test_family_household_setup_is_rejected(self):
         response = self.create_profile(household_mode="family")

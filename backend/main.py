@@ -1,28 +1,29 @@
 import asyncio
 import json
 import logging
-import re
+import secrets
 import sqlite3
 from contextlib import asynccontextmanager
 from datetime import date
 from typing import Literal
+from urllib.parse import quote
 
 import psycopg
-from fastapi import Cookie, Depends, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from google.genai.errors import APIError
 from pypdf.errors import PdfReadError
+from starlette.middleware.sessions import SessionMiddleware
 
 from pydantic import BaseModel, Field
 
-from app import bills, calendar, config, llm, media, pipeline, reviews, tenancies
+from app import auth, bills, calendar, cases, config, llm, media, pipeline, tenancies
 from app.pipeline import AnalysisInputError
 from app.rag.retrieve import retrieve_many
 
 logger = logging.getLogger(__name__)
 MAX_AGREEMENT_SIZE = 10 * 1024 * 1024
-SESSION_MAX_AGE = tenancies.SESSION_DAYS * 24 * 60 * 60
 
 
 async def _calendar_reminder_worker() -> None:
@@ -51,10 +52,33 @@ async def lifespan(_app: FastAPI):
 app = FastAPI(title="Tenancy Demystifier", lifespan=lifespan)
 
 
-def optional_account(
-    session: str | None = Cookie(default=None, alias=config.SESSION_COOKIE_NAME),
-) -> dict[str, str] | None:
-    return tenancies.account_for_session(session)
+if not config.SESSION_SECRET:
+    logger.warning("SESSION_SECRET is not set; logins will not survive a restart")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=config.SESSION_SECRET or secrets.token_urlsafe(32),
+    session_cookie="flatmate_session",
+    max_age=30 * 24 * 60 * 60,
+    same_site="lax",
+    https_only=config.SESSION_HTTPS_ONLY,
+)
+app.include_router(auth.router)
+
+
+def optional_account(request: Request) -> dict[str, str] | None:
+    """The logged-in user (app.auth), or None. Accounts are optional."""
+    user_id = auth.current_user_id(request)
+    if not user_id or not config.DATABASE_URL:
+        return None
+    try:
+        with cases.connect() as conn:
+            row = conn.execute("SELECT id, email, display_name FROM users WHERE id = %s", (user_id,)).fetchone()
+    except psycopg.Error as error:
+        logger.exception("Could not load the logged-in user")
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if row is None:
+        return None
+    return {"id": str(row[0]), "email": row[1], "display_name": row[2]}
 
 
 @app.get("/api/health")
@@ -63,13 +87,14 @@ def health():
         "status": "ok",
         "gemini_configured": bool(config.GEMINI_API_KEY),
         "vector_store": "tiger_data" if config.DATABASE_URL else "local",
-        "review_store": "postgres" if config.DATABASE_URL else "sqlite",
+        "case_store": "tiger_data" if config.DATABASE_URL else "none",
         "email_reminders_configured": config.EMAIL_REMINDERS_CONFIGURED,
     }
 
 
 @app.post("/api/analyze")
 async def analyze(
+    request: Request,
     agreement: UploadFile = File(...),
     lead_tenant: str | None = Form(default=None),
     co_tenants: str = Form(default=""),
@@ -77,18 +102,16 @@ async def analyze(
     tenant_name: str | None = Form(default=None),
     household_mode: str = Form(default="single"),
     hmo_status: str = Form(default="unknown"),
-    account: dict[str, str] | None = Depends(optional_account),
+    current_tenant: str | None = Form(default=None),
 ):
     lead_tenant = (lead_tenant or tenant_name or "").strip()
     if not lead_tenant:
         raise HTTPException(status_code=422, detail="Please enter the lead tenant's name")
-    if household_mode not in tenancies.HOUSEHOLD_MODES:
-        raise HTTPException(status_code=422, detail="Please choose a household setup")
-    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
-        raise HTTPException(status_code=422, detail="Please choose an HMO status")
-    if household_mode == "friends" and hmo_status == "not_applicable":
-        raise HTTPException(status_code=422, detail="Choose an HMO status when living with friends")
     co_tenant_names = [name.strip() for name in co_tenants.split(",") if name.strip()]
+    try:
+        tenancies.validate_household(household_mode, hmo_status, lead_tenant, co_tenant_names)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
     if agreement.content_type != "application/pdf":
         raise HTTPException(status_code=400, detail="Please upload a PDF")
@@ -139,25 +162,32 @@ async def analyze(
         co_tenants=co_tenant_names,
     )
     result["bills_estimate"] = bills_estimate
-    try:
-        review_id = reviews.save_review(
-            lead_tenant,
-            co_tenant_names,
-            property_address,
-            agreement.filename,
-            result,
-            owner_account_id=account["id"] if account else None,
-        )
-    except (OSError, sqlite3.Error, psycopg.Error) as error:
-        logger.exception("Could not save completed agreement review")
-        raise HTTPException(
-            status_code=503,
-            detail="The agreement was analyzed, but its review could not be saved. Please try again.",
-        ) from error
+    agreement_text = result.pop("agreement_text", "")
+    clauses = result.pop("clauses", [])
+    case_code = None
+    if config.DATABASE_URL:
+        # Saving must never break the demo: show the results even if the database is down.
+        try:
+            with cases.connect() as conn:
+                case_code = cases.save_case(
+                    conn,
+                    lead_tenant=lead_tenant,
+                    co_tenants=co_tenant_names,
+                    property_address=property_address,
+                    filename=agreement.filename,
+                    agreement_text=agreement_text,
+                    clauses=clauses,
+                    result=result,
+                    user_id=auth.current_user_id(request),
+                    pdf=pdf_bytes,
+                    current_tenant=current_tenant,
+                )
+        except Exception:
+            logger.exception("Could not save the case")
 
     return {
-        "review_id": review_id,
-        "case_code": review_id,
+        "case_code": case_code,
+        "saved": case_code is not None,
         "tenant_name": lead_tenant,
         "lead_tenant": lead_tenant,
         "co_tenants": co_tenant_names,
@@ -167,23 +197,9 @@ async def analyze(
         ],
         "property_address": property_address,
         "filename": agreement.filename,
+        "pdf_url": cases.pdf_url(case_code) if case_code else None,
         **result,
     }
-
-
-@app.get("/api/reviews/{review_code}")
-def get_shared_review(review_code: str):
-    try:
-        review = reviews.get_shared_review(review_code)
-    except (OSError, sqlite3.Error, psycopg.Error) as error:
-        logger.exception("Could not load shared review %s", review_code)
-        raise HTTPException(
-            status_code=503,
-            detail="Could not load the saved review right now. Please try again.",
-        ) from error
-    if review is None:
-        raise HTTPException(status_code=404, detail="No saved review was found with that code.")
-    return review
 
 
 class BillsEstimateRequest(BaseModel):
@@ -212,17 +228,6 @@ def estimate_bills_endpoint(req: BillsEstimateRequest):
     )
 
 
-class AccountRequest(BaseModel):
-    email: str = Field(min_length=3, max_length=254)
-    display_name: str = Field(min_length=1, max_length=100)
-    password: str = Field(min_length=12, max_length=256)
-
-
-class LoginRequest(BaseModel):
-    email: str = Field(min_length=3, max_length=254)
-    password: str = Field(min_length=1, max_length=256)
-
-
 class JoinTenancyRequest(BaseModel):
     code: str = Field(min_length=8, max_length=20)
     tenant_name: str = Field(min_length=1, max_length=100)
@@ -240,7 +245,7 @@ class TenancyProfileRequest(BaseModel):
     agreement_signed: bool = False
     signed_on: str | None = None
     tenancy_start: str | None = None
-    review_id: str = Field(min_length=1, max_length=100)
+    case_code: str = Field(min_length=1, max_length=100)
 
 
 class SigningUpdateRequest(BaseModel):
@@ -275,65 +280,10 @@ def current_account(
     return account
 
 
-def _set_session_cookie(response: Response, token: str) -> None:
-    response.set_cookie(
-        config.SESSION_COOKIE_NAME,
-        token,
-        max_age=SESSION_MAX_AGE,
-        httponly=True,
-        secure=config.SESSION_COOKIE_SECURE,
-        samesite="lax",
-        path="/",
-    )
-
-
 def _profile_or_404(profile: dict | None) -> dict:
     if profile is None:
         raise HTTPException(status_code=404, detail="Tenancy profile not found.")
     return profile
-
-
-@app.post("/api/auth/register", status_code=201)
-def register_account(body: AccountRequest, response: Response):
-    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email.strip()):
-        raise HTTPException(status_code=422, detail="Enter a valid email address.")
-    try:
-        account, token = tenancies.register(body.email, body.display_name, body.password)
-    except (sqlite3.IntegrityError, psycopg.errors.UniqueViolation) as error:
-        raise HTTPException(status_code=409, detail="An account with that email already exists.") from error
-    _set_session_cookie(response, token)
-    return account
-
-
-@app.post("/api/auth/login")
-def login_account(body: LoginRequest, response: Response):
-    account_session = tenancies.login(body.email, body.password)
-    if account_session is None:
-        raise HTTPException(status_code=401, detail="Email or password was not recognized.")
-    account, token = account_session
-    _set_session_cookie(response, token)
-    return account
-
-
-@app.get("/api/auth/me")
-def get_current_account(account: dict[str, str] = Depends(current_account)):
-    return account
-
-
-@app.post("/api/auth/logout", status_code=204)
-def logout_account(
-    response: Response,
-    session: str | None = Cookie(default=None, alias=config.SESSION_COOKIE_NAME),
-    _account: dict[str, str] = Depends(current_account),
-):
-    tenancies.logout(session)
-    response.delete_cookie(
-        config.SESSION_COOKIE_NAME,
-        httponly=True,
-        secure=config.SESSION_COOKIE_SECURE,
-        samesite="lax",
-        path="/",
-    )
 
 
 @app.get("/api/tenancies")
@@ -346,20 +296,32 @@ def create_tenancy_profile(
     body: TenancyProfileRequest,
     account: dict[str, str] = Depends(current_account),
 ):
-    review = reviews.get_review(body.review_id, account["id"])
+    try:
+        with cases.connect() as conn:
+            review = cases.get_case(conn, cases.normalize_code(body.case_code))
+    except psycopg.Error as error:
+        logger.exception("Could not load case %s for a tenancy profile", body.case_code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
     if review is None:
         raise HTTPException(status_code=404, detail="The agreement review could not be found.")
+    review["bills_estimate"] = bills.estimate_bills(
+        property_address=review["property_address"],
+        tenant_count=len(review["co_tenants"]) + 1,
+        need_to_knows=review.get("need_to_knows"),
+        lead_tenant=review["lead_tenant"],
+        co_tenants=review["co_tenants"],
+    )
     try:
         return tenancies.create_profile(
             account,
             body.household_mode,
             body.hmo_status,
-            body.property_address,
-            body.lead_tenant,
-            body.co_tenants,
+            review["property_address"],
+            review["lead_tenant"],
+            review["co_tenants"],
             body.current_tenant,
             body.current_role,
-            body.review_id,
+            review["case_code"],
             review,
             body.agreement_signed,
             body.signed_on,
@@ -378,7 +340,14 @@ def join_tenancy(
         profile = tenancies.join_profile(body.code, account, body.tenant_name, body.role)
     except (ValueError, sqlite3.IntegrityError, psycopg.errors.UniqueViolation) as error:
         raise HTTPException(status_code=409, detail=str(error)) from error
-    return _profile_or_404(profile)
+    profile = _profile_or_404(profile)
+    # Joining by tenancy code also adds the agreement review to the account's cases.
+    try:
+        with cases.connect() as conn:
+            cases.join_case(conn, profile["review_id"], account["id"], body.tenant_name)
+    except Exception:  # best effort: the tenancy join itself already succeeded
+        logger.exception("Could not link case %s to the joined account", profile["review_id"])
+    return profile
 
 
 @app.get("/api/tenancies/{profile_id}")
@@ -593,9 +562,9 @@ async def upload_tenancy_photo(
         raise HTTPException(status_code=409, detail="Move-in photo uploads unlock when the tenancy starts.")
     content = await photo.read(media.MAX_PHOTO_SIZE + 1)
     try:
-        storage_key, media_type = media.store_photo(content, photo.content_type or "")
+        media_type = media.validate_photo(content, photo.content_type or "")
         photo_id = tenancies.add_photo(
-            profile_id, account["id"], room.strip(), note.strip(), storage_key, media_type
+            profile_id, account["id"], room.strip(), note.strip(), content, media_type
         )
     except media.InvalidPhoto as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
@@ -617,12 +586,7 @@ def read_tenancy_photo(
     photo = tenancies.get_photo(profile_id, photo_id, account["id"])
     if photo is None:
         raise HTTPException(status_code=404, detail="Photo not found.")
-    try:
-        content = media.read_photo(photo["storage_key"])
-    except (OSError, RuntimeError) as error:
-        logger.exception("Could not read stored tenancy photo")
-        raise HTTPException(status_code=503, detail="The photo could not be loaded.") from error
-    return Response(content=content, media_type=photo["media_type"])
+    return Response(content=bytes(photo["data"]), media_type=photo["media_type"])
 
 
 @app.delete("/api/tenancies/{profile_id}/photos/{photo_id}", status_code=204)
@@ -636,11 +600,84 @@ def delete_tenancy_photo(
     if photo is None:
         raise HTTPException(status_code=404, detail="Photo not found.")
     try:
-        media.delete_photo(photo["storage_key"])
         tenancies.delete_photo(profile_id, photo_id, account["id"])
-    except (OSError, RuntimeError) as error:
+    except (OSError, RuntimeError, sqlite3.Error, psycopg.Error) as error:
         logger.exception("Could not delete tenancy photo")
         raise HTTPException(status_code=503, detail="The photo could not be deleted.") from error
+
+
+@app.get("/api/cases/{code}")
+def get_case(code: str):
+    if not config.DATABASE_URL:
+        raise HTTPException(status_code=503, detail="Saved cases need the database, which isn't set up on this server.")
+    try:
+        with cases.connect() as conn:
+            case = cases.get_case(conn, cases.normalize_code(code))
+    except psycopg.Error as error:
+        logger.exception("Could not load case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if case is None:
+        raise HTTPException(status_code=404, detail="No case was found with that code.")
+    # Not stored: recomputed so a reopened review shows the same bills as the first run.
+    case["bills_estimate"] = bills.estimate_bills(
+        property_address=case["property_address"],
+        tenant_count=len(case["co_tenants"]) + 1,
+        need_to_knows=case.get("need_to_knows"),
+        lead_tenant=case["lead_tenant"],
+        co_tenants=case["co_tenants"],
+    )
+    return case
+
+
+@app.get("/api/cases/{code}/agreement.pdf")
+def get_agreement_pdf(code: str):
+    if not config.DATABASE_URL:
+        raise HTTPException(status_code=503, detail="Saved cases need the database, which isn't set up on this server.")
+    try:
+        with cases.connect() as conn:
+            found = cases.get_pdf(conn, cases.normalize_code(code))
+    except psycopg.Error as error:
+        logger.exception("Could not load the PDF for case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if found is None:
+        raise HTTPException(status_code=404, detail="No PDF was saved for that case.")
+    pdf, filename = found
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={
+            # inline opens it in the browser's PDF viewer; quote() keeps odd file names header-safe.
+            "Content-Disposition": f"inline; filename*=UTF-8''{quote(filename or 'agreement.pdf')}",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@app.get("/api/my/cases")
+def my_cases(request: Request):
+    user_id = auth.require_user_id(request)
+    auth.require_database()
+    try:
+        with cases.connect() as conn:
+            return {"cases": cases.list_cases(conn, user_id)}
+    except psycopg.Error as error:
+        logger.exception("Could not list cases")
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+
+
+@app.post("/api/cases/{code}/join")
+def join_case(code: str, request: Request):
+    """Add a case to the logged-in user's account, e.g. a co-tenant entering the code."""
+    user = auth.me(request)
+    try:
+        with cases.connect() as conn:
+            found = cases.join_case(conn, cases.normalize_code(code), user["id"], user["display_name"])
+    except psycopg.Error as error:
+        logger.exception("Could not join case %s", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if not found:
+        raise HTTPException(status_code=404, detail="No case was found with that code.")
+    return {"ok": True}
 
 
 # Serve the standalone app when it is present; otherwise use the built React app.

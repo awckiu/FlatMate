@@ -1,55 +1,59 @@
-"""Load UK housing legislation into the vector store.
+"""Load the trusted UK housing law sources into the vector store.
 
-Save each source as plain text in backend/data/law/<name>.txt (copied from
-legislation.gov.uk / gov.uk), then run from backend/:
+First download them with scripts.fetch_law (writes backend/data/law/<stem>.txt), then
+run from backend/:
 
     .venv\\Scripts\\python -m scripts.ingest_law
+    .venv\\Scripts\\python -m scripts.ingest_law --only how_to_rent
 
-Uses Tiger Data when DATABASE_URL is set, otherwise the local index.
+Only files for the sources in app/rag/sources.py are read, and a file is refused if its
+header or any section link doesn't match that list. Uses Tiger Data when DATABASE_URL is
+set, otherwise the local index.
 """
 
+import argparse
+import sys
+
 from app import config
-from app.rag.ingest import chunk_by_section, ingest
+from app.rag.ingest import ingest, parse_law_file
+from app.rag.sources import TRUSTED_SOURCES, TrustedSource, is_trusted_url
 from app.rag.store import get_store
 
-SOURCES = {
-    "housing_act_1988": ("Housing Act 1988", "https://www.legislation.gov.uk/ukpga/1988/50"),
-    "housing_act_2004": ("Housing Act 2004", "https://www.legislation.gov.uk/ukpga/2004/34"),
-    "tenant_fees_act_2019": ("Tenant Fees Act 2019", "https://www.legislation.gov.uk/ukpga/2019/4"),
-    "renters_rights_act_2025": ("Renters' Rights Act 2025", "https://www.legislation.gov.uk/ukpga/2025/26"),
-    "deposit_protection": (
-        "Tenancy deposit protection",
-        "https://www.gov.uk/tenancy-deposit-protection",
-    ),
-    "how_to_rent": ("How to rent (gov.uk)", "https://www.gov.uk/government/publications/how-to-rent"),
-}
+
+def load(source: TrustedSource):
+    path = config.LAW_TEXT_DIR / f"{source.stem}.txt"
+    if not path.is_file():
+        print(f"skip {source.name}: {path} not found (run scripts.fetch_law first)")
+        return None
+    law = parse_law_file(path.read_text(encoding="utf-8"))
+    if law.source != source.name or law.url != source.url:
+        raise ValueError(f"{path.name}: header says {law.source!r} at {law.url}, expected {source.name!r} at {source.url}")
+    untrusted = [c.url for c in law.chunks if not is_trusted_url(c.url)]
+    if untrusted:
+        raise ValueError(f"{path.name}: section links outside the trusted sites: {untrusted[:3]}")
+    if not law.chunks:
+        raise ValueError(f"{path.name}: no sections")
+    return law
 
 
 def main():
-    available = []
-    for stem, (source, url) in SOURCES.items():
-        path = config.LAW_TEXT_DIR / f"{stem}.txt"
-        if not path.is_file():
-            print(f"skip {source}: {path} not found")
-            continue
-        text = path.read_text(encoding="utf-8").strip()
-        if not text:
-            print(f"skip {source}: {path} is empty")
-            continue
-        available.append((source, url, text))
-    if not available:
-        raise FileNotFoundError(
-            f"No non-empty law source files found in {config.LAW_TEXT_DIR}; "
-            "add at least one source before running ingestion."
-        )
+    parser = argparse.ArgumentParser(description="Embed and store the trusted law sources.")
+    parser.add_argument("--only", help="ingest one source by its stem")
+    args = parser.parse_args()
+    sources = [s for s in TRUSTED_SOURCES if not args.only or s.stem == args.only]
+    if not sources:
+        sys.exit(f"unknown source {args.only!r}; choose from {', '.join(s.stem for s in TRUSTED_SOURCES)}")
+
+    laws = [law for law in map(load, sources) if law]
+    if not laws:
+        raise FileNotFoundError(f"No law source files found in {config.LAW_TEXT_DIR}; run scripts.fetch_law first.")
 
     store = get_store()
     total = 0
-    for source, url, text in available:
-        chunks = chunk_by_section(text, source, url)
-        total += ingest(store, chunks)
-        print(f"{source}: {len(chunks)} chunks")
-    print(f"done, {total} chunks ingested")
+    for law in laws:
+        total += ingest(store, law.chunks, last_updated=law.last_updated, source_url=law.url)
+        print(f"{law.source} (updated {law.last_updated}): {len(law.chunks)} chunks")
+    print(f"done, {total} chunks ingested into {'Tiger Data' if config.DATABASE_URL else 'the local index'}")
 
 
 if __name__ == "__main__":

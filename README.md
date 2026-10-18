@@ -107,11 +107,9 @@ these status notes are shared with members of that tenancy. FlatMate does **not*
 Move-in photos unlock when the tenancy starts; supported image uploads are stored as evidence
 and are not analysed by AI.
 
-For local development, photos are stored under `backend/data/photos`. To use private
-S3-compatible storage, set `PHOTO_STORAGE_ENDPOINT`, `PHOTO_STORAGE_BUCKET`,
-`PHOTO_STORAGE_ACCESS_KEY`, and `PHOTO_STORAGE_SECRET_KEY` in `backend/.env`; optionally set
-`PHOTO_STORAGE_REGION`. Keep the bucket private. Behind HTTPS in production, set
-`SESSION_COOKIE_SECURE=true` so the account session cookie is sent only over HTTPS.
+Move-in photos are stored in the database (`tenancy_photos.data`), not in S3 or on disk. Behind HTTPS in production, set
+`SESSION_HTTPS_ONLY=true` so the login cookie is sent only over HTTPS. Accounts and tenancy
+profiles need `DATABASE_URL` (Tiger Data).
 
 Household and HMO selections provide context to legal retrieval, but do not themselves add
 legislation to the law database or guarantee that a legal check is available. Populate the

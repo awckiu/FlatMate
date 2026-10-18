@@ -1,25 +1,20 @@
-"""Account, session and shared tenancy-profile persistence."""
+"""Shared tenancy-profile persistence. Logins live in app.auth (the users table); db/schema.sql owns the tables."""
 
 from __future__ import annotations
 
-import base64
-import hashlib
-import hmac
 import json
 import secrets
 import sqlite3
 import uuid
-from contextlib import closing
-from datetime import date, datetime, timedelta, timezone
+from contextlib import closing, contextmanager
+from datetime import date, datetime, timezone
 from typing import Any
 
 import psycopg
 from psycopg.rows import dict_row
 
-from app import config
+from app import cases, config
 
-PASSWORD_ITERATIONS = 600_000
-SESSION_DAYS = 30
 HOUSEHOLD_MODES = {"single", "friends"}
 
 
@@ -33,31 +28,41 @@ def _connection():
     return connection
 
 
+@contextmanager
+def _transaction(connection):
+    """Commit on success, roll back on error. sqlite3's `with connection` does this, but
+    psycopg's closes the connection, which broke every later query on Tiger Data."""
+    if isinstance(connection, sqlite3.Connection):
+        with connection:
+            yield
+        return
+    try:
+        yield
+        connection.commit()
+    except BaseException:
+        connection.rollback()
+        raise
+
+
 def _sql(query: str) -> str:
     return query.replace("?", "%s") if config.DATABASE_URL else query
 
 
 def _ensure_schema(connection) -> None:
+    if config.DATABASE_URL:
+        # Tiger Data: db/schema.sql is the only definition of these tables.
+        cases.ensure_schema()
+        return
+    # Everything below is the SQLite stand-in used by the tests (no DATABASE_URL). Keep it in
+    # step with db/schema.sql.
     connection.execute(
         _sql(
             """
-            CREATE TABLE IF NOT EXISTS flatmate_accounts (
+            CREATE TABLE IF NOT EXISTS users (
                 id text PRIMARY KEY,
                 email text NOT NULL UNIQUE,
                 display_name text NOT NULL,
-                password_hash text NOT NULL,
-                created_at text NOT NULL
-            )
-            """
-        )
-    )
-    connection.execute(
-        _sql(
-            """
-            CREATE TABLE IF NOT EXISTS flatmate_sessions (
-                token_hash text PRIMARY KEY,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
-                expires_at text NOT NULL
+                password_hash text
             )
             """
         )
@@ -68,7 +73,7 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_profiles (
                 id text PRIMARY KEY,
                 code text UNIQUE,
-                owner_account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                owner_account_id text NOT NULL REFERENCES users(id),
                 household_mode text NOT NULL,
                 hmo_status text NOT NULL,
                 property_address text NOT NULL,
@@ -87,22 +92,9 @@ def _ensure_schema(connection) -> None:
             """
         )
     )
-    if config.DATABASE_URL:
-        profile_columns = {
-            row["column_name"]
-            for row in connection.execute(
-                """
-                SELECT column_name
-                FROM information_schema.columns
-                WHERE table_schema = current_schema() AND table_name = 'tenancy_profiles'
-                """
-            ).fetchall()
-        }
-    else:
-        profile_columns = {
-            row["name"]
-            for row in connection.execute("PRAGMA table_info(tenancy_profiles)").fetchall()
-        }
+    profile_columns = {
+        row["name"] for row in connection.execute("PRAGMA table_info(tenancy_profiles)").fetchall()
+    }
     if "review_id" not in profile_columns:
         connection.execute("ALTER TABLE tenancy_profiles ADD COLUMN review_id text")
 
@@ -111,7 +103,7 @@ def _ensure_schema(connection) -> None:
             """
             CREATE TABLE IF NOT EXISTS tenancy_members (
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 name text NOT NULL,
                 role text NOT NULL,
                 is_current integer NOT NULL DEFAULT 1,
@@ -134,7 +126,7 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                account_id text NOT NULL REFERENCES users(id),
                 user_message text NOT NULL,
                 assistant_message text NOT NULL,
                 landlord_draft text NOT NULL,
@@ -164,10 +156,10 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_photos (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id),
+                account_id text NOT NULL REFERENCES users(id),
                 room text NOT NULL,
                 note text NOT NULL,
-                storage_key text NOT NULL,
+                data blob NOT NULL,
                 media_type text NOT NULL,
                 uploaded_at text NOT NULL
             )
@@ -180,7 +172,7 @@ def _ensure_schema(connection) -> None:
             CREATE TABLE IF NOT EXISTS tenancy_calendar_items (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
-                created_by text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                created_by text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 title text NOT NULL,
                 kind text NOT NULL,
                 due_date text NOT NULL,
@@ -195,7 +187,7 @@ def _ensure_schema(connection) -> None:
         _sql(
             """
             CREATE TABLE IF NOT EXISTS flatmate_notification_preferences (
-                account_id text PRIMARY KEY REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
                 email_reminders_enabled boolean NOT NULL DEFAULT false
             )
             """
@@ -206,7 +198,7 @@ def _ensure_schema(connection) -> None:
             """
             CREATE TABLE IF NOT EXISTS tenancy_calendar_reminders (
                 item_id text NOT NULL REFERENCES tenancy_calendar_items(id) ON DELETE CASCADE,
-                account_id text NOT NULL REFERENCES flatmate_accounts(id) ON DELETE CASCADE,
+                account_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                 due_date text NOT NULL,
                 status text NOT NULL,
                 updated_at text NOT NULL,
@@ -222,112 +214,25 @@ def _timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _hash_password(password: str) -> str:
-    salt = secrets.token_bytes(16)
-    key = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, PASSWORD_ITERATIONS)
-    return "$".join(
-        (
-            "pbkdf2_sha256",
-            str(PASSWORD_ITERATIONS),
-            base64.urlsafe_b64encode(salt).decode(),
-            base64.urlsafe_b64encode(key).decode(),
-        )
-    )
-
-
-def _verify_password(password: str, encoded: str) -> bool:
-    try:
-        algorithm, iterations, salt_text, key_text = encoded.split("$", 3)
-        if algorithm != "pbkdf2_sha256":
-            return False
-        salt = base64.urlsafe_b64decode(salt_text.encode())
-        expected = base64.urlsafe_b64decode(key_text.encode())
-        actual = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, int(iterations))
-        return hmac.compare_digest(actual, expected)
-    except (ValueError, TypeError):
-        return False
-
-
-def _new_session(connection, account_id: str) -> str:
-    token = secrets.token_urlsafe(32)
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    expires = (datetime.now(timezone.utc) + timedelta(days=SESSION_DAYS)).isoformat()
-    connection.execute(
-        _sql("INSERT INTO flatmate_sessions (token_hash, account_id, expires_at) VALUES (?, ?, ?)"),
-        (token_hash, account_id, expires),
-    )
-    return token
-
-
-def register(email: str, display_name: str, password: str) -> tuple[dict[str, str], str]:
-    account_id = uuid.uuid4().hex
-    normalized_email = email.strip().casefold()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with connection:
-            connection.execute(
-                _sql(
-                    "INSERT INTO flatmate_accounts (id, email, display_name, password_hash, created_at) "
-                    "VALUES (?, ?, ?, ?, ?)"
-                ),
-                (account_id, normalized_email, display_name.strip(), _hash_password(password), _timestamp()),
-            )
-            token = _new_session(connection, account_id)
-    return {"id": account_id, "email": normalized_email, "display_name": display_name.strip()}, token
-
-
-def login(email: str, password: str) -> tuple[dict[str, str], str] | None:
-    normalized_email = email.strip().casefold()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with connection:
-            row = connection.execute(
-                _sql(
-                    "SELECT id, email, display_name, password_hash FROM flatmate_accounts WHERE email = ?"
-                ),
-                (normalized_email,),
-            ).fetchone()
-            if row is None or not _verify_password(password, row["password_hash"]):
-                return None
-            token = _new_session(connection, row["id"])
-    return {
-        "id": row["id"],
-        "email": row["email"],
-        "display_name": row["display_name"],
-    }, token
-
-
-def account_for_session(token: str | None) -> dict[str, str] | None:
-    if not token:
-        return None
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    now = _timestamp()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        row = connection.execute(
-            _sql(
-                """
-                SELECT a.id, a.email, a.display_name
-                FROM flatmate_sessions s
-                JOIN flatmate_accounts a ON a.id = s.account_id
-                WHERE s.token_hash = ? AND s.expires_at > ?
-                """
-            ),
-            (token_hash, now),
-        ).fetchone()
-    return dict(row) if row else None
-
-
-def logout(token: str | None) -> None:
-    if not token:
-        return
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    with closing(_connection()) as connection:
-        _ensure_schema(connection)
-        with connection:
-            connection.execute(
-                _sql("DELETE FROM flatmate_sessions WHERE token_hash = ?"), (token_hash,)
-            )
+def validate_household(
+    household_mode: str, hmo_status: str, lead_tenant: str, co_tenants: list[str]
+) -> None:
+    """Rules shared by the analysis and the tenancy profile, so a review that is accepted
+    can always be turned into a tenancy."""
+    if household_mode not in HOUSEHOLD_MODES:
+        raise ValueError("Choose a valid household setup.")
+    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
+        raise ValueError("Choose whether the property is an HMO, not an HMO, or unknown.")
+    if household_mode == "friends" and hmo_status == "not_applicable":
+        raise ValueError("Choose an HMO status when living with friends.")
+    if household_mode == "single" and co_tenants:
+        raise ValueError("A solo tenancy must have one lead tenant and no co-tenants.")
+    if any(not name.strip() for name in co_tenants):
+        raise ValueError("Co-tenant names cannot be blank.")
+    if len({name.casefold() for name in co_tenants}) != len(co_tenants):
+        raise ValueError("Enter each co-tenant only once.")
+    if lead_tenant.casefold() in {name.casefold() for name in co_tenants}:
+        raise ValueError("The lead tenant should not be repeated in the co-tenant list.")
 
 
 def create_profile(
@@ -345,12 +250,7 @@ def create_profile(
     signed_on: str | None = None,
     tenancy_start: str | None = None,
 ) -> dict[str, Any]:
-    if household_mode not in HOUSEHOLD_MODES:
-        raise ValueError("Choose a valid household setup.")
-    if hmo_status not in {"yes", "no", "unknown", "not_applicable"}:
-        raise ValueError("Choose whether the property is an HMO, not an HMO, or unknown.")
-    if household_mode == "friends" and hmo_status == "not_applicable":
-        raise ValueError("Choose an HMO status when living with friends.")
+    validate_household(household_mode, hmo_status, lead_tenant, co_tenants)
     if current_role not in {"lead", "co_tenant"}:
         raise ValueError("Choose whether you are the lead tenant or a co-tenant.")
     if current_role == "lead" and current_tenant.casefold() != lead_tenant.casefold():
@@ -359,27 +259,28 @@ def create_profile(
         name.casefold() for name in co_tenants
     }:
         raise ValueError("The signed-in tenant's name must appear in the co-tenant list.")
-    if household_mode == "single" and (current_role != "lead" or co_tenants):
+    if household_mode == "single" and current_role != "lead":
         raise ValueError("A solo tenancy must have one lead tenant and no co-tenants.")
-    if any(not name.strip() for name in co_tenants):
-        raise ValueError("Co-tenant names cannot be blank.")
-    if len({name.casefold() for name in co_tenants}) != len(co_tenants):
-        raise ValueError("Enter each co-tenant only once.")
-    if lead_tenant.casefold() in {name.casefold() for name in co_tenants}:
-        raise ValueError("The lead tenant should not be repeated in the co-tenant list.")
-    if tenancy_start:
-        date.fromisoformat(tenancy_start)
-    if signed_on:
-        date.fromisoformat(signed_on)
-    if agreement_signed and not signed_on:
-        raise ValueError("Enter the date the agreement was signed.")
-    if not agreement_signed and signed_on:
-        raise ValueError("Only enter a signing date after the agreement has been signed.")
+    _validate_signing(agreement_signed, signed_on, tenancy_start)
 
     profile_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        existing = connection.execute(
+            _sql(
+                """
+                SELECT p.id FROM tenancy_profiles p JOIN tenancy_members m ON m.profile_id = p.id
+                WHERE p.review_id = ? AND m.account_id = ?
+                """
+            ),
+            (review_id, account["id"]),
+        ).fetchone()
+        if existing is not None:
+            # The same review submitted again (e.g. a retry) reuses this account's tenancy.
+            profile = get_profile(existing["id"], account["id"])
+            if profile is not None:
+                return profile
+        with _transaction(connection):
             connection.execute(
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
                 (account["id"],),
@@ -424,6 +325,19 @@ def create_profile(
     return profile
 
 
+def _validate_signing(agreement_signed: bool, signed_on: str | None, tenancy_start: str | None) -> None:
+    signed_date = date.fromisoformat(signed_on) if signed_on else None
+    start_date = date.fromisoformat(tenancy_start) if tenancy_start else None
+    if agreement_signed and not signed_on:
+        raise ValueError("Enter the date the agreement was signed.")
+    if not agreement_signed and signed_on:
+        raise ValueError("Only enter a signing date after the agreement has been signed.")
+    if agreement_signed and not tenancy_start:
+        raise ValueError("Enter the tenancy start date so the tenancy code can be issued.")
+    if signed_date and start_date and start_date < signed_date:
+        raise ValueError("The tenancy cannot start before the agreement was signed.")
+
+
 def _activate_due_profiles(connection, account_id: str | None = None) -> None:
     today = date.today().isoformat()
     conditions = "agreement_signed = 1 AND tenancy_start <= ? AND code IS NULL"
@@ -453,7 +367,7 @@ def _activate_due_profiles(connection, account_id: str | None = None) -> None:
 def get_profile(profile_id: str, account_id: str) -> dict[str, Any] | None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection, account_id)
         row = connection.execute(
             _sql(
@@ -473,7 +387,7 @@ def get_profile_by_code(code: str, account_id: str) -> dict[str, Any] | None:
     normalized = code.strip().upper()
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
         row = connection.execute(
             _sql(
@@ -503,7 +417,7 @@ def _decode_profile(row) -> dict[str, Any]:
 def list_profiles(account_id: str) -> list[dict[str, Any]]:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
         rows = connection.execute(
             _sql(
@@ -527,7 +441,7 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
         raise ValueError("Enter your name and choose your role on the agreement.")
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             _activate_due_profiles(connection)
             row = connection.execute(
                 _sql(
@@ -570,15 +484,10 @@ def update_signing(
     signed_on: str | None,
     tenancy_start: str | None,
 ) -> dict[str, Any] | None:
-    if agreement_signed and not signed_on:
-        raise ValueError("Enter the date the agreement was signed.")
-    if signed_on:
-        date.fromisoformat(signed_on)
-    if tenancy_start:
-        date.fromisoformat(tenancy_start)
+    _validate_signing(agreement_signed, signed_on, tenancy_start)
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             row = connection.execute(
                 _sql(
                     """
@@ -625,7 +534,7 @@ def add_chat_message(
     message_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             member = connection.execute(
                 _sql(
                     """
@@ -802,13 +711,13 @@ def add_photo(
     account_id: str,
     room: str,
     note: str,
-    storage_key: str,
+    data: bytes,
     media_type: str,
 ) -> str:
     photo_id = uuid.uuid4().hex
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             member = connection.execute(
                 _sql(
                     """
@@ -825,7 +734,7 @@ def add_photo(
                 _sql(
                     """
                     INSERT INTO tenancy_photos
-                        (id, profile_id, account_id, room, note, storage_key, media_type, uploaded_at)
+                        (id, profile_id, account_id, room, note, data, media_type, uploaded_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
                 ),
@@ -835,7 +744,7 @@ def add_photo(
                     account_id,
                     room,
                     note,
-                    storage_key,
+                    data,
                     media_type,
                     _timestamp(),
                 ),
@@ -860,13 +769,13 @@ def list_photos(profile_id: str, account_id: str) -> list[dict[str, Any]]:
     return [dict(row) for row in rows]
 
 
-def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, str] | None:
+def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, Any] | None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
         row = connection.execute(
             _sql(
                 """
-                SELECT p.storage_key, p.media_type
+                SELECT p.data, p.media_type
                 FROM tenancy_photos p JOIN tenancy_members m ON m.profile_id = p.profile_id
                 WHERE p.profile_id = ? AND p.id = ? AND m.account_id = ?
                 """
@@ -879,7 +788,7 @@ def get_photo(profile_id: str, photo_id: str, account_id: str) -> dict[str, str]
 def delete_photo(profile_id: str, photo_id: str, account_id: str) -> None:
     with closing(_connection()) as connection:
         _ensure_schema(connection)
-        with connection:
+        with _transaction(connection):
             connection.execute(
                 _sql(
                     """

@@ -16,18 +16,17 @@ EMBED_DIM = 768
 DATABASE_URL = os.getenv("DATABASE_URL") or None
 SCHEMA_PATH = BACKEND_DIR / "db" / "schema.sql"
 
+# Signs the login cookie. Empty means a random secret per run, so restarts log everyone out.
+SESSION_SECRET = os.getenv("SESSION_SECRET") or None
+# Set to true on the HTTPS server so the cookie is never sent over plain HTTP.
+SESSION_HTTPS_ONLY = os.getenv("SESSION_HTTPS_ONLY", "").lower() == "true"
+
 DATA_DIR = BACKEND_DIR / "data"
 LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
+# Checklist Gemini follows for the quick read (summary + need-to-knows). Skipped if missing.
+CHECKLIST_PATH = BACKEND_DIR.parent / "docs" / "things_to_check.txt"
 REVIEWS_DB_PATH = DATA_DIR / "reviews.sqlite3"
-PHOTO_STORAGE_DIR = DATA_DIR / "photos"
-PHOTO_STORAGE_ENDPOINT = os.getenv("PHOTO_STORAGE_ENDPOINT") or None
-PHOTO_STORAGE_BUCKET = os.getenv("PHOTO_STORAGE_BUCKET") or None
-PHOTO_STORAGE_ACCESS_KEY = os.getenv("PHOTO_STORAGE_ACCESS_KEY") or None
-PHOTO_STORAGE_SECRET_KEY = os.getenv("PHOTO_STORAGE_SECRET_KEY") or None
-PHOTO_STORAGE_REGION = os.getenv("PHOTO_STORAGE_REGION", "us-east-1")
-SESSION_COOKIE_NAME = "flatmate_session"
-SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
 REMINDER_SMTP_HOST = os.getenv("REMINDER_SMTP_HOST") or None
 REMINDER_SMTP_PORT = int(os.getenv("REMINDER_SMTP_PORT", "587"))
 REMINDER_SMTP_USERNAME = os.getenv("REMINDER_SMTP_USERNAME") or None

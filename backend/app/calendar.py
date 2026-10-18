@@ -84,7 +84,7 @@ def add_item(
     item_id = uuid.uuid4().hex
     with closing(tenancies._connection()) as connection:
         tenancies._ensure_schema(connection)
-        with connection:
+        with tenancies._transaction(connection):
             member = connection.execute(
                 tenancies._sql(
                     "SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"
@@ -126,7 +126,7 @@ def add_item(
 def delete_item(profile_id: str, item_id: str, account_id: str) -> bool:
     with closing(tenancies._connection()) as connection:
         tenancies._ensure_schema(connection)
-        with connection:
+        with tenancies._transaction(connection):
             cursor = connection.execute(
                 tenancies._sql(
                     """
@@ -158,7 +158,7 @@ def get_email_preference(account_id: str) -> bool:
 def set_email_preference(account_id: str, enabled: bool) -> None:
     with closing(tenancies._connection()) as connection:
         tenancies._ensure_schema(connection)
-        with connection:
+        with tenancies._transaction(connection):
             connection.execute(
                 tenancies._sql(
                     """
@@ -221,7 +221,7 @@ def send_due_reminders(today: date | None = None) -> int:
                    a.id AS account_id, a.email, p.property_address
             FROM tenancy_calendar_items c
             JOIN tenancy_members m ON m.profile_id = c.profile_id
-            JOIN flatmate_accounts a ON a.id = m.account_id
+            JOIN users a ON a.id = m.account_id
             JOIN flatmate_notification_preferences n ON n.account_id = a.id
             JOIN tenancy_profiles p ON p.id = c.profile_id
             WHERE n.email_reminders_enabled
@@ -235,7 +235,7 @@ def send_due_reminders(today: date | None = None) -> int:
         stale_before = (datetime.now(timezone.utc) - timedelta(minutes=30)).isoformat()
         with closing(tenancies._connection()) as connection:
             tenancies._ensure_schema(connection)
-            with connection:
+            with tenancies._transaction(connection):
                 connection.execute(
                     tenancies._sql(
                         """
@@ -284,7 +284,7 @@ def send_due_reminders(today: date | None = None) -> int:
             )
             with closing(tenancies._connection()) as connection:
                 tenancies._ensure_schema(connection)
-                with connection:
+                with tenancies._transaction(connection):
                     connection.execute(
                         tenancies._sql(
                             """
@@ -299,7 +299,7 @@ def send_due_reminders(today: date | None = None) -> int:
 
         with closing(tenancies._connection()) as connection:
             tenancies._ensure_schema(connection)
-            with connection:
+            with tenancies._transaction(connection):
                 connection.execute(
                     tenancies._sql(
                         """
