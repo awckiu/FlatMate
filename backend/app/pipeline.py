@@ -71,6 +71,8 @@ def analyze(
     tenant_name: str,
     property_address: str,
     co_tenants: list[str] | None = None,
+    household_mode: str = "single",
+    hmo_status: str = "unknown",
 ) -> dict:
     text, pages = extract_text(pdf_bytes)
     text = text.strip()
@@ -92,13 +94,23 @@ def analyze(
             "email": "",
             "mode": "placeholder",
             "law_data_available": False,
+            "household_mode": household_mode,
+            "hmo_status": hmo_status,
             "disclaimer": "This tool provides information, not legal advice.",
         }
 
     clauses = split_clauses(text)
     if not clauses:
         clauses = [{"clause_ref": "", "text": text}]
-    retrieved_groups = retrieve_many([clause["text"] for clause in clauses])
+    household_context = (
+        f"Household setup: {household_mode.replace('_', ' ')}. "
+        f"HMO status: {hmo_status.replace('_', ' ')}. "
+        "Use these facts to prioritize relevant tenancy questions and retrieved housing law; "
+        "do not assume legal status beyond the supplied facts.\n"
+    )
+    retrieved_groups = retrieve_many(
+        [household_context + clause["text"] for clause in clauses]
+    )
     law_by_reference: dict[tuple[str, str], dict] = {}
     for sections in retrieved_groups:
         for section in sections:
@@ -106,7 +118,9 @@ def analyze(
             law_by_reference.setdefault(key, section)
     law_sections = list(law_by_reference.values())
 
-    analysis = llm.analyze_agreement(text, law_sections)
+    analysis = llm.analyze_agreement(
+        text, law_sections, household_mode=household_mode, hmo_status=hmo_status
+    )
     _validate_analysis(analysis)
     flags = []
     for flag in analysis["flags"]:
@@ -151,5 +165,7 @@ def analyze(
         "email": email,
         "mode": "gemini",
         "law_data_available": bool(law_sections),
+        "household_mode": household_mode,
+        "hmo_status": hmo_status,
         "disclaimer": "This tool provides information, not legal advice.",
     }

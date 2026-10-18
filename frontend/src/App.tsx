@@ -14,11 +14,45 @@ type NeedToKnow = {
   text: string
 }
 
+type BillEstimateItem = {
+  id: string
+  name: string
+  monthly_cost: number
+  included_in_rent: boolean
+  active: boolean
+  description: string
+}
+
+type BillsEstimate = {
+  property_address: string
+  postcode: string
+  region: string
+  tenant_count: number
+  is_student: boolean
+  estimate_basis: string
+  live_data_available: boolean
+  epc: {
+    available: boolean
+    description: string
+    search_url: string
+  }
+  bills: BillEstimateItem[]
+  totals: {
+    total_monthly: number
+    per_person_monthly: number
+    student_savings_monthly: number
+    currency: string
+  }
+  council_tax_letter: string
+}
+
 type AnalyzeResponse = {
   tenant_name: string
   co_tenants: string[]
   property_address: string
   filename: string
+  review_id?: string
+  case_code?: string
   pages: number
   summary: string
   need_to_knows: NeedToKnow[]
@@ -27,6 +61,9 @@ type AnalyzeResponse = {
   mode: 'placeholder' | 'gemini'
   law_data_available: boolean
   disclaimer: string
+  household_mode: 'single' | 'friends'
+  hmo_status: 'yes' | 'no' | 'unknown' | 'not_applicable'
+  bills_estimate?: BillsEstimate
 }
 
 export default function App() {
@@ -34,10 +71,13 @@ export default function App() {
   const [tenantName, setTenantName] = useState('')
   const [coTenants, setCoTenants] = useState('')
   const [address, setAddress] = useState('')
+  const [householdMode, setHouseholdMode] = useState<AnalyzeResponse['household_mode']>('single')
+  const [hmoStatus, setHmoStatus] = useState<AnalyzeResponse['hmo_status']>('unknown')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<AnalyzeResponse | null>(null)
   const [geminiConfigured, setGeminiConfigured] = useState(true)
+  const [reviewCode, setReviewCode] = useState('')
 
   useEffect(() => {
     fetch('/api/health')
@@ -58,6 +98,8 @@ export default function App() {
     body.append('lead_tenant', tenantName)
     body.append('co_tenants', coTenants)
     body.append('property_address', address)
+    body.append('household_mode', householdMode)
+    body.append('hmo_status', householdMode === 'single' ? 'not_applicable' : hmoStatus)
 
     try {
       const res = await fetch('/api/analyze', { method: 'POST', body })
@@ -65,6 +107,26 @@ export default function App() {
       setResult(await res.json())
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function openSavedReview() {
+    const code = reviewCode.trim()
+    if (!code) {
+      setError('Enter your agreement review code.')
+      return
+    }
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch(`/api/reviews/${encodeURIComponent(code)}`)
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.detail ?? `Could not open the review (${res.status}).`)
+      setResult(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not open the saved review.')
     } finally {
       setLoading(false)
     }
@@ -82,7 +144,53 @@ export default function App() {
       <h1>Tenancy Demystifier</h1>
       <p>Upload your tenancy agreement and we'll flag what to check before you sign.</p>
 
+      <div>
+        <label>
+          Already have an agreement review code?
+          <input
+            value={reviewCode}
+            onChange={(e) => setReviewCode(e.target.value)}
+            placeholder="e.g. FLAT-AB23CDEFGH"
+            autoCapitalize="characters"
+          />
+        </label>
+        <button type="button" onClick={openSavedReview} disabled={loading || !reviewCode.trim()}>
+          Open saved review
+        </button>
+      </div>
+
       <form onSubmit={onSubmit}>
+        <label>
+          Who will you live with?
+          <select
+            value={householdMode}
+            onChange={(e) => {
+              const nextMode = e.target.value as AnalyzeResponse['household_mode']
+              setHouseholdMode(nextMode)
+              if (nextMode === 'friends' && hmoStatus === 'not_applicable') setHmoStatus('unknown')
+            }}
+          >
+            <option value="single">I’m renting alone</option>
+            <option value="friends">I’m living with friends</option>
+          </select>
+        </label>
+        {householdMode !== 'single' && (
+          <label>
+            Do you know whether the property is an HMO?
+            <select value={hmoStatus} onChange={(e) => setHmoStatus(e.target.value as AnalyzeResponse['hmo_status'])}>
+              <option value="unknown">I’m not sure</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+        )}
+          {householdMode === 'friends' && hmoStatus !== 'yes' && (
+            <p className="hmo-warning" role="alert">
+              You’re sharing with friends, but the property is marked as not an HMO or its status
+              is unknown. It may still meet the HMO definition, and licensing rules vary by area.
+              Check with your local council and landlord before relying on this status.
+            </p>
+          )}
         <label>
           Tenancy agreement (PDF)
           <input
@@ -114,6 +222,12 @@ export default function App() {
       {result && (
         <section>
           <h2>Agreement summary</h2>
+          {result.case_code && (
+            <p>
+              Review code: <strong>{result.case_code}</strong>.{' '}
+              <a href={`?review=${encodeURIComponent(result.case_code)}`}>Open the shareable report link</a>
+            </p>
+          )}
           <p>{result.summary}</p>
           <p>
             {result.filename}: {result.pages} page(s)

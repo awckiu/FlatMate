@@ -45,10 +45,12 @@ cd backend
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 copy .env.example .env        # then open .env and paste your GEMINI_API_KEY
-.venv\Scripts\uvicorn main:app --reload --port 8000
+.venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000
 ```
 
-On macOS/Linux use `.venv/bin/...` instead of `.venv\Scripts\...` and `cp` instead of `copy`.
+Run the command from the `backend` directory so Python uses the backend virtual environment
+and can find `main.py`. On macOS/Linux use `.venv/bin/python -m uvicorn ...` and `cp` instead
+of `copy`.
 
 **2. Frontend** (terminal 2):
 
@@ -63,6 +65,52 @@ Open http://localhost:5173. If no Gemini key is set yet, the page shows a yellow
 
 **Never commit `backend/.env`.** It holds secret keys, and this repo is public. `.gitignore`
 already excludes it, so don't force-add it.
+
+## Rent and bills calendar
+
+The signed-in tenancy workspace includes a calendar for one-off or monthly rent and bill due
+dates. Email reminders are optional and are sent to the signed-in account email address two
+UK calendar days before a due date. The backend must remain running for reminders to be checked
+hourly.
+
+To enable reminders, configure `REMINDER_SMTP_HOST`, `REMINDER_SMTP_PORT`, and
+`REMINDER_FROM_EMAIL` in `backend/.env`. If your SMTP server requires authentication, also set
+both `REMINDER_SMTP_USERNAME` and `REMINDER_SMTP_PASSWORD`; reminders remain unavailable until
+the SMTP configuration is complete. `REMINDER_SMTP_USE_SSL=true` enables implicit TLS; otherwise
+the server connection uses STARTTLS. Leave these settings blank to run the app without email
+reminders. No SMTP credentials are needed for calendar entries themselves.
+
+## Accounts and an ongoing tenancy
+
+The standalone app served by FastAPI supports account registration, individual sign-in, and a
+shared tenancy profile. During setup, choose whether you rent alone or share, enter the
+agreement's tenant names and property details, and set the signing and tenancy-start dates. A
+shared `HOME-...` code is issued only after the agreement is signed and the tenancy start date
+has arrived. Co-tenants can use an account and join with that code; the name and role are
+checked against the profile's tenant list, but this is not identity verification. An account
+can have multiple tenancy records, with only one marked current.
+
+Each saved agreement review also has a separate `FLAT-...` review code. Use its link or enter
+the code on the start page to reopen the report; anyone with that code can view the saved
+agreement review, so share it only with people you trust. This code does not unlock a tenancy
+profile. The `HOME-...` tenancy code is issued later and is required to join the shared
+ongoing-tenancy workspace.
+
+After signing, the tenancy buddy can use saved agreement details to prepare general responses
+and optional landlord email/text drafts. FlatMate does **not** send messages. Move-in photos
+unlock when the tenancy starts; supported image uploads are stored as evidence and are not
+analysed by AI.
+
+For local development, photos are stored under `backend/data/photos`. To use private
+S3-compatible storage, set `PHOTO_STORAGE_ENDPOINT`, `PHOTO_STORAGE_BUCKET`,
+`PHOTO_STORAGE_ACCESS_KEY`, and `PHOTO_STORAGE_SECRET_KEY` in `backend/.env`; optionally set
+`PHOTO_STORAGE_REGION`. Keep the bucket private. Behind HTTPS in production, set
+`SESSION_COOKIE_SECURE=true` so the account session cookie is sent only over HTTPS.
+
+Household and HMO selections provide context to legal retrieval, but do not themselves add
+legislation to the law database or guarantee that a legal check is available. Populate the
+law corpus before relying on legal flags. The buddy and agreement analysis are informational,
+not legal advice.
 
 ## Deploy (Vultr), draft
 
