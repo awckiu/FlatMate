@@ -1,0 +1,217 @@
+TENANCY AGREEMENT: THINGS TO CHECK, CLARIFY AND ASK
+Scope: private rented housing in England. Reflects the Renters' Rights Act 2025, with the first phase in force from 1 May 2026.
+Last checked: October 2026. Later phases (landlord database, ombudsman, Decent Homes Standard, extension of Awaab's Law to private renting) were still being rolled out, so check gov.uk for their current status.
+Purpose: neutral prompts for reading an agreement. These are things to check, clarify or ask about. Most are not problems on their own.
+This is information, not legal advice. Check details at gov.uk/private-renting, Shelter England, Citizens Advice, or your university accommodation service.
+
+Each section gives: who it applies to, what to check, why it matters, questions to ask, and where to read more.
+
+## 1. Who the landlord is and who you deal with
+Applies to: everyone
+What to check: the landlord's full name and a UK address for notices; whether an agent manages the property; who collects rent; who arranges repairs; an out-of-hours number for emergencies such as gas leaks or flooding.
+Why it matters: notices and repair requests only work if they reach the right person, and unclear ownership is a common sign of a scam.
+Questions to ask: Is the person named on the agreement the owner? Is the agent authorised to sign for the landlord? Who do I call out of hours?
+Law and guidance: Landlord and Tenant Act 1987 s.48 (landlord's address for notices); gov.uk "How to rent".
+
+## 2. Type and length of tenancy
+Applies to: everyone
+What to check: whether the agreement describes a rolling (periodic) tenancy. Since 1 May 2026 new private tenancies in England are periodic, not fixed term. Wording such as "fixed term", "assured shorthold" or "Section 21" suggests an outdated template. Check whether you are renting a room or the whole property, whether it is a tenancy or a licence, and the start date.
+Why it matters: it decides how and when you can leave, and how you can be asked to leave.
+Questions to ask: Is this an assured periodic tenancy? Is it a joint tenancy for the whole house or an individual agreement for my room? Does any exemption apply (for example purpose-built student accommodation)?
+Law and guidance: Renters' Rights Act 2025; Housing Act 1988.
+
+## 3. Written statement of terms and government information
+Applies to: everyone
+What to check: that you have the complete written agreement, including schedules, the inventory and any house rules. For new tenancies since 1 May 2026 the landlord must provide a written statement of terms. Check whether you were given the government's Renters' Rights information and the current "How to rent" guide.
+Why it matters: a tenancy is easier to enforce, and easier to understand, when everything is in writing.
+Questions to ask: Is this the full set of documents? Where are the inventory and the safety certificates?
+Law and guidance: Renters' Rights Act 2025; gov.uk guidance on written information for tenants.
+
+## 4. Rent: amount, who pays, when
+Applies to: everyone
+What to check: monthly rent for the whole property and per person; due date and payment method; what happens if a housemate does not pay; how much you must pay before moving in. Landlords may only ask for one month's rent in advance, and guidance for student tenants says they cannot ask for, encourage or accept rent in advance before the agreement is signed.
+Why it matters: large upfront payments are hard to recover if something goes wrong.
+Questions to ask: What is the total I must pay before move-in, and what is each part? Is rent due per person or as one shared payment?
+Law and guidance: Renters' Rights Act 2025 (rent in advance limit); Tenant Fees Act 2019.
+
+## 5. Rent increases
+Applies to: everyone
+What to check: whether the agreement contains a rent review, automatic increase or "index-linked" wording, and how any increase would be made. Under the Act, rent can rise once a year through a formal notice (Section 13) with at least two months' notice, and you can challenge it at the First-tier Tribunal.
+Why it matters: it tells you how stable your costs are across the year.
+Questions to ask: How will any increase be handled? What notice will I get?
+Law and guidance: Housing Act 1988 s.13 as amended by the Renters' Rights Act 2025.
+
+## 6. Deposit
+Applies to: everyone
+What to check: the amount (capped at five weeks' rent where annual rent is under £50,000); which government-approved scheme will protect it (DPS, MyDeposits or Tenancy Deposit Scheme); that it must be protected within 30 days with the prescribed information given to you; whether it is one deposit for the house or one per person; how deductions are decided; what the agreement says about "fair wear and tear"; what happens to the deposit if one tenant leaves.
+Why it matters: the deposit is usually the largest sum at risk, and disputes are common.
+Questions to ask: Which scheme will hold it, and when will I get the certificate? Who handles the deposit if a housemate leaves?
+Law and guidance: Tenant Fees Act 2019; Housing Act 2004 ss.212-215; deposit scheme guidance.
+
+## 7. Holding deposits and other payments
+Applies to: everyone
+What to check: any payment asked for before signing. A holding deposit is capped at one week's rent, and the rules say when it must be returned. In England landlords and agents may only charge permitted payments: rent, a capped deposit, a capped holding deposit, changes to the agreement at your request (capped), early termination at your request, replacement keys or late-rent interest, and utilities, council tax, TV licence and communications if you are responsible for them. Fees for admin, referencing, inventory or check-out are not on the list.
+Why it matters: a payment that is not permitted can be recovered.
+Questions to ask: Which permitted category does this payment fall under?
+Law and guidance: Tenant Fees Act 2019 (permitted payments, holding deposits).
+
+## 8. Late payment and default charges
+Applies to: everyone
+What to check: any charge for late rent. Interest on late rent is only allowed after 14 days and is capped at 3% above the Bank of England base rate. Charges for lost keys must reflect the actual cost.
+Why it matters: flat late fees and high interest rates are a common way to inflate costs.
+Questions to ask: What exactly happens if rent is a few days late?
+Law and guidance: Tenant Fees Act 2019.
+
+## 9. Bills and what is included
+Applies to: everyone
+What to check: which bills are included (water, gas, electricity, broadband), and any cap or "fair use" limit; whose name is on each account; how meter readings and bill splits work; what happens if someone leaves; contract length for shared broadband.
+Why it matters: "bills included" can come with limits that cost you money later.
+Questions to ask: What is the cap, who measures usage, and what happens above the cap? Whose account is it? Can I see the latest bills?
+Law and guidance: Tenant Fees Act 2019 (utilities may be passed on only where you are responsible for them).
+
+## 10. Council tax and the student exemption
+Applies to: students
+What to check: whether the agreement makes you responsible for council tax. Households made up entirely of full-time students are normally exempt, usually through an exemption certificate from the university. A household with a non-student may owe some council tax.
+Why it matters: council tax is a large bill that is easy to pay by mistake.
+Questions to ask: Who is responsible for registering with the council? Does anyone in the house count as a non-student?
+Law and guidance: your local council's council tax pages; your university's student services.
+
+## 11. Repairs and maintenance
+Applies to: everyone
+What to check: how to report repairs and expected response times; who pays for what. The landlord must keep the structure, exterior, heating, hot water, gas, electrics and sanitation in repair, and this cannot be passed to the tenant. Tenants are expected to look after the home in a reasonable way. Check appliances, the garden and emergency repairs.
+Why it matters: an agreement that shifts landlord repair duties to you may not be enforceable, but it can cause arguments.
+Questions to ask: How do I report repairs and how fast will they be handled? Who deals with the boiler and appliances?
+Law and guidance: Landlord and Tenant Act 1985 s.11; Homes (Fitness for Human Habitation) Act 2018.
+
+## 12. Condition, cleanliness and pests
+Applies to: everyone
+What to check: the condition and cleanliness of the property at move-in; whether there is a dated check-in report with photos; who is responsible for pest treatment and how the cause is decided. Report any pests promptly and in writing, and keep dated evidence.
+Why it matters: charges for cleaning or pest treatment at the end of a tenancy often turn on what the property looked like at the start.
+Questions to ask: What is the condition record at move-in? If pests are found, who arranges and pays for treatment, and how is the cause decided?
+Law and guidance: Landlord and Tenant Act 1985 ss.9A-9C (home must be fit for human habitation); deposit scheme guidance on cleaning and damage.
+
+## 13. Safety certificates and alarms
+Applies to: everyone
+What to check: a current gas safety certificate (annual, from a Gas Safe engineer, copy before move-in); an electrical installation condition report (at least every five years); an Energy Performance Certificate with the rating; smoke alarms on each floor and carbon monoxide alarms where required.
+Why it matters: these are basic safety protections and should be easy to produce.
+Questions to ask: Can I have copies of the gas, electrical and EPC certificates? Where are the alarms and who tests them?
+Law and guidance: Gas Safety (Installation and Use) Regulations 1998; Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020; Energy Performance of Buildings Regulations 2012; Smoke and Carbon Monoxide Alarm (England) Regulations 2015 as amended.
+
+## 14. HMO status and licensing
+Applies to: students, flatshares
+What to check: whether the property counts as a house in multiple occupation (broadly, several unrelated people sharing facilities). Larger HMOs need a licence, and some councils require additional or selective licensing. Ask for the licence number and check the council's register. HMOs also have extra fire and safety rules.
+Why it matters: HMO status affects safety standards, and for student lets it affects which possession rules apply.
+Questions to ask: Is this an HMO? Does it need a licence, and what is the number?
+Law and guidance: Housing Act 2004 Part 2; your local council's HMO pages.
+
+## 15. Student possession ground (Ground 4A)
+Applies to: students in HMOs
+What to check: if every tenant is a full-time student in a student HMO, the landlord may be able to end the tenancy using Ground 4A, with four months' notice and a possession date between 1 June and 30 September. The landlord must give a written statement about Ground 4A before the tenancy is entered into, and the tenancy must be signed no more than six months before it starts.
+Why it matters: it affects how long you can count on staying, and some arrangements are outside the Act.
+Questions to ask: Does the landlord intend to rely on Ground 4A? Where is the written statement? Is this property an HMO and are all tenants students?
+Law and guidance: Housing Act 1988 Schedule 2 as amended by the Renters' Rights Act 2025; Unipol student guidance.
+
+## 16. Ending the tenancy: your notice
+Applies to: everyone
+What to check: tenants must give at least two months' notice to end a periodic tenancy; whether notice must be in writing and to whom; how it works when only one housemate wants to leave. In a joint tenancy, one tenant's notice can end the tenancy for everyone, so check how the agreement and the law treat this.
+Why it matters: leaving at the wrong time or in the wrong way can leave you or your housemates paying rent.
+Questions to ask: How do I give notice? What happens if one of us leaves and another wants to stay? Is there a process for finding a replacement tenant?
+Law and guidance: Renters' Rights Act 2025.
+
+## 17. Ending the tenancy: landlord's notice
+Applies to: everyone
+What to check: the landlord must now use a legal ground (Section 8). Section 21 "no-fault" notices cannot be served after 30 April 2026, so an agreement referring to Section 21 is out of date. Check any listed reasons for ending the tenancy and the notice periods stated.
+Why it matters: you can see how secure your home is.
+Questions to ask: In what circumstances would the landlord want to end the tenancy? How much notice would I get?
+Law and guidance: Housing Act 1988 Schedule 2; Renters' Rights Act 2025.
+
+## 18. Joint liability and guarantors
+Applies to: students, flatshares, international students
+What to check: whether you are jointly and severally liable, meaning each tenant can be asked for the whole rent and all damage; whether you have an individual agreement instead; whether a guarantor is required, where they must live, how long their liability lasts and whether it renews.
+Why it matters: you could owe a housemate's share, and a guarantor takes on serious obligations.
+Questions to ask: What happens if a housemate stops paying? How long does the guarantee last? Are there guarantor alternatives for international students?
+Law and guidance: Shelter England; university accommodation advice.
+
+## 19. Right to Rent checks
+Applies to: international students
+What to check: landlords and agents must check that tenants have the right to rent in England, for example with a passport, an eVisa share code or other documents. The checks should be applied to everyone consistently.
+Why it matters: you may be asked for documents early, and delays can affect your start date.
+Questions to ask: Which documents or share code do you need, and by when? What if my documents are not ready by the start date?
+Law and guidance: gov.uk "Check a tenant's right to rent".
+
+## 20. Arriving late and visa delays
+Applies to: international students
+What to check: whether rent starts on the tenancy start date even if you arrive later; whether you can pay rent from abroad; whether the landlord will hold the room; how an earlier or later start is recorded in writing. Remember that a landlord cannot require more than one month's rent in advance.
+Why it matters: you can end up paying for a room you cannot use.
+Questions to ask: If my arrival is delayed, does the rent start when I arrive? Can the start date be changed in writing?
+Law and guidance: Renters' Rights Act 2025 (rent in advance); university accommodation advice.
+
+## 21. Guests, sharing and subletting
+Applies to: everyone
+What to check: limits on overnight guests and any consent requirement; rules on partners staying; subletting, lodgers or short-term letting; occupancy limits in HMOs.
+Why it matters: house rules are contract terms that can be used against you later.
+Questions to ask: How are guest rules applied in practice? Is written consent needed, and how do I get it?
+Law and guidance: contract terms; Shelter England.
+
+## 22. Pets
+Applies to: everyone
+What to check: whether pets are mentioned. Under the Act tenants have a right to request a pet, and a landlord must consider the request fairly and may refuse only with good reason.
+Why it matters: an agreement with a blanket ban may not reflect the current rules.
+Questions to ask: What process do you use for pet requests, and what conditions would you expect?
+Law and guidance: Renters' Rights Act 2025.
+
+## 23. Landlord access and inspections
+Applies to: everyone
+What to check: how much notice the landlord must give before visiting (written notice, usually at least 24 hours, is the normal expectation); how often inspections happen; viewings near the end of the tenancy. You have a right to quiet enjoyment of your home.
+Why it matters: unlimited access can be intrusive and unsafe.
+Questions to ask: What notice do you give for inspections, repairs and viewings?
+Law and guidance: Landlord and Tenant Act 1985 s.11(6) (24 hours' written notice for repair inspections); implied right to quiet enjoyment.
+
+## 24. House rules, parking, bins and bikes
+Applies to: everyone
+What to check: smoking and noise rules; bin and recycling days; parking permits and their cost in the area; bike storage; garden use; heating and ventilation expectations.
+Why it matters: these everyday details cause most friction between housemates and landlords.
+Questions to ask: Is there a parking permit scheme and what does it cost? Where do bikes and bins go?
+Law and guidance: your local council's parking and waste pages.
+
+## 25. Inventory and check-in
+Applies to: everyone
+What to check: a signed inventory listing furniture and condition; dated photos and meter readings on day one; keys received. Check and return comments within the time allowed, and keep copies.
+Why it matters: your evidence at move-in is your strongest protection against unfair deductions.
+Questions to ask: When will I get the inventory? How long do I have to add comments?
+Law and guidance: deposit scheme guidance on inventories and evidence.
+
+## 26. End of tenancy: cleaning, damage and deposit return
+Applies to: everyone
+What to check: the standard of cleaning expected; whether the agreement requires professional cleaning or a check-out fee (a required fee is not a permitted payment; reasonable costs for cleaning that was actually needed can be claimed with evidence); how deductions are shown; the timeline for returning the deposit.
+Why it matters: this is the stage where most deposit disputes happen.
+Questions to ask: What cleaning standard do you expect? How will you itemise any deductions?
+Law and guidance: Tenant Fees Act 2019; deposit scheme dispute resolution guidance.
+
+## 27. Scams and identity checks
+Applies to: everyone, especially international students
+What to check: view the property in person or on a live video call before paying; confirm the landlord owns the property (HM Land Registry title); pay by a traceable method to a named account; be cautious about pressure, rent far below the market, "overseas landlord" stories and requests for gift cards or cash. Check that any agent belongs to a redress scheme.
+Why it matters: rental scams target students and newcomers.
+Questions to ask: Can I see the property and the ownership details before paying? Which redress scheme do you belong to?
+Law and guidance: Action Fraud; Citizens Advice; Shelter England.
+
+## 28. Complaints, redress and getting help
+Applies to: everyone
+What to check: which redress scheme the agent belongs to; the council's private sector housing team, which can investigate housing conditions, illegal eviction and breaches of the Act; free advice from Shelter, Citizens Advice, your students' union or university accommodation service. A landlord ombudsman and a landlord database were due to launch in late 2026, so check their current status.
+Why it matters: you can get help without going to court.
+Questions to ask: How do I make a complaint to you, and what happens next?
+Law and guidance: gov.uk "Renters' Rights Act" guidance; Shelter England.
+
+## 29. Final check before signing
+Applies to: everyone
+What to check: you have seen the property; you have read every page and schedule; names, dates, rent and deposit amounts match what was agreed; there are no unexpected fees; safety certificates, the How to rent guide and the inventory have been provided; every answer you need is in writing; you keep a copy of the signed agreement.
+Why it matters: signing is the last easy moment to ask questions.
+Questions to ask: Can I take this away for a day, and who can I contact with questions?
+Law and guidance: gov.uk "How to rent".
+
+## Sources to read for current detail
+gov.uk: Guide to the Renters' Rights Act; How to rent; Tenancy deposit protection; Check a tenant's right to rent.
+Shelter England: Renters' Rights Act pages and private renting advice.
+Citizens Advice: renting privately.
+Unipol and university accommodation services: student-specific guidance on Ground 4A, HMOs and guarantors.
+legislation.gov.uk: Renters' Rights Act 2025, Tenant Fees Act 2019, Housing Act 1988, Housing Act 2004, Landlord and Tenant Act 1985.
