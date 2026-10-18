@@ -1,8 +1,0 @@
-source: How to rent (gov.uk)
-url: https://www.gov.uk/government/publications/how-to-rent
-last_updated: 2026-05-01
-
-### How to rent | How to rent | https://www.gov.uk/government/publications/how-to-rent
-This guide was for tenants and landlords in the private rented sector. It helped them understand their rights and responsibilities before 1 May 2026.
-This guide has now been withdrawn and is not up to date.
-This guide has been retained for tenancies where the landlord served a notice for possession under section 21 before 1 May 2026.

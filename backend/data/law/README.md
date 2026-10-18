@@ -12,7 +12,7 @@ Only these trusted sources are used (the list lives in `backend/app/rag/sources.
 | `protection_from_eviction_act_1977.txt` | Protection from Eviction Act 1977 (unlawful eviction, harassment, notice to quit) | legislation.gov.uk |
 | `hmo_management_regulations_2006.txt` | Management of HMOs (England) Regulations 2006 (manager and occupier duties) | legislation.gov.uk |
 | `deposit_protection.txt` | Tenancy deposit protection | gov.uk |
-| `how_to_rent.txt` | How to rent: the checklist for renting in England | gov.uk |
+| `assured_periodic_tenancies_tenants.txt` | Assured periodic tenancies: a guide for tenants (rent, deposits, pets, ending a tenancy) | gov.uk |
 
 The files are generated, never hand-edited. From `backend/`:
 

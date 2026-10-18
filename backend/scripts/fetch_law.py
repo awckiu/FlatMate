@@ -219,7 +219,8 @@ def fetch_guidance(source: TrustedSource) -> str:
     if details.get("parts"):
         for part in details["parts"]:
             text = "\n\n".join(t for _, t in _html_parts(part["body"]))
-            sections.append((part["title"], part["title"], f"{source.url}/{part['slug']}", text))
+            title = part["title"].strip()
+            sections.append((title, title, f"{source.url}/{part['slug']}", text))
     else:
         page_url, body = source.url, details.get("body", "")
         if not body:

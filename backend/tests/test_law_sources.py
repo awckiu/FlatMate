@@ -8,7 +8,7 @@ from unittest.mock import patch
 from app import config
 from app.rag.ingest import MAX_CHARS, parse_law_file
 from app.rag.sources import TRUSTED_SOURCES, is_trusted_url
-from scripts import fetch_law, ingest_law
+from scripts import copy_law, fetch_law, ingest_law
 
 SOURCES = {s.stem: s for s in TRUSTED_SOURCES}
 
@@ -117,11 +117,11 @@ class LawSourcesTests(unittest.TestCase):
         self.assertTrue(all(len(c.text) <= MAX_CHARS for c in chunks))
 
     def test_ingest_refuses_files_that_do_not_match_the_allowlist(self):
-        source = SOURCES["how_to_rent"]
+        source = SOURCES["assured_periodic_tenancies_tenants"]
         path = config.LAW_TEXT_DIR / f"{source.stem}.txt"
         header = f"source: {source.name}\nurl: {source.url}\nlast_updated: 2026-05-01\n\n"
 
-        path.write_text(header + "### Repairs | Repairs | https://www.gov.uk/how-to-rent\nText\n", encoding="utf-8")
+        path.write_text(header + "### Rent increases | Rent increases | https://www.gov.uk/assured-periodic-tenancies-tenants/rent-increases\nText\n", encoding="utf-8")
         self.assertEqual(len(ingest_law.load(source).chunks), 1)
 
         path.write_text(header + "### Repairs | Repairs | https://blog.example.com/rent\nText\n", encoding="utf-8")
@@ -131,6 +131,38 @@ class LawSourcesTests(unittest.TestCase):
         path.write_text(header.replace(source.name, "Some other guide") + "### A | A | https://www.gov.uk/a\nText\n", encoding="utf-8")
         with self.assertRaises(ValueError):
             ingest_law.load(source)
+
+
+class CopyLawTests(unittest.TestCase):
+    TEST_DB = "postgres://user:pw@test.example.com:5432/tsdb?sslmode=require"
+
+    def test_same_database_ignores_credentials_and_options(self):
+        self.assertTrue(copy_law.same_database(self.TEST_DB, "postgres://other:x@test.example.com/tsdb"))
+        self.assertFalse(copy_law.same_database(self.TEST_DB, "postgres://user:pw@main.example.com:5432/tsdb"))
+        self.assertFalse(copy_law.same_database(self.TEST_DB, "postgres://user:pw@test.example.com:5432/other"))
+
+    def test_refuses_to_copy_a_database_onto_itself(self):
+        with (
+            patch.object(config, "DATABASE_URL", self.TEST_DB),
+            patch.dict("os.environ", {"MAIN_DATABASE_URL": self.TEST_DB}),
+            patch("scripts.copy_law.connect") as connect,
+        ):
+            with self.assertRaises(SystemExit) as raised:
+                copy_law.main([])
+        self.assertIn("same database", str(raised.exception.code))
+        self.assertNotIn(self.TEST_DB, str(raised.exception.code))
+        connect.assert_not_called()
+
+    def test_refuses_when_target_variable_is_missing(self):
+        with (
+            patch.object(config, "DATABASE_URL", self.TEST_DB),
+            patch.dict("os.environ", {}, clear=True),
+            patch("scripts.copy_law.connect") as connect,
+        ):
+            with self.assertRaises(SystemExit) as raised:
+                copy_law.main(["--to", "NO_SUCH_DATABASE_URL"])
+        self.assertIn("NO_SUCH_DATABASE_URL is not set", str(raised.exception.code))
+        connect.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -35,7 +35,7 @@ TRUSTED_SOURCES = [
         "Housing Act 2004",
         "https://www.legislation.gov.uk/ukpga/2004/34",
         "legislation",
-        ("s.1-2", "s.4", "s.55", "s.61", "s.67", "s.72-73", "s.75", "s.212-215C", "s.254", "Sch 4"),
+        ("s.1-2", "s.4", "s.55", "s.61", "s.67", "s.72-73", "s.212-215C", "s.254", "Sch 4"),
     ),
     TrustedSource(
         "tenant_fees_act_2019",
@@ -83,9 +83,10 @@ TRUSTED_SOURCES = [
         "guidance",
     ),
     TrustedSource(
-        "how_to_rent",
-        "How to rent (gov.uk)",
-        "https://www.gov.uk/government/publications/how-to-rent",
+        # Replaces gov.uk "How to rent", withdrawn after the Renters' Rights Act (1 May 2026).
+        "assured_periodic_tenancies_tenants",
+        "Assured periodic tenancies: tenants (gov.uk)",
+        "https://www.gov.uk/assured-periodic-tenancies-tenants",
         "guidance",
     ),
 ]
