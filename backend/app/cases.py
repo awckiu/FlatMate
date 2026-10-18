@@ -10,7 +10,9 @@ from app.pipeline import DISCLAIMER
 CODE_PREFIX = "FLAT-"
 # No 0/O/1/I/L so codes are easy to read out and type.
 CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
-CODE_LENGTH = 6
+# 10 characters (about 8e14 combinations): the code is the only thing protecting a case, which
+# anyone holding it can open without logging in. Older 6-character codes still work.
+CODE_LENGTH = 10
 _schema_applied = False
 
 

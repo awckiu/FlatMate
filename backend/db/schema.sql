@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- how co-tenants join.
 CREATE TABLE IF NOT EXISTS cases (
   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code              text NOT NULL UNIQUE,  -- 'FLAT-7KQ2'
+  code              text NOT NULL UNIQUE,  -- 'FLAT-7KQ2XM4PTD'
   property_address  text NOT NULL,
   postcode          text,
   tenancy_start     date,
