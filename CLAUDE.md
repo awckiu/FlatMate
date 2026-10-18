@@ -139,8 +139,14 @@ kept for the bills and area features later.
 - When `DATABASE_URL` is set, each analysis is saved in Tiger Data as a case (`cases`,
   `tenants`, `agreements`, `clauses`, `flags`, `emails`; `backend/app/cases.py`) under a
   code like `FLAT-7KQ2XM`. `GET /api/cases/{code}` and `/?case=CODE` reopen it; the code is
-  how co-tenants share a case (no login yet). Without a database, results are shown unsaved.
+  how co-tenants share a case. Without a database, results are shown unsaved.
   The results page can print the review; choose “Save as PDF” in the print dialog.
+- Accounts are optional, email + password (`backend/app/auth.py`): `POST /api/auth/signup`,
+  `/api/auth/login`, `/api/auth/logout`, `GET /api/me`. Passwords are hashed with scrypt;
+  the login is a signed cookie (`SESSION_SECRET`). An analysis run while logged in is linked
+  to the user as lead tenant; `GET /api/my/cases` lists their cases, and
+  `POST /api/cases/{code}/join` adds a case by code (claiming the co-tenant with their name).
+  Anyone with a case code can still open it without logging in.
 
 ## Analysis pipeline (RAG over UK housing law)
 

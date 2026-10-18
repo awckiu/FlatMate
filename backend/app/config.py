@@ -16,6 +16,11 @@ EMBED_DIM = 768
 DATABASE_URL = os.getenv("DATABASE_URL") or None
 SCHEMA_PATH = BACKEND_DIR / "db" / "schema.sql"
 
+# Signs the login cookie. Empty means a random secret per run, so restarts log everyone out.
+SESSION_SECRET = os.getenv("SESSION_SECRET") or None
+# Set to true on the HTTPS server so the cookie is never sent over plain HTTP.
+SESSION_HTTPS_ONLY = os.getenv("SESSION_HTTPS_ONLY", "").lower() == "true"
+
 DATA_DIR = BACKEND_DIR / "data"
 LAW_TEXT_DIR = DATA_DIR / "law"
 LOCAL_INDEX_PATH = DATA_DIR / "law_index.npz"
