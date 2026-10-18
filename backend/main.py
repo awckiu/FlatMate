@@ -1,11 +1,16 @@
+import json
+import logging
+
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from google.genai import errors as gemini_errors
 from pypdf.errors import PdfReadError
 
 from app import config, pipeline
 from app.pipeline import AnalysisInputError
 
+logger = logging.getLogger(__name__)
 app = FastAPI(title="Tenancy Demystifier")
 MAX_AGREEMENT_SIZE = 10 * 1024 * 1024
 
@@ -46,6 +51,20 @@ async def analyze(
         raise HTTPException(status_code=400, detail="Could not read that PDF")
     except AnalysisInputError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
+    except gemini_errors.APIError as error:
+        logger.warning("Gemini API error %s: %s", error.code, error)
+        if error.code == 429 or error.code >= 500:
+            raise HTTPException(
+                status_code=503, detail="Gemini is busy right now. Please try again in a minute."
+            ) from error
+        raise HTTPException(
+            status_code=502, detail="The analysis service rejected the request. Please try again later."
+        ) from error
+    except (RuntimeError, json.JSONDecodeError) as error:
+        logger.warning("Gemini returned an unusable analysis: %s", error)
+        raise HTTPException(
+            status_code=502, detail="Gemini returned an unexpected answer. Please try again."
+        ) from error
 
     return {
         "tenant_name": lead_tenant,

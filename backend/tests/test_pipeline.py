@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
+from google.genai import errors as gemini_errors
 
 from app import pipeline
 from app.rag.ingest import ingest
@@ -172,6 +173,19 @@ class AnalyzeApiTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["lead_tenant"], "Legacy Tenant")
+
+    def test_analyze_returns_a_json_error_when_gemini_is_busy(self):
+        client = TestClient(app)
+        busy = gemini_errors.ServerError(503, {"error": {"message": "high demand"}})
+        with patch("main.pipeline.analyze", side_effect=busy):
+            response = client.post(
+                "/api/analyze",
+                data={"lead_tenant": "Lead Tenant", "property_address": "Example Street"},
+                files={"agreement": ("agreement.pdf", b"%PDF-test", "application/pdf")},
+            )
+
+        self.assertEqual(response.status_code, 503)
+        self.assertIn("Gemini is busy", response.json()["detail"])
 
 
 if __name__ == "__main__":
