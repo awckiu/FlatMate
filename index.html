@@ -1375,12 +1375,11 @@
             emailContent.textContent = result.email || 'No email draft was generated because no issues were flagged.';
             copyBtn.disabled = !result.email;
             copyFeedback.textContent = '';
-            reviewSaved.textContent = result.review_id
-                ? `Saved · Your case code is ${result.review_id}. Keep it to reopen this review, or share it with your co-tenants.`
-                : 'This review was not saved to the database.';
-            exportPdfBtn.disabled = !result.review_id;
-            if (result.review_id) {
-                history.replaceState(null, '', '?case=' + encodeURIComponent(result.review_id));
+            reviewSaved.textContent = result.case_code
+                ? `Saved · Your case code is ${result.case_code}. Keep it to reopen this review, or share it with your co-tenants.`
+                : 'This review was not saved, so it will be gone when you leave this page.';
+            if (result.case_code) {
+                history.replaceState(null, '', '?case=' + encodeURIComponent(result.case_code));
             }
         }
 

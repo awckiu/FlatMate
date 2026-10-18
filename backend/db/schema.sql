@@ -115,13 +115,8 @@ CREATE TABLE IF NOT EXISTS photos (
   note         text
 );
 
--- Completed analysis results, retained independently of user accounts/case setup.
-CREATE TABLE IF NOT EXISTS tenancy_reviews (
-  id                text PRIMARY KEY,
-  lead_tenant       text NOT NULL,
-  co_tenants        jsonb NOT NULL,
-  property_address  text NOT NULL,
-  filename          text,
-  review            jsonb NOT NULL,
-  created_at        timestamptz NOT NULL DEFAULT now()
-);
+-- Saved analyses: what the results page needs to show a case again.
+ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'gemini' or 'placeholder'
+ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
+ALTER TABLE flags ADD COLUMN IF NOT EXISTS excerpt text;                   -- short quote from the clause
+ALTER TABLE flags ADD COLUMN IF NOT EXISTS cited_url text;

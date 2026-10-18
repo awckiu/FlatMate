@@ -1,0 +1,182 @@
+"""Saved analyses in Tiger Data: one case per tenancy, reopened with its case code."""
+
+import secrets
+
+import psycopg
+
+from app import config
+from app.pipeline import DISCLAIMER
+
+CODE_PREFIX = "FLAT-"
+# No 0/O/1/I/L so codes are easy to read out and type.
+CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
+CODE_LENGTH = 6
+_schema_applied = False
+
+
+def new_code() -> str:
+    return CODE_PREFIX + "".join(secrets.choice(CODE_ALPHABET) for _ in range(CODE_LENGTH))
+
+
+def normalize_code(code: str) -> str:
+    code = code.strip().upper()
+    return code if code.startswith(CODE_PREFIX) else CODE_PREFIX + code
+
+
+def connect() -> psycopg.Connection:
+    global _schema_applied
+    conn = psycopg.connect(config.DATABASE_URL)
+    if not _schema_applied:
+        with conn.transaction():
+            conn.execute(config.SCHEMA_PATH.read_text(encoding="utf-8"))
+        _schema_applied = True
+    return conn
+
+
+def save_case(
+    conn: psycopg.Connection,
+    *,
+    lead_tenant: str,
+    co_tenants: list[str],
+    property_address: str,
+    filename: str | None,
+    agreement_text: str,
+    clauses: list[dict],
+    result: dict,
+) -> str:
+    """Save one analysis as a new case and return its code."""
+    for _ in range(5):
+        code = new_code()
+        try:
+            with conn.transaction():
+                _insert_case(
+                    conn, code, lead_tenant, co_tenants, property_address,
+                    filename, agreement_text, clauses, result,
+                )
+            return code
+        except psycopg.errors.UniqueViolation:
+            continue
+    raise RuntimeError("Could not generate a unique case code")
+
+
+def _insert_case(conn, code, lead_tenant, co_tenants, property_address, filename, agreement_text, clauses, result):
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO cases (code, property_address) VALUES (%s, %s) RETURNING id",
+            (code, property_address),
+        )
+        case_id = cur.fetchone()[0]
+        cur.executemany(
+            "INSERT INTO tenants (case_id, name, role) VALUES (%s, %s, %s)",
+            [(case_id, lead_tenant, "lead"), *((case_id, name, "co_tenant") for name in co_tenants)],
+        )
+        cur.execute(
+            """INSERT INTO agreements
+                 (case_id, original_filename, page_count, text, summary, analysis_mode, law_data_available)
+               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+            (
+                case_id, filename, result["pages"], agreement_text, result["summary"],
+                result["mode"], result["law_data_available"],
+            ),
+        )
+        agreement_id = cur.fetchone()[0]
+
+        # One row per clause number. Findings that name a clause the splitter didn't find
+        # get their own row with empty text.
+        clause_texts: dict[str, str] = {}
+        for clause in clauses:
+            clause_texts.setdefault(clause["clause_ref"].strip(), clause["text"])
+        for item in [*result["need_to_knows"], *result["flags"]]:
+            clause_texts.setdefault(item["clause_ref"].strip(), "")
+        clause_ids: dict[str, int] = {}
+        if clause_texts:
+            # Batched: Tiger Data is a round trip away from the server.
+            cur.executemany(
+                "INSERT INTO clauses (agreement_id, number, text) VALUES (%s, %s, %s) RETURNING id",
+                [(agreement_id, number, text) for number, text in clause_texts.items()],
+                returning=True,
+            )
+            clause_ids = dict(zip(clause_texts, (result_set.fetchone()[0] for result_set in cur.results())))
+
+        rows = [
+            (clause_ids[item["clause_ref"].strip()], "need_to_know", item["topic"], item["text"],
+             None, None, None, None)
+            for item in result["need_to_knows"]
+        ]
+        for flag in result["flags"]:
+            citation = flag.get("citation") or {}
+            rows.append((
+                clause_ids[flag["clause_ref"].strip()], flag["kind"], None, flag["explanation"],
+                flag["clause_excerpt"], citation.get("source"), citation.get("section"), citation.get("url"),
+            ))
+        if rows:
+            cur.executemany(
+                """INSERT INTO flags
+                     (clause_id, kind, topic, explanation, excerpt, cited_source, cited_section, cited_url)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                rows,
+            )
+        if result.get("email"):
+            cur.execute("INSERT INTO emails (case_id, body) VALUES (%s, %s)", (case_id, result["email"]))
+
+
+def get_case(conn: psycopg.Connection, code: str) -> dict | None:
+    """A saved case in the same shape as the /api/analyze response, or None."""
+    row = conn.execute(
+        """SELECT c.id, c.code, c.property_address, a.id, a.original_filename, a.page_count,
+                  a.summary, a.analysis_mode, a.law_data_available, e.body
+           FROM cases c
+           JOIN agreements a ON a.case_id = c.id
+           LEFT JOIN emails e ON e.case_id = c.id
+           WHERE c.code = %s""",
+        (code,),
+    ).fetchone()
+    if row is None:
+        return None
+    case_id, code, address, agreement_id, filename, pages, summary, mode, law_data_available, email = row
+
+    tenants = [
+        {"name": name, "role": role}
+        for name, role in conn.execute(
+            "SELECT name, role FROM tenants WHERE case_id = %s ORDER BY role = 'co_tenant', id", (case_id,)
+        )
+    ]
+    need_to_knows, flags = [], []
+    for kind, topic, explanation, excerpt, source, section, url, number in conn.execute(
+        """SELECT f.kind, f.topic, f.explanation, f.excerpt, f.cited_source, f.cited_section, f.cited_url, cl.number
+           FROM flags f JOIN clauses cl ON cl.id = f.clause_id
+           WHERE cl.agreement_id = %s ORDER BY f.id""",
+        (agreement_id,),
+    ):
+        if kind == "need_to_know":
+            need_to_knows.append({"topic": topic or "", "clause_ref": number, "text": explanation})
+        else:
+            flags.append({
+                "kind": kind,
+                "clause_ref": number,
+                "clause_excerpt": excerpt or "",
+                "explanation": explanation,
+                "citation": (
+                    {"source": source, "section": section, "url": url or ""} if source and section else None
+                ),
+            })
+
+    lead = next((t["name"] for t in tenants if t["role"] == "lead"), "")
+    return {
+        "case_code": code,
+        "saved": True,
+        "tenant_name": lead,
+        "lead_tenant": lead,
+        "co_tenants": [t["name"] for t in tenants if t["role"] == "co_tenant"],
+        "tenants": tenants,
+        "property_address": address,
+        "filename": filename,
+        "pages": pages,
+        "summary": summary or "",
+        "need_to_knows": need_to_knows,
+        "flags": flags,
+        "email": email or "",
+        "mode": mode or "gemini",
+        "law_data_available": bool(law_data_available),
+        "disclaimer": DISCLAIMER,
+    }
