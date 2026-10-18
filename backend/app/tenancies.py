@@ -467,38 +467,56 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
         _ensure_schema(connection)
         with _transaction(connection):
             _activate_due_profiles(connection)
+            # Co-tenants can join with the HOME- tenancy code (issued on the start date) or with the
+            # FLAT- review code the lead tenant sees from the first review, so they can join before move-in.
             row = connection.execute(
                 _sql(
                     """
                     SELECT * FROM tenancy_profiles
-                    WHERE code = ? AND is_active = 1 AND agreement_signed = 1
+                    WHERE code = ? OR review_id = ?
+                    ORDER BY is_active DESC, created_at DESC
+                    LIMIT 1
                     """
                 ),
-                (normalized_code,),
+                (normalized_code, normalized_code),
             ).fetchone()
             if row is None:
                 return None
-            listed_names = (
-                [row["lead_tenant"]]
-                if role == "lead"
-                else json.loads(row["co_tenants"])
-            )
-            if normalized_name.casefold() not in {name.casefold() for name in listed_names}:
-                raise ValueError("That name and role do not match a tenant listed on this tenancy.")
+            already_member = connection.execute(
+                _sql("SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"),
+                (row["id"], account["id"]),
+            ).fetchone()
+            # Match the name against everyone on the agreement and take the role from where it is listed,
+            # so picking the wrong role doesn't block a listed tenant.
+            listed = [(row["lead_tenant"], "lead")] + [(name, "co_tenant") for name in json.loads(row["co_tenants"])]
+            wanted = " ".join(normalized_name.split()).casefold()
+            matches = [listed_role for name, listed_role in listed if " ".join(name.split()).casefold() == wanted]
+            if not matches:
+                names = ", ".join(
+                    f"{name} ({'lead tenant' if listed_role == 'lead' else 'co-tenant'})" for name, listed_role in listed
+                )
+                raise ValueError(f"That name isn't on this agreement. It lists: {names}. Enter your name exactly as one of these.")
+            role = role if role in matches else matches[0]
             connection.execute(
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
                 (account["id"],),
             )
-            connection.execute(
-                _sql(
-                    """
-                    INSERT INTO tenancy_members (profile_id, account_id, name, role, is_current)
-                    VALUES (?, ?, ?, ?, 1)
-                    """
-                ),
-                (row["id"], account["id"], normalized_name, role),
-            )
-    return get_profile_by_code(normalized_code, account["id"])
+            if already_member:
+                connection.execute(
+                    _sql("UPDATE tenancy_members SET is_current = 1 WHERE profile_id = ? AND account_id = ?"),
+                    (row["id"], account["id"]),
+                )
+            else:
+                connection.execute(
+                    _sql(
+                        """
+                        INSERT INTO tenancy_members (profile_id, account_id, name, role, is_current)
+                        VALUES (?, ?, ?, ?, 1)
+                        """
+                    ),
+                    (row["id"], account["id"], normalized_name, role),
+                )
+    return get_profile(row["id"], account["id"])
 
 
 def update_signing(

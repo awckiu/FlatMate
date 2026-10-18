@@ -212,6 +212,27 @@ class TenancyApiTests(unittest.TestCase):
         self.assertTrue(activated.json()["is_active"])
         self.assertIsNotNone(activated.json()["code"])
 
+    def test_co_tenant_joins_with_the_review_code_before_the_start_date(self):
+        future_start = (date.today() + timedelta(days=30)).isoformat()
+        profile = self.create_profile(tenancy_start=future_start).json()
+        self.assertIsNone(profile["code"])
+
+        friend = TestClient(app)
+        try:
+            self.register(friend, "early@example.test", "Friend Tenant")
+            body = {"code": profile["review_id"].lower(), "tenant_name": "friend tenant", "role": "co_tenant"}
+            joined = friend.post("/api/tenancies/join", json=body)
+            joined_again = friend.post("/api/tenancies/join", json=body)
+            unknown = friend.post("/api/tenancies/join", json={**body, "code": "FLAT-ZZZZZZZZZZ"})
+        finally:
+            friend.close()
+
+        self.assertEqual(joined.status_code, 200, joined.text)
+        self.assertEqual(joined.json()["id"], profile["id"])
+        self.assertEqual(joined.json()["role"], "co_tenant")
+        self.assertEqual(joined_again.status_code, 200, joined_again.text)
+        self.assertEqual(unknown.status_code, 404)
+
     def test_only_one_tenancy_is_current_for_an_account(self):
         first = self.create_profile()
         second = self.create_profile(
@@ -519,22 +540,25 @@ class TenancyApiTests(unittest.TestCase):
         self.assertEqual(send_email.call_args.args[0], self.account["email"])
         self.assertIn("Rent", send_email.call_args.args[2])
 
-    def test_join_rejects_role_and_name_mismatch(self):
+    def test_join_takes_the_role_from_the_agreement_and_rejects_unlisted_names(self):
         profile = self.create_profile().json()
         friend = TestClient(app)
         try:
             self.register(friend, "wrong@example.test", "Friend Tenant")
-            response = friend.post(
+            unlisted = friend.post(
                 "/api/tenancies/join",
-                json={
-                    "code": profile["code"],
-                    "tenant_name": "Friend Tenant",
-                    "role": "lead",
-                },
+                json={"code": profile["code"], "tenant_name": "Someone Else", "role": "co_tenant"},
+            )
+            wrong_role = friend.post(
+                "/api/tenancies/join",
+                json={"code": profile["code"], "tenant_name": " friend  tenant ", "role": "lead"},
             )
         finally:
             friend.close()
-        self.assertEqual(response.status_code, 409)
+        self.assertEqual(unlisted.status_code, 409)
+        self.assertIn("Friend Tenant (co-tenant)", unlisted.json()["detail"])
+        self.assertEqual(wrong_role.status_code, 200, wrong_role.text)
+        self.assertEqual(wrong_role.json()["role"], "co_tenant")
 
 
 if __name__ == "__main__":
