@@ -2213,6 +2213,10 @@
                 if (hmo.value === 'not_applicable') hmo.value = 'unknown';
                 hmo.disabled = false;
             }
+            // "I'm renting alone" only fits a solo tenancy, so shared households can't pick it.
+            const alone = hmo.querySelector('option[value="not_applicable"]');
+            alone.hidden = !solo;
+            alone.disabled = !solo;
             $('friends-hmo-warning').classList.toggle('hidden', !(selectedHouseholdMode() === 'friends' && ['no', 'unknown'].includes(hmo.value)));
         }
 
