@@ -42,7 +42,9 @@ placeholder output (see `mode: "placeholder"` below).
 3. Start the analysis.
 4. Review the results:
    - **Need-to-knows**: key clauses people miss (guest policy, what is / isn't allowed,
-     included services and bills, charges).
+     included services and bills, charges). The LLM reads the agreement, picks out these
+     key phrases and need-to-knows, and saves them for later so the rest of the app's
+     features (and the tenancy's ongoing use of the app) can build on this saved data.
    - **Flags**, two kinds:
      - `clarify`: needs clarification / confirmation from the landlord.
      - `contradicts_law`: conflicts with UK law (Housing Act, Tenant Fees Act, Renters'
@@ -61,25 +63,43 @@ kept for the bills and area features later.
 - **Next-steps advisor**: council tax, bills to set up (energy, WiFi, parking permits) and
   how to reduce them, based on the address.
 - **Bills estimate by region**: EPC rating, council tax, average energy prices (track rises
-  and notify), parking permits; toggle off what the agreement already includes.
+  and notify), parking permits; toggle off what the agreement already includes. Also check
+  whether WiFi is included, and cover other relevant bills (e.g. bikes). Throughout the
+  tenancy, remind the tenant to pay bills and submit meter readings on time.
 - **Move-in photos**: upload photos at move-in and store them in the database as dated
   evidence, in case a landlord raises an issue later (e.g. deposit deductions). Photos are
-  stored only; no LLM analysis of images.
-- **Landlord replies**: upload or read landlord emails and interpret them.
+  stored only; no LLM analysis of images. Also doubles as a reference tenants can pull from
+  later, e.g. when writing emails to the landlord or whenever else they need it.
+- **Landlord replies**: upload or read landlord emails and interpret them. This would need
+  the user's explicit permission to access their email.
 - **Tenancy buddy chatbot**: help during the tenancy; contact the landlord about issues.
+  Active from the point the agreement is signed; if the tenant reports an issue, it contacts
+  the landlord by text or email depending on the tenant's stated preference.
 - **User modes**: single / family / friends (tenancy swaps), HMO or not; changes what is
-  flagged as important.
+  flagged as important. What gets flagged depends on both the mode and on what the uploaded
+  agreement actually includes.
 - **Tenancy code + mobile app**: a code per tenancy shared by co-tenants (lead vs co-tenant,
-  who holds the energy account) that unlocks the app.
+  who holds the energy account) that unlocks the app. Generated once the tenancy starts; it
+  unlocks mobile-app features from the chatbot onward. Co-tenants are asked "are you lead
+  tenant or co-tenant?" and then share the same tenancy profile, with slightly different
+  responsibilities depending on who holds the energy account.
 - **Property-viewing tracker add-on** (before signing): spreadsheet of viewed properties,
   likes/dislikes, group preferences, and area filters for structural history (mould,
-  floods, gas leaks, electric vs gas heating, maintenance), EPC checker.
+  floods, gas leaks, electric vs gas heating, maintenance), EPC checker. Could also flag the
+  likely problems associated with a property's heating type (all-electric vs electric/gas)
+  and its recent maintenance history. Possibly using an LLM to process move-in/viewing
+  photos here would be a change from the text-only Gemini policy above and needs team sign-off
+  before building.
 - **Legislation watch (incident.io)**: a daily job compares each law source's
   last-updated date with the one stored in Tiger Data. If it changed, it raises an
   incident in incident.io; a person reviews it before the law is rescanned and stored.
-  Only for new legislation, always with a human in the loop.
+  Only for new legislation, always with a human in the loop. The Google Doc frames this
+  side track more broadly as "adaptable AI agents for changing legislation and changing
+  priorities of the user" — the user-priorities-adaptation half is not designed yet and
+  would need its own scoping if pursued.
 - Future: landlord reviews, verified government-sourced dataset, paywall on the chatbot,
-  solicitor partnership, email provider integration.
+  solicitor partnership, email provider integration, additional upload file types (docx,
+  plain text) alongside PDF.
 
 ## Sponsor tracks / services
 
@@ -98,6 +118,8 @@ kept for the bills and area features later.
     source's last-updated date.
   - User data: tenancies (case number, tenants, address), extracted clauses and flags,
     and photo records (link to the file in Vultr, date, room). Schema: `backend/db/schema.sql`.
+  - Future: also store area/address-level data, e.g. common issues reported for properties
+    in a given area, for future flagging purposes (not in the current schema; see Later).
 - **incident.io**: future extension, not in the MVP (see Later).
 
 ## Stack
@@ -127,6 +149,9 @@ kept for the bills and area features later.
    (`app/llm.py`). Legal flags are only retained when their citation matches a retrieved
    source and section.
 4. Draft the landlord email from the verified or clarification flags.
+
+The RAG approach above is the confirmed technique for querying legislation within this
+defined, curated dataset, with guardrails to keep answers specific to the user's case.
 
 Without `GEMINI_API_KEY` the endpoint returns an explicit unanalyzed placeholder response
 (`mode: "placeholder"`). Law source files are not included; add them under
@@ -185,3 +210,10 @@ Tiger Data stays a separate hosted database.
 - Never commit secrets (API keys, `.env` files), and never paste them into diffs shown
   in chat.
 - Keep changes small and demoable; commit working states often.
+
+## Product name
+
+The Google Doc calls the product "flatmate"; the repo currently calls it Tenancy
+Demystifier. Header copy should be the product name plus a short explanation line (see
+OPEN-4 in project_plan.md for the open branding decision).
+
