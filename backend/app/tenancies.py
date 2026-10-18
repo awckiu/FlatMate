@@ -138,6 +138,21 @@ def _ensure_schema(connection) -> None:
     connection.execute(
         _sql(
             """
+            CREATE TABLE IF NOT EXISTS tenancy_clause_status (
+                profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+                issue_key text NOT NULL,
+                status text NOT NULL CHECK (status IN ('open', 'resolved')),
+                update_note text NOT NULL,
+                updated_by text NOT NULL REFERENCES flatmate_accounts(id),
+                updated_at text NOT NULL,
+                PRIMARY KEY (profile_id, issue_key)
+            )
+            """
+        )
+    )
+    connection.execute(
+        _sql(
+            """
             CREATE TABLE IF NOT EXISTS tenancy_photos (
                 id text PRIMARY KEY,
                 profile_id text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
@@ -570,6 +585,125 @@ def list_chat_messages(profile_id: str, account_id: str) -> list[dict[str, Any]]
             (profile_id, account_id),
         ).fetchall()
     return [dict(row) for row in rows]
+
+
+def _clause_issue_catalog(review: dict[str, Any]) -> list[dict[str, str]]:
+    issues = []
+    for index, flag in enumerate(review.get("flags", [])):
+        if not isinstance(flag, dict):
+            continue
+        reference = str(flag.get("clause_ref") or "").strip()
+        excerpt = str(flag.get("clause_excerpt") or "").strip()
+        explanation = str(flag.get("explanation") or "").strip()
+        issues.append(
+            {
+                "issue_key": f"flag-{index}",
+                "kind": str(flag.get("kind") or "review_flag"),
+                "clause_ref": reference,
+                "title": f"Clause {reference}" if reference else "Agreement point",
+                "description": explanation or excerpt or "Flagged agreement clause",
+            }
+        )
+    for index, item in enumerate(review.get("need_to_knows", [])):
+        if not isinstance(item, dict):
+            continue
+        reference = str(item.get("clause_ref") or "").strip()
+        topic = str(item.get("topic") or "").strip()
+        issues.append(
+            {
+                "issue_key": f"need-to-know-{index}",
+                "kind": "need_to_know",
+                "clause_ref": reference,
+                "title": topic or (f"Clause {reference}" if reference else "Agreement point"),
+                "description": str(item.get("text") or topic or "Agreement point to keep in mind"),
+            }
+        )
+    return issues
+
+
+def list_clause_issues(profile_id: str, account_id: str) -> list[dict[str, Any]]:
+    profile = get_profile(profile_id, account_id)
+    if profile is None:
+        raise PermissionError("You are not a member of this tenancy.")
+    issues = _clause_issue_catalog(profile["review"])
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        rows = connection.execute(
+            _sql(
+                """
+                SELECT issue_key, status, update_note, updated_at
+                FROM tenancy_clause_status
+                WHERE profile_id = ?
+                """
+            ),
+            (profile_id,),
+        ).fetchall()
+    saved = {row["issue_key"]: dict(row) for row in rows}
+    for issue in issues:
+        status = saved.get(issue["issue_key"])
+        issue["status"] = status["status"] if status else "unconfirmed"
+        issue["update_note"] = status["update_note"] if status else ""
+        issue["updated_at"] = status["updated_at"] if status else None
+    return issues
+
+
+def record_clause_status_updates(
+    profile_id: str,
+    account_id: str,
+    review: dict[str, Any],
+    updates: list[dict[str, str]],
+    user_message: str,
+) -> list[dict[str, str]]:
+    catalog = {issue["issue_key"]: issue for issue in _clause_issue_catalog(review)}
+    normalized_message = " ".join(user_message.casefold().split())
+    accepted: list[dict[str, str]] = []
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        with connection:
+            member = connection.execute(
+                _sql(
+                    "SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"
+                ),
+                (profile_id, account_id),
+            ).fetchone()
+            if member is None:
+                raise PermissionError("You are not a member of this tenancy.")
+            for update in updates:
+                issue_key = update.get("issue_key", "")
+                status = update.get("status", "")
+                evidence = " ".join(update.get("evidence", "").casefold().split())
+                issue = catalog.get(issue_key)
+                if (
+                    issue is None
+                    or status not in {"open", "resolved"}
+                    or not evidence
+                    or evidence not in normalized_message
+                ):
+                    continue
+                updated_at = _timestamp()
+                connection.execute(
+                    _sql(
+                        """
+                        INSERT INTO tenancy_clause_status
+                            (profile_id, issue_key, status, update_note, updated_by, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        ON CONFLICT (profile_id, issue_key) DO UPDATE SET
+                            status = excluded.status,
+                            update_note = excluded.update_note,
+                            updated_by = excluded.updated_by,
+                            updated_at = excluded.updated_at
+                        """
+                    ),
+                    (profile_id, issue_key, status, update["evidence"].strip(), account_id, updated_at),
+                )
+                accepted.append(
+                    {
+                        "issue_key": issue_key,
+                        "title": issue["title"],
+                        "status": status,
+                    }
+                )
+    return accepted
 
 
 def add_photo(

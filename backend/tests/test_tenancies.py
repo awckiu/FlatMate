@@ -282,6 +282,103 @@ class TenancyApiTests(unittest.TestCase):
             409,
         )
 
+    def test_chat_updates_persistent_clause_status_only_with_verbatim_evidence(self):
+        profile = self.create_profile().json()
+        issue_key = "need-to-know-0"
+        user_message = "The landlord fixed the leak mentioned in clause 4, so that issue is resolved."
+        self.assertEqual(
+            self.client.get(f"/api/tenancies/{profile['id']}/clause-issues").json()[0]["status"],
+            "unconfirmed",
+        )
+        with (
+            patch("main.retrieve_many", return_value=[[]]),
+            patch(
+                "main.llm.tenancy_buddy_reply",
+                return_value={
+                    "reply": "Thanks for the update; I have recorded that point as resolved.",
+                    "landlord_draft": "",
+                    "issue_updates": [
+                        {
+                            "issue_key": issue_key,
+                            "status": "resolved",
+                            "evidence": "fixed the leak mentioned in clause 4",
+                        },
+                        {
+                            "issue_key": issue_key,
+                            "status": "open",
+                            "evidence": "the tenant still has an unresolved leak",
+                        },
+                    ],
+                },
+            ) as buddy,
+        ):
+            response = self.client.post(
+                f"/api/tenancies/{profile['id']}/chat",
+                json={"message": user_message},
+            )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(
+            response.json()["memory_updates"],
+            [{"issue_key": issue_key, "title": "Repairs", "status": "resolved"}],
+        )
+        self.assertEqual(
+            self.client.get(f"/api/tenancies/{profile['id']}/clause-issues").json()[0]["status"],
+            "resolved",
+        )
+        self.assertEqual(
+            buddy.call_args.args[5][0]["status"],
+            "unconfirmed",
+            "The buddy should not treat a point without tenant feedback as unresolved.",
+        )
+
+        with (
+            patch("main.retrieve_many", return_value=[[]]),
+            patch(
+                "main.llm.tenancy_buddy_reply",
+                return_value={
+                    "reply": "I did not change the saved status because the quote did not match.",
+                    "landlord_draft": "",
+                    "issue_updates": [
+                        {
+                            "issue_key": issue_key,
+                            "status": "open",
+                            "evidence": "the tenant still has an unresolved leak",
+                        }
+                    ],
+                },
+            ),
+        ):
+            rejected = self.client.post(
+                f"/api/tenancies/{profile['id']}/chat",
+                json={"message": "The leak is fixed now."},
+            )
+        self.assertEqual(rejected.status_code, 200, rejected.text)
+        self.assertEqual(rejected.json()["memory_updates"], [])
+        self.assertEqual(
+            self.client.get(f"/api/tenancies/{profile['id']}/clause-issues").json()[0]["status"],
+            "resolved",
+        )
+        co_tenant = TestClient(app)
+        try:
+            self.register(co_tenant, "co-tenant@example.test", "Friend Tenant")
+            joined = co_tenant.post(
+                "/api/tenancies/join",
+                json={
+                    "code": profile["code"],
+                    "tenant_name": "Friend Tenant",
+                    "role": "co_tenant",
+                },
+            )
+            self.assertEqual(joined.status_code, 200, joined.text)
+            shared_status = co_tenant.get(
+                f"/api/tenancies/{profile['id']}/clause-issues"
+            )
+            self.assertEqual(shared_status.status_code, 200, shared_status.text)
+            self.assertEqual(shared_status.json()[0]["status"], "resolved")
+        finally:
+            co_tenant.close()
+
     def test_photo_upload_retrieval_and_delete_are_member_scoped(self):
         profile = self.create_profile().json()
         upload = self.client.post(

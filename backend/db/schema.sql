@@ -165,6 +165,16 @@ CREATE TABLE IF NOT EXISTS tenancy_chat_messages (
   created_at        text NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS tenancy_clause_status (
+  profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
+  issue_key   text NOT NULL,
+  status      text NOT NULL CHECK (status IN ('open', 'resolved')),
+  update_note text NOT NULL,
+  updated_by  text NOT NULL REFERENCES flatmate_accounts(id),
+  updated_at  text NOT NULL,
+  PRIMARY KEY (profile_id, issue_key)
+);
+
 CREATE TABLE IF NOT EXISTS tenancy_photos (
   id          text PRIMARY KEY,
   profile_id  text NOT NULL REFERENCES tenancy_profiles(id) ON DELETE CASCADE,
