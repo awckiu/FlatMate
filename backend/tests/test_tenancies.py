@@ -212,6 +212,27 @@ class TenancyApiTests(unittest.TestCase):
         self.assertTrue(activated.json()["is_active"])
         self.assertIsNotNone(activated.json()["code"])
 
+    def test_co_tenant_joins_with_the_review_code_before_the_start_date(self):
+        future_start = (date.today() + timedelta(days=30)).isoformat()
+        profile = self.create_profile(tenancy_start=future_start).json()
+        self.assertIsNone(profile["code"])
+
+        friend = TestClient(app)
+        try:
+            self.register(friend, "early@example.test", "Friend Tenant")
+            body = {"code": profile["review_id"].lower(), "tenant_name": "friend tenant", "role": "co_tenant"}
+            joined = friend.post("/api/tenancies/join", json=body)
+            joined_again = friend.post("/api/tenancies/join", json=body)
+            unknown = friend.post("/api/tenancies/join", json={**body, "code": "FLAT-ZZZZZZZZZZ"})
+        finally:
+            friend.close()
+
+        self.assertEqual(joined.status_code, 200, joined.text)
+        self.assertEqual(joined.json()["id"], profile["id"])
+        self.assertEqual(joined.json()["role"], "co_tenant")
+        self.assertEqual(joined_again.status_code, 200, joined_again.text)
+        self.assertEqual(unknown.status_code, 404)
+
     def test_only_one_tenancy_is_current_for_an_account(self):
         first = self.create_profile()
         second = self.create_profile(

@@ -467,17 +467,25 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
         _ensure_schema(connection)
         with _transaction(connection):
             _activate_due_profiles(connection)
+            # Co-tenants can join with the HOME- tenancy code (issued on the start date) or with the
+            # FLAT- review code the lead tenant sees from the first review, so they can join before move-in.
             row = connection.execute(
                 _sql(
                     """
                     SELECT * FROM tenancy_profiles
-                    WHERE code = ? AND is_active = 1 AND agreement_signed = 1
+                    WHERE code = ? OR review_id = ?
+                    ORDER BY is_active DESC, created_at DESC
+                    LIMIT 1
                     """
                 ),
-                (normalized_code,),
+                (normalized_code, normalized_code),
             ).fetchone()
             if row is None:
                 return None
+            already_member = connection.execute(
+                _sql("SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"),
+                (row["id"], account["id"]),
+            ).fetchone()
             listed_names = (
                 [row["lead_tenant"]]
                 if role == "lead"
@@ -489,16 +497,22 @@ def join_profile(code: str, account: dict[str, str], tenant_name: str, role: str
                 _sql("UPDATE tenancy_members SET is_current = 0 WHERE account_id = ?"),
                 (account["id"],),
             )
-            connection.execute(
-                _sql(
-                    """
-                    INSERT INTO tenancy_members (profile_id, account_id, name, role, is_current)
-                    VALUES (?, ?, ?, ?, 1)
-                    """
-                ),
-                (row["id"], account["id"], normalized_name, role),
-            )
-    return get_profile_by_code(normalized_code, account["id"])
+            if already_member:
+                connection.execute(
+                    _sql("UPDATE tenancy_members SET is_current = 1 WHERE profile_id = ? AND account_id = ?"),
+                    (row["id"], account["id"]),
+                )
+            else:
+                connection.execute(
+                    _sql(
+                        """
+                        INSERT INTO tenancy_members (profile_id, account_id, name, role, is_current)
+                        VALUES (?, ?, ?, ?, 1)
+                        """
+                    ),
+                    (row["id"], account["id"], normalized_name, role),
+                )
+    return get_profile(row["id"], account["id"])
 
 
 def update_signing(

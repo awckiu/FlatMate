@@ -1205,7 +1205,7 @@
                         </label>
                         <label class="choice-card">
                             <input type="radio" name="entry-flow" value="code">
-                            <span><strong>Join my housemates</strong><span>Someone already set it up and gave me a HOME- code.</span></span>
+                            <span><strong>Join my housemates</strong><span>Someone already set it up and gave me their FLAT- or HOME- code.</span></span>
                         </label>
                     </fieldset>
                 </div>
@@ -1213,8 +1213,8 @@
                 <form id="join-form" class="panel form-skin hidden" novalidate>
                     <h2>Join your shared tenancy</h2>
                     <div class="onboarding-fields" style="margin-top:12px">
-                        <label for="join-code">Tenancy code
-                            <input id="join-code" autocomplete="off" placeholder="e.g. HOME-AB12CD34EF" style="text-transform:uppercase">
+                        <label for="join-code">Code from your housemate
+                            <input id="join-code" autocomplete="off" placeholder="e.g. FLAT-AB12CD34EF or HOME-AB12CD34EF" style="text-transform:uppercase">
                         </label>
                         <label for="join-tenant-name">Your name as it appears on the agreement
                             <input id="join-tenant-name" autocomplete="name">
@@ -2466,7 +2466,7 @@
             $('copy-btn').disabled = !result.email;
             $('copy-feedback').textContent = '';
             $('review-saved').textContent = result.case_code
-                ? `Saved · Review code ${result.case_code}. Housemates can open it with this code.`
+                ? `Saved · Review code ${result.case_code}. Housemates join with this code: they log in, pick “Join my housemates” and enter it.`
                 : 'This review was not saved, so it will be gone when you leave this page.';
             const pdfLink = $('original-pdf-link');
             if (result.pdf_url) pdfLink.href = result.pdf_url;
@@ -2588,9 +2588,21 @@
             const code = state.review?.case_code;
             if (!code) return;
             $('add-to-account-btn').disabled = true;
+            // A tenant named on the agreement joins the shared tenancy itself; anyone else just saves the review.
+            for (const role of ['co_tenant', 'lead']) {
+                try {
+                    const profile = await apiJson('/api/tenancies/join', jsonBody('POST', { code, tenant_name: state.user.display_name, role }));
+                    useProfile(profile);
+                    $('add-to-account-btn').disabled = false;
+                    $('add-to-account-btn').classList.add('hidden');
+                    state.inSetup = false;
+                    go(defaultPage());
+                    return;
+                } catch { /* not a listed tenant under this role, or no tenancy for this review */ }
+            }
             try {
                 await apiJson(`/api/cases/${encodeURIComponent(code)}/join`, { method: 'POST' });
-                $('review-saved').textContent = `Added to your account · Review code ${code}. To share reminders and photos, ask the lead tenant for the HOME- tenancy code.`;
+                $('review-saved').textContent = `Added to your account · Review code ${code}. To share the tenancy, pick “Join my housemates” and enter this code with your name exactly as it is on the agreement.`;
                 $('add-to-account-btn').classList.add('hidden');
             } catch (error) {
                 $('review-saved').textContent = errorText(error, 'Could not add this review to your account.');

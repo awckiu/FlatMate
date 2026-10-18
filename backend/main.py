@@ -345,7 +345,8 @@ def join_tenancy(
         profile = tenancies.join_profile(body.code, account, body.tenant_name, body.role)
     except (ValueError, sqlite3.IntegrityError, psycopg.errors.UniqueViolation) as error:
         raise HTTPException(status_code=409, detail=str(error)) from error
-    profile = _profile_or_404(profile)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="No tenancy was found with that code. Check it with the lead tenant.")
     # Joining by tenancy code also adds the agreement review to the account's cases.
     try:
         with cases.connect() as conn:
