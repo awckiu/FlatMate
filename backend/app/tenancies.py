@@ -97,6 +97,9 @@ def _ensure_schema(connection) -> None:
     }
     if "review_id" not in profile_columns:
         connection.execute("ALTER TABLE tenancy_profiles ADD COLUMN review_id text")
+    for column in ("moved_in_at", "closed_at"):
+        if column not in profile_columns:
+            connection.execute(f"ALTER TABLE tenancy_profiles ADD COLUMN {column} text")
 
     connection.execute(
         _sql(
@@ -143,7 +146,7 @@ def _ensure_schema(connection) -> None:
                 issue_key text NOT NULL,
                 status text NOT NULL CHECK (status IN ('open', 'resolved')),
                 update_note text NOT NULL,
-                updated_by text NOT NULL REFERENCES flatmate_accounts(id),
+                updated_by text NOT NULL,
                 updated_at text NOT NULL,
                 PRIMARY KEY (profile_id, issue_key)
             )
@@ -323,6 +326,27 @@ def create_profile(
     if profile is None:
         raise RuntimeError("The tenancy profile could not be loaded after creation.")
     return profile
+
+
+def refresh_review(review_id: str, review: dict[str, Any]) -> None:
+    """After the agreement is amended, give every tenancy built on that review the new
+    findings. Saved issue statuses are keyed by the old findings' positions, so they reset."""
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        with _transaction(connection):
+            connection.execute(
+                _sql(
+                    """
+                    DELETE FROM tenancy_clause_status
+                    WHERE profile_id IN (SELECT id FROM tenancy_profiles WHERE review_id = ?)
+                    """
+                ),
+                (review_id,),
+            )
+            connection.execute(
+                _sql("UPDATE tenancy_profiles SET review = ? WHERE review_id = ?"),
+                (json.dumps(review), review_id),
+            )
 
 
 def _validate_signing(agreement_signed: bool, signed_on: str | None, tenancy_start: str | None) -> None:
@@ -521,6 +545,49 @@ def update_signing(
                 ),
             )
             _activate_due_profiles(connection, account_id)
+    return get_profile(profile_id, account_id)
+
+
+def is_member_of_review(review_id: str, account_id: str) -> bool:
+    """True if the account belongs to a tenancy made from this FLAT- case code."""
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        row = connection.execute(
+            _sql(
+                """
+                SELECT 1 FROM tenancy_profiles p
+                JOIN tenancy_members m ON m.profile_id = p.id
+                WHERE p.review_id = ? AND m.account_id = ?
+                """
+            ),
+            (review_id, account_id),
+        ).fetchone()
+    return row is not None
+
+
+def update_progress(
+    profile_id: str,
+    account_id: str,
+    moved_in: bool | None,
+    closed: bool | None,
+) -> dict[str, Any] | None:
+    """Mark the household as moved in or the tenancy as closed. Any member can do this."""
+    with closing(_connection()) as connection:
+        _ensure_schema(connection)
+        with _transaction(connection):
+            member = connection.execute(
+                _sql("SELECT 1 FROM tenancy_members WHERE profile_id = ? AND account_id = ?"),
+                (profile_id, account_id),
+            ).fetchone()
+            if member is None:
+                return None
+            for column, value in (("moved_in_at", moved_in), ("closed_at", closed)):
+                if value is None:
+                    continue
+                connection.execute(
+                    _sql(f"UPDATE tenancy_profiles SET {column} = ? WHERE id = ?"),
+                    (_timestamp() if value else None, profile_id),
+                )
     return get_profile(profile_id, account_id)
 
 

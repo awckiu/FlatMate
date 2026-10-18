@@ -107,6 +107,16 @@ CREATE TABLE IF NOT EXISTS emails (
 -- (The old Vultr-storage `photos` table is gone: move-in photos live in tenancy_photos, below.)
 DROP TABLE IF EXISTS photos;
 
+-- Changes to the agreement after the first review: a new PDF version ('pdf', body = file
+-- name) or a written amendment such as a landlord's email ('text', body = the amendment).
+CREATE TABLE IF NOT EXISTS agreement_amendments (
+  id          bigserial PRIMARY KEY,
+  case_id     uuid NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
+  kind        text NOT NULL CHECK (kind IN ('pdf', 'text')),
+  body        text NOT NULL,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
 -- Saved analyses: what the results page needs to show a case again.
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS analysis_mode text;        -- 'gemini' or 'placeholder'
 ALTER TABLE agreements ADD COLUMN IF NOT EXISTS law_data_available boolean;
@@ -170,7 +180,7 @@ CREATE TABLE IF NOT EXISTS tenancy_clause_status (
   issue_key   text NOT NULL,
   status      text NOT NULL CHECK (status IN ('open', 'resolved')),
   update_note text NOT NULL,
-  updated_by  text NOT NULL REFERENCES flatmate_accounts(id),
+  updated_by  text NOT NULL,             -- users.id of whoever reported the status
   updated_at  text NOT NULL,
   PRIMARY KEY (profile_id, issue_key)
 );
@@ -218,6 +228,9 @@ ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS review_id text;
 ALTER TABLE tenancy_photos ADD COLUMN IF NOT EXISTS data bytea;      -- photos used to be files
 ALTER TABLE tenancy_photos DROP COLUMN IF EXISTS storage_key;
 ALTER TABLE tenancy_calendar_items ALTER COLUMN amount TYPE numeric;
+-- Where the household is in the journey: moved in (photos done) and closed (moved out).
+ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS moved_in_at text;
+ALTER TABLE tenancy_profiles ADD COLUMN IF NOT EXISTS closed_at text;
 
 DO $$
 DECLARE

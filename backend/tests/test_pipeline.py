@@ -54,6 +54,8 @@ class PipelineTests(unittest.TestCase):
             patch("app.pipeline.retrieve_many", return_value=[[law]]),
             patch("app.pipeline.llm.analyze_agreement", return_value=analysis),
             patch("app.pipeline.llm.draft_landlord_email", return_value="Draft email") as draft,
+            # Unrelated meanings, so s.99 can't be matched to s.1 by meaning either.
+            patch("app.pipeline.llm.embed", return_value=[[1.0, 0.0], [0.0, 1.0]]),
         ):
             result = pipeline.analyze(b"%PDF-test", "Lead Tenant", "Example Street", ["Co Tenant"])
 
@@ -68,6 +70,37 @@ class PipelineTests(unittest.TestCase):
         self.assertTrue(result["law_data_available"])
         draft.assert_called_once()
         self.assertEqual(draft.call_args.args[0], "Lead Tenant, Co Tenant")
+
+    def test_citations_match_loosely_written_labels(self):
+        fees = {"source": "Tenant Fees Act 2019", "section": "s.1", "text": "Prohibited payments", "url": ""}
+        guide = {"source": "Tenancy deposit protection (gov.uk)", "section": "Overview", "text": "Deposits", "url": ""}
+        flags = [
+            {"citation_source": "Tenant Fees Act", "citation_section": "Section 1(1)"},
+            {"citation_source": "Tenancy deposit protection", "citation_section": "overview"},
+        ]
+        with patch("app.pipeline.llm.embed") as embed:
+            matched = pipeline.match_citations(flags, [fees, guide])
+
+        self.assertIs(matched[id(flags[0])], fees)
+        self.assertIs(matched[id(flags[1])], guide)
+        embed.assert_not_called()
+
+    def test_citations_fall_back_to_matching_by_meaning(self):
+        fees = {"source": "Tenant Fees Act 2019", "section": "s.1", "text": "Prohibited payments", "url": ""}
+        repairs = {"source": "Landlord and Tenant Act 1985", "section": "s.11", "text": "Repairs", "url": ""}
+        flags = [
+            {"clause_excerpt": "£200 cleaning fee", "explanation": "A banned fee.",
+             "citation_source": "", "citation_section": "the fees ban"},
+            {"clause_excerpt": "Pets", "explanation": "Unrelated.",
+             "citation_source": "", "citation_section": ""},
+        ]
+        # Flag vectors first, then one per supplied law section.
+        vectors = [[0.9, 0.1, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]
+        with patch("app.pipeline.llm.embed", return_value=vectors):
+            matched = pipeline.match_citations(flags, [fees, repairs])
+
+        self.assertIs(matched[id(flags[0])], fees)
+        self.assertNotIn(id(flags[1]), matched)
 
     def test_analyze_rejects_a_pdf_without_extractable_text(self):
         with patch.object(pipeline, "extract_text", return_value=("", 2)):

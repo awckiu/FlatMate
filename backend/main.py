@@ -254,6 +254,11 @@ class SigningUpdateRequest(BaseModel):
     tenancy_start: str | None = None
 
 
+class ProgressUpdateRequest(BaseModel):
+    moved_in: bool | None = None
+    closed: bool | None = None
+
+
 class TenancyChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=4000)
     request_landlord_draft: bool = False
@@ -375,6 +380,16 @@ def update_tenancy_signing(
         )
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
+    return _profile_or_404(profile)
+
+
+@app.patch("/api/tenancies/{profile_id}/progress")
+def update_tenancy_progress(
+    profile_id: str,
+    body: ProgressUpdateRequest,
+    account: dict[str, str] = Depends(current_account),
+):
+    profile = tenancies.update_progress(profile_id, account["id"], body.moved_in, body.closed)
     return _profile_or_404(profile)
 
 
@@ -626,6 +641,117 @@ def get_case(code: str):
         lead_tenant=case["lead_tenant"],
         co_tenants=case["co_tenants"],
     )
+    return case
+
+
+def _analysis_http_error(error: Exception) -> HTTPException:
+    """The same messages /api/analyze gives when reading or analysing an agreement fails."""
+    if isinstance(error, PdfReadError):
+        return HTTPException(status_code=400, detail="Could not read that PDF")
+    if isinstance(error, AnalysisInputError):
+        return HTTPException(status_code=422, detail=str(error))
+    if isinstance(error, APIError):
+        logger.exception("Gemini API request failed while updating an agreement")
+        status_code = error.code if isinstance(error.code, int) else None
+        if status_code == 429 or (status_code is not None and status_code >= 500):
+            return HTTPException(status_code=503, detail="Gemini is busy right now. Please try again in a minute.")
+        return HTTPException(status_code=502, detail="Gemini could not analyze this amendment. Please try again.")
+    logger.exception("Gemini returned an unusable answer while updating an agreement")
+    return HTTPException(status_code=502, detail="Gemini returned an unexpected answer. Please try again.")
+
+
+@app.post("/api/cases/{code}/amendments")
+async def amend_case(
+    code: str,
+    request: Request,
+    agreement: UploadFile | None = File(default=None),
+    amendment_text: str = Form(default="", max_length=20_000),
+):
+    """Update a saved agreement: a whole new PDF version is re-read and re-analysed; a
+    written amendment (e.g. pasted from a landlord's email) edits the clauses it changes,
+    then the amended agreement is re-analysed."""
+    if not config.DATABASE_URL:
+        raise HTTPException(status_code=503, detail="Saved cases need the database, which isn't set up on this server.")
+    amendment_text = amendment_text.strip()
+    if (agreement is None) == (not amendment_text):
+        raise HTTPException(status_code=422, detail="Upload the new agreement PDF or paste the amendment text (one of the two).")
+    code = cases.normalize_code(code)
+    # A case code is shared read-only; only members of a tenancy built on it can change it.
+    account = optional_account(request)
+    if account is None:
+        raise HTTPException(status_code=401, detail="Log in to update this agreement.")
+    if not tenancies.is_member_of_review(code, account["id"]):
+        raise HTTPException(
+            status_code=403,
+            detail="Only tenants in this tenancy can update the agreement. Join it with your HOME- tenancy code first.",
+        )
+    try:
+        with cases.connect() as conn:
+            source = cases.get_agreement_source(conn, code)
+    except psycopg.Error as error:
+        logger.exception("Could not load case %s for an amendment", code)
+        raise HTTPException(status_code=503, detail="Could not reach the database. Please try again.") from error
+    if source is None:
+        raise HTTPException(status_code=404, detail="No case was found with that code.")
+    people = (source["lead_tenant"], source["property_address"], source["co_tenants"],
+              source["household_mode"], source["hmo_status"])
+
+    if agreement is not None:
+        if agreement.content_type != "application/pdf":
+            raise HTTPException(status_code=400, detail="Please upload a PDF")
+        pdf_bytes = await agreement.read(MAX_AGREEMENT_SIZE + 1)
+        if len(pdf_bytes) > MAX_AGREEMENT_SIZE:
+            raise HTTPException(status_code=413, detail="The PDF must be 10MB or smaller")
+        if not pdf_bytes:
+            raise HTTPException(status_code=400, detail="The PDF is empty")
+        try:
+            result = await asyncio.to_thread(pipeline.analyze, pdf_bytes, *people)
+        except (PdfReadError, AnalysisInputError, APIError, RuntimeError, json.JSONDecodeError) as error:
+            raise _analysis_http_error(error) from error
+    else:
+        if not config.GEMINI_API_KEY:
+            raise HTTPException(status_code=503, detail="Gemini is not configured, so a written amendment can't be applied.")
+        try:
+            changes = await asyncio.to_thread(llm.amend_clauses, source["clauses"], amendment_text)
+            if not changes:
+                raise HTTPException(
+                    status_code=422,
+                    detail="That amendment doesn't seem to change anything in the agreement. Check you pasted the right text.",
+                )
+            new_text = cases.apply_text_changes(source["text"], source["clauses"], changes)
+            result = await asyncio.to_thread(pipeline.analyze_text, new_text, source["pages"], *people)
+        except (AnalysisInputError, APIError, RuntimeError, json.JSONDecodeError) as error:
+            raise _analysis_http_error(error) from error
+
+    try:
+        with cases.connect() as conn:
+            if agreement is not None:
+                cases.replace_agreement(
+                    conn, code, filename=agreement.filename, agreement_text=result.pop("agreement_text"),
+                    clauses=result.pop("clauses"), result=result, pdf=pdf_bytes,
+                )
+            else:
+                cases.amend_agreement(
+                    conn, source, amendment=amendment_text, changes=changes,
+                    agreement_text=result.pop("agreement_text"), result=result,
+                )
+            case = cases.get_case(conn, code)
+    except psycopg.Error as error:
+        logger.exception("Could not save the amendment for case %s", code)
+        raise HTTPException(status_code=503, detail="Could not save the update. Please try again.") from error
+    case["bills_estimate"] = bills.estimate_bills(
+        property_address=case["property_address"],
+        tenant_count=len(case["co_tenants"]) + 1,
+        need_to_knows=case.get("need_to_knows"),
+        lead_tenant=case["lead_tenant"],
+        co_tenants=case["co_tenants"],
+    )
+    try:
+        tenancies.refresh_review(code, case)
+    except Exception:  # the case itself is updated; tenancies pick it up next time they reload
+        logger.exception("Could not refresh tenancy reviews for case %s", code)
+    if agreement is None:
+        case["amended_clauses"] = [change["clause_ref"] for change in changes]
     return case
 
 
