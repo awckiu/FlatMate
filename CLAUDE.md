@@ -136,6 +136,10 @@ kept for the bills and area features later.
 - FastAPI serves the standalone `index.html` at `/` when it exists; otherwise it serves the
   built React frontend (`frontend/dist`). The app is one process on one URL. In dev, Vite
   proxies `/api` to FastAPI on port 8000.
+- Completed reviews are saved in `tenancy_reviews`: PostgreSQL when `DATABASE_URL` is set,
+  otherwise a local SQLite file at `backend/data/reviews.sqlite3` (ignored by git). The
+  analysis response includes a review reference. The results page can print the review;
+  choose “Save as PDF” in the browser print dialog to export it.
 
 ## Analysis pipeline (RAG over UK housing law)
 
